@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('arabic')->unique();
             $table->string('kurdish')->unique();
+            $table->string("arabic_search")->unique();
             $table->text('description')->nullable();
             $table->unsignedInteger('hadis_number');
             $table->foreignId('teller_id')->references('id')->on('tellers')->cascadeOnDelete();

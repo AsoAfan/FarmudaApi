@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\HadisController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +21,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('hadis/store', [\App\Http\Controllers\HadisController::class, 'store'])->middleware('json');
-Route::get('hadis/show', [\App\Http\Controllers\HadisController::class, 'show']);
+
+Route::middleware('admin')->group(function () {
+
+//    Route::post('hadis/store', [HadisController::class, 'store'])->middleware('json');
+//    Route::get('book/show',[BookController::class,'show']);
+//    Route::post('chapter/store', [ChapterController::class, 'store']);
+});
+
+Route::post('hadis/store', [HadisController::class, 'store'])->middleware('json');
+Route::get('hadis/show', [HadisController::class, 'show']);
+
+
+Route::get('book/show', [BookController::class, 'show']);
+Route::post('book/store', [BookController::class, 'store']);
+
+Route::get('chapter/show', [ChapterController::class, 'show']);
+Route::post('chapter/store', [ChapterController::class, 'store']);
+
