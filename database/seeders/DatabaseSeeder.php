@@ -40,7 +40,8 @@ class DatabaseSeeder extends Seeder
             'arabic' => "رَحِمَ اللهُ مَنْ سَمِعَ مِنِّي حَديثاً ، فَبَلَّغَهُ كَمَا سَمِعَهُ",
             'kurdish' => "ڕەحمەتی خوا لەو کەسە بێ , کە فەرموودەیەک لە من دەبیستێ , وە دەیگەیەنێ وەک چۆن بیستوویەتی.",
             'hadis_number' => 1,
-            'teller_id' => 1
+            'teller_id' => 1,
+            'arabic_search' => preg_replace('/\p{M}/u', '', 'رَحِمَ اللهُ مَنْ سَمِعَ مِنِّي حَديثاً ، فَبَلَّغَهُ كَمَا سَمِعَهُ')
 
         ]);
         // \App\Models\User::factory()->create([
