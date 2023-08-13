@@ -4,10 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Normalizer;
-use function Laravel\Prompts\search;
+
 
 //use Patchwork\Utf8\Normalizer;
 
@@ -23,17 +20,39 @@ class Hadis extends Model
     public function scopeFilter($query, array $filters)
     {
 
+//        dd($filters);
 
         $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('arabic_search', 'like', "%{$search}%")
+                    ->orWhere('kurdish', 'like', "%{$search}%")
+                    ->orWhere('hadis_number', 'like', "%{$search}%");
+//                    ->orWhereHas('buxariChapters', function ($query) use ($search){
+//                        $query->where('name', 'like', "%$search%"); }); Search in BuxariChapters also
+            });
+        });
 
-//            $normalizedSearchQuery = Normalizer::normalize($search, Normalizer::FORM_D);
-            $query
-                ->where('arabic_search', 'like', "%{$search}%")
-                ->orWhere('kurdish', 'like', "%{$search }%")
-                ->orWhere('hadis_number', 'like', "%{$search}%");
 
-        }); // $search = $filters['search']
+        $query->when($filters['category'] ?? false, function ($query, $category) {
+            $query->whereHas('categories', function ($query) use ($category) {
+                $query->where('name', $category);
+            });
+        });
 
+
+        $query->when($filters['bchapter'] ?? false, function ($query, $chapter) {
+            $query->whereHas('buxariChapters', function ($query) use ($chapter) {
+                $query->where('name', $chapter);
+            });
+        });
+
+        $query->when($filters['teller'] ?? false, function ($query, $teller) {
+            $query->whereHas('teller', function ($q) use ($teller) {
+                $q->where('name', $teller);
+
+            });
+
+        });
     }
 
 

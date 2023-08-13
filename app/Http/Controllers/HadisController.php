@@ -15,7 +15,7 @@ class HadisController extends Controller
 
     public function show()
     {
-        return Hadis::with('categories', 'buxariChapters')->filter(request(['search']))->get();
+        return Hadis::with('categories', 'buxariChapters')->filter(request(['category', 'search', 'bchapter', 'teller']))->get(); // TODO: MAKE IT MORE READABLE
     }
 
     public function store(Request $request)

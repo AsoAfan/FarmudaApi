@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Teller extends Model
 {
     use HasFactory;
+
+    public function hadises()
+    {
+        return $this->hasMany(Hadis::class);
+    }
 }
