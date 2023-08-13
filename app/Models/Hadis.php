@@ -33,16 +33,17 @@ class Hadis extends Model
         });
 
 
-        $query->when($filters['category'] ?? false, function ($query, $category) {
+        $query->when(($filters['category'] ?? false) , function ($query, $category) {
             $query->whereHas('categories', function ($query) use ($category) {
-                $query->where('name', $category);
+
+                $query->whereIn('name', $category); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
             });
         });
 
 
         $query->when($filters['bchapter'] ?? false, function ($query, $chapter) {
             $query->whereHas('buxariChapters', function ($query) use ($chapter) {
-                $query->where('name', $chapter);
+                $query->whereIn('name', $chapter);
             });
         });
 

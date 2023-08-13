@@ -19,5 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('hadis/store', [\App\Http\Controllers\HadisController::class, 'store'])->middleware('json');
-//Route::post('hadis/show', [\App\Http\Controllers\HadisController::class, 'filter'])->middleware('json');
+Route::post('hadis/show', [\App\Http\Controllers\HadisController::class, 'filter'])->middleware('json');
 Route::get('hadis/show', [\App\Http\Controllers\HadisController::class, 'show']);
+
