@@ -27,7 +27,6 @@ class HadisController extends Controller
         return Hadis::with('categories', 'buxariChapters')->filter(request(['category', 'search', 'bchapter', 'teller']))->get(); // TODO: MAKE IT MORE READABLE
 
 
-
     }
 
     public function store(Request $request)
@@ -40,14 +39,15 @@ class HadisController extends Controller
             'hadis_description' => [new KurdishChars],
             'hadis_number' => ['required', 'unique:hadis,hadis_number'],
             'hadis_teller_id' => ['required', 'exists:tellers,id'], // TODO: MUST BE NUMBER
+            'hadis_category_ids' => ['array', 'exists:categories,id'],
+
             'buxari_chapter_ids' => [$atLeastOne, 'array', 'exists:buxari_chapters,id'],
-            'muslim_chapter_ids' => [$atLeastOne, 'array', 'exists:muslim_chapters,id'],
-            'hadis_category_ids' => ['array', 'exists:categories,id']
+            'muslim_chapter_ids' => [$atLeastOne, 'array', 'exists:muslim_chapters,id']
 
         ]);
 
 
-        if ($validator->fails()) return Response(['errors' => $validator->errors()->all()]);
+        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()], 422);
 
 
         $newHadis = Hadis::create([

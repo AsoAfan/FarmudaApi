@@ -14,7 +14,7 @@ class Hadis extends Model
 
     protected $guarded = [];
 
-    protected $hidden = ['arabic_search'];
+    protected $hidden = ['arabic_search', 'pivot'];
 
 
     public function scopeFilter($query, array $filters)
@@ -33,10 +33,23 @@ class Hadis extends Model
         });
 
 
+//        $query->withCount('categories')
+//            ->whereHas(
+//                'tags',
+//                fn ($query) => $query->whereIn('asset_tags.id', $tagIds),
+//            )
+//            ->having('tags_count', $tagIds->count());
+
+
         $query->when(($filters['category'] ?? false) , function ($query, $category) {
+            $query->withCount()
             $query->whereHas('categories', function ($query) use ($category) {
 
-                $query->whereIn('name', $category); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+                foreach ($category as $i) {
+
+                    $query->where('name', $i); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+
+                }
             });
         });
 

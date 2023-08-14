@@ -9,6 +9,8 @@ class Teller extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'slug'];
+
     public function hadises()
     {
         return $this->hasMany(Hadis::class);
