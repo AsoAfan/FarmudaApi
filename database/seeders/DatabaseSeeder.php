@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Book;
 use App\Models\BuxariChapter;
 use App\Models\Category;
 use App\Models\Hadis;
@@ -23,11 +24,7 @@ class DatabaseSeeder extends Seeder
             'slug' => 'c'
         ]);
 
-        BuxariChapter::create([
-            'name' => 'الامان',
-            'slug' => 'b'
 
-        ]);
 
         Teller::create([
             'name' => 'ابو هريرة',
@@ -43,6 +40,12 @@ class DatabaseSeeder extends Seeder
             'teller_id' => 1,
             'arabic_search' => preg_replace('/\p{M}/u', '', 'رَحِمَ اللهُ مَنْ سَمِعَ مِنِّي حَديثاً ، فَبَلَّغَهُ كَمَا سَمِعَهُ')
 
+        ]);
+
+
+        Book::create([
+            'name' => "Buxari",
+            'slug' => "buxary"
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

@@ -38,12 +38,8 @@ class TellerController extends Controller
 
     }
 
-    public function update($slug, Request $request)
+    public function update(Request $request, Teller $teller)
     {
-        $teller = Teller::where('slug', $slug)->first();
-
-        if (!$teller) return response()->json(["errors" => "Teller not found"], 404);
-
 
         $validator = Validator::make($request->all(), [
             'name' => ["unique:tellers,name", new ArabicChars],
@@ -51,7 +47,7 @@ class TellerController extends Controller
         ]);
 
 
-        if ($validator->fails()) return response()->json([ $validator->errors()], 422);
+        if ($validator->fails()) return response()->json([$validator->errors()], 422);
 
 
         $teller->update($request->all());
@@ -59,12 +55,8 @@ class TellerController extends Controller
         return ["success" => "Data updated success fully", "newTeller" => $teller];
     }
 
-    public function destroy($slug, Request $request)
+    public function destroy(Request $request, Teller $teller)
     {
-
-        $teller = Teller::where('slug', $slug)->first();
-
-        if (!$teller) return response()->json(["errors" => "user not found"], 404);
 
         $teller->delete();
         return response()->json(['success' => $teller->name . " deleted successfully"]);

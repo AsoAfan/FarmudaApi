@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BuxariChapter extends Model
+class Book extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['pivot', 'id'];
+    protected $fillable = ["name", "slug"];
 
-    public function hadises()
+    public function chapters()
     {
-        return $this->belongsToMany(Hadis::class);
+        return $this->belongsToMany(Chapter::class);
     }
 }

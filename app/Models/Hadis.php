@@ -14,70 +14,111 @@ class Hadis extends Model
 
     protected $guarded = [];
 
-    protected $hidden = ['arabic_search', 'pivot'];
+    protected $hidden = ['arabic_search', 'pivot', 'teller_id'];
 
 
     public function scopeFilter($query, array $filters)
     {
 
-//        dd($filters);
+        /*
+         *
+         *  Must have filters for hadises
+         * 1. search (arabic, kurdish and hadis_number => PartialMatch)
+         * 2. teller (name => ExactMatch)
+         * 3. categories (name => ExactMatch)
+         * 4. Books (name => ExactMatch)
+         * 5. Chapters (name => ExactMatch)
+         *
+         * */
 
+
+        // 1. Search
         $query->when($filters['search'] ?? false, function ($query, $search) {
             $query->where(function ($query) use ($search) {
                 $query->where('arabic_search', 'like', "%{$search}%")
                     ->orWhere('kurdish', 'like', "%{$search}%")
                     ->orWhere('hadis_number', 'like', "%{$search}%");
-//                    ->orWhereHas('buxariChapters', function ($query) use ($search){
-//                        $query->where('name', 'like', "%$search%"); }); Search in BuxariChapters also
+//                    ->orWhereHas('chapters', function ($query) use ($search){
+//                        $query->where('name', 'like', "%$search%"); }); Search in Chapters also
             });
         });
 
 
-//        $query->withCount('categories')
-//            ->whereHas(
-//                'tags',
-//                fn ($query) => $query->whereIn('asset_tags.id', $tagIds),
-//            )
-//            ->having('tags_count', $tagIds->count());
-
-
-        $query->when(($filters['category'] ?? false) , function ($query, $category) {
-            $query->withCount()
-            $query->whereHas('categories', function ($query) use ($category) {
-
-                foreach ($category as $i) {
-
-                    $query->where('name', $i); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
-
-                }
-            });
-        });
-
-
-        $query->when($filters['bchapter'] ?? false, function ($query, $chapter) {
-            $query->whereHas('buxariChapters', function ($query) use ($chapter) {
-                $query->whereIn('name', $chapter);
-            });
-        });
-
+        // 2. teller
         $query->when($filters['teller'] ?? false, function ($query, $teller) {
             $query->whereHas('teller', function ($q) use ($teller) {
                 $q->where('name', $teller);
 
             });
-
         });
+
+
+        // 3. categories
+        $query->when(($filters['category'] ?? false), function ($query, $category) {
+            $query
+                ->withCount('categories')
+                ->whereHas('categories', function ($query) use ($category) {
+                    $query->distinct()->whereIn('name', $category); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+                }, '=', count($category));
+        });
+
+
+        // 4. books
+        $query->when(($filters['book'] ?? false), function ($query, $book) {
+            $query
+                ->withCount('books')
+                ->whereHas('books', function ($query) use ($book) {
+                    $query->distinct()->whereIn('name', $book); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+                }, '=', count($book));
+        });
+
+
+        // 5. chapters
+        $query->when(($filters['chapter'] ?? false), function ($query, $chapter) {
+            $query
+                ->withCount('chapters')
+                ->whereHas('chapters', function ($query) use ($chapter) {
+                    $query->distinct()->whereIn('name', $chapter); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+                }, '=', count($chapter));
+        });
+
     }
 
+    public function feature()
+    {
+        return $this->belongsTo(FeaturedHadis::class);
+}
 
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
 
-    public function buxariChapters()
+//    public function buxariChapters()
+//    {
+//        return $this->belongsToMany(BuxariChapter::class);
+//    }
+
+//    public function muslimChapters()
+//    {
+//        return $this->belongsToMany(MuslimChapter::class);
+//    }
+
+//    public function muslimChapter()
+//    {
+//
+//        return $this->belongsToMany(MuslimChapter::class);
+//
+//    }
+
+    public function books()
     {
-        return $this->belongsToMany(BuxariChapter::class);
+        return $this->belongsToMany(Book::class);
+    }
+
+    public function chapters()
+    {
+        return $this->belongsToMany(Chapter::class);
     }
 
 

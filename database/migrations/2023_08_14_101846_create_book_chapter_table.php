@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('muslim_chapters', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->string('slug')->nullable();
-            $table->timestamps();
+        Schema::create('book_chapter', function (Blueprint $table) {
+            $table->foreignId('book_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('chapter_id')->constrained()->cascadeOnDelete();
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('muslim_chapters');
+        Schema::dropIfExists('book_chaptet');
     }
 };

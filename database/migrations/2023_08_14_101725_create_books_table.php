@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('buxari_chapter_hadis', function (Blueprint $table) {
-            $table->foreignId('hadis_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('buxari_chapter_id')->constrained()->cascadeOnDelete();
+        Schema::create('books', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
+            $table->timestamps();
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('buxari_chapters_hadis');
+        Schema::dropIfExists('books');
     }
 };

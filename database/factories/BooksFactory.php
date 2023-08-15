@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class BuxariChaptersFactory extends Factory
+class BooksFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class BuxariChaptersFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'الامان'
+            //
         ];
     }
 }
