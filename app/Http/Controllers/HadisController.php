@@ -64,7 +64,7 @@ class HadisController extends Controller
             'hadis_arabic' => ['unique:hadis,arabic', 'required', new ArabicChars],
             'hadis_kurdish' => ['unique:hadis,kurdish', 'required', new KurdishChars],
             'hadis_description' => [new KurdishChars],
-            'hadis_number' => ['required', 'unique:hadis,hadis_number'],
+            'hadis_number' => ['required', 'unique:hadis,hadis_number', 'numeric'],
             'hadis_teller_id' => ['required', 'numeric', 'exists:tellers,id'],
 
             'category_ids' => ['array', 'exists:categories,id'],
@@ -96,8 +96,16 @@ class HadisController extends Controller
 
     }
 
-    public function update(Hadis $hadis)
+    public function update(Hadis $hadis, Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'arabic' => ["unique:hadis,arabic,{$hadis->id}", new ArabicChars],
+            'kurdish' => ["unique:hadis,kurdish,{$hadis->id}", new KurdishChars],
+            'description' => [new KurdishChars],
+            'hadis_number' => ["unique:hadis,hadis_number,{$hadis->hadis_number}", 'numeric'],
+            'hadis_teller_id' => ['required_without_all', 'numeric', 'exists:tellers,id'],
+
+        ]);
 
     }
 

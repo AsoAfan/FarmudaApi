@@ -42,17 +42,14 @@ class CategoryController extends Controller
         if (!$newCategory) return ['errors' => response()->status()];
 
         return ["success" => 'Category created successfully', "newCategory" => $newCategory];
-
-
+        
     }
 
     /**
      * Display the specified resource.
      */
-//    public function show(string $id)
-//    {
-//        //
-//    }
+    // Deleted
+
 
     /**
      * Update the specified resource in storage.
