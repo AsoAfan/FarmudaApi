@@ -14,6 +14,8 @@ class Hadis extends Model
 
     protected $guarded = [];
 
+    protected $with = ['teller', 'categories','books', 'chapters'];
+
     protected $hidden = ['arabic_search', 'pivot', 'teller_id'];
 
 
@@ -84,32 +86,17 @@ class Hadis extends Model
 
     }
 
-    public function feature()
-    {
-        return $this->belongsTo(FeaturedHadis::class);
-}
+//    public function feature()
+//    {
+//        return $this->belongsTo(FeaturedHadis::class);
+//}
 
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
 
-//    public function buxariChapters()
-//    {
-//        return $this->belongsToMany(BuxariChapter::class);
-//    }
 
-//    public function muslimChapters()
-//    {
-//        return $this->belongsToMany(MuslimChapter::class);
-//    }
-
-//    public function muslimChapter()
-//    {
-//
-//        return $this->belongsToMany(MuslimChapter::class);
-//
-//    }
 
     public function books()
     {

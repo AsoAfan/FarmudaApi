@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Mail\EmailOtp;
+use App\Models\User;
+use App\Rules\KurdishChars;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+
+
+        $validator = Validator::make($request->all(), [
+
+            'name' => ['required', 'string', new KurdishChars],
+            'email' => ['required', 'unique:users,email'],
+            'password' => ['required', 'min:8', Password::default()]
+        ]);
+
+        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
+
+        $newUser = User::create([
+            "name" => $request->get('name'),
+            "email" => $request->get('email'),
+            "password" => $request->get('password')
+        ]);
+
+        if ($newUser) {
+            $otp = mt_rand(100000, 999999);
+            Mail::to($newUser->email)->send(new EmailOtp($otp));
+        }
+
+        return ['success' => "user created successfully"];
+
+
+    }
+
+    public function login(Request $request)
+    {
+
+//        dd(csrf_token());
+        if ($request->get('_token') === csrf_token())
+
+        $validator = Validator::make($request->all(), [
+
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!Auth::attempt($request->only(['email', 'password']))) return ['errors' => "Invalid credentials"];
+
+        return ['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user];
+    }
+
+    public function logout()
+    {
+
+        $userName = auth()->user()->name;
+        auth()->user()->tokens()->each(function ($token){
+            $token->delete();
+        });
+
+        return ['success' => $userName];
+
+    }
+}

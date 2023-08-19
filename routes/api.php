@@ -5,6 +5,7 @@ use App\Http\Controllers\TellerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,20 +33,69 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+//Route::get('/test-cors', function () {
+//    return response()->json(['message' => 'CORS test successful']);
+//})->middleware('cros');
+
+
+Route::middleware(['guest:sanctum'])->group(function () {
+
+    Route::post('auth/register', [\App\Http\Controllers\Auth\AuthController::class, 'register'])
+        ->missing(fn() => response()->json(['errors' => "route not found"], 404)); // TODO: Guest
+
+    Route::post('auth/login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);// TODO: Guest
+
+    Route::get('not-auth', function (){
+        return response()->json(["errors" => 'You are not authorized'],401);
+    })->name('login');
+
+});
+
+
 Route::middleware('json')->group(function () {
 
-// Hadis (read, store, delete,
+    Route::middleware(['auth:sanctum'])->group(function () {
+
+        // Auth
+        Route::post('auth/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
+
+
+        // User
+
+
+
+        // Question
+        Route::post('question/store', [\App\Http\Controllers\QuestionController::class, 'store']); // TODO: Auth
+        Route::put('question/update/{question}', [\App\Http\Controllers\QuestionController::class, 'update']); // TODO: Auth
+    });
+
+    Route::get('question/show', [\App\Http\Controllers\QuestionController::class, 'index']); // TODO: All Users
+
+
+// User
+    Route::get('user/show', [\App\Http\Controllers\UserController::class, 'index']); // TODO: Admins
+
+
+// Hadis (read, create, update, delete)
     Route::post('hadis/show', [\App\Http\Controllers\HadisController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
 
-    Route::get('hadis/show/{num}', [\App\Http\Controllers\HadisController::class, 'show']); // read | with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
-    Route::get('hadis/latest', [\App\Http\Controllers\HadisController::class, 'latest']); // read | 2 latest Hadises TODO: ALL_USERS
+    Route::get('hadis/show/{hadis}', [\App\Http\Controllers\HadisController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
+    Route::get('hadis/show/', [\App\Http\Controllers\HadisController::class, 'showShorts']); // read |   with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
+    Route::get('hadis/latest', [\App\Http\Controllers\HadisController::class, 'latest'])->middleware('auth:sanctum'); // read | 2 latest Hadises TODO: ALL_USERS
 
     Route::post('hadis/store', [\App\Http\Controllers\HadisController::class, 'store']); // create(Add new hadis) TODO: ADMINS
 
+    Route::get('/hadis/toggle-feature/{hadis}', [\App\Http\Controllers\HadisController::class, 'toggleFeature'])
+        ->missing(fn() => response()->json(["errors" => "Hadis not found"], 404)); // update toggle statues toFALSE if True and to TRUE if False
+
     Route::put('hadis/update/{hadis}', [\App\Http\Controllers\HadisController::class, "update"])
-        ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // TODO: not implemented |  Admins
+        ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // update TODO:  Admins
 
     Route::delete('hadis/destroy/{hadis}', [\App\Http\Controllers\HadisController::class, 'destroy'])
+        ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // Delete  TODO: Admins
+
+    Route::delete('hadis/destroy-set/{hadis}', [\App\Http\Controllers\HadisController::class, 'destroySet'])
         ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // Delete  TODO: Admins
 
 // Teller (create, read, update, delete)
@@ -90,9 +140,4 @@ Route::middleware('json')->group(function () {
         ->missing(fn() => response()->json(["errors" => "Chapter not found"], 404)); // delete TODO: Admins
 
 
-
-    // features hadis
-
-    Route::get('feature/hadis', [\App\Http\Controllers\FeaturedHadisController::class, 'index']);
-    Route::get('feature/hadis/toggle/{hadis}', [\App\Http\Controllers\HadisController::class, 'toggleFeature'])->missing(fn() => response()->json(["errors" => "Hadis not found"], 404));
 });

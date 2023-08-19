@@ -7,7 +7,6 @@ use App\Rules\ArabicChars;
 use App\Rules\KurdishChars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class HadisController extends Controller
 {
@@ -17,43 +16,98 @@ class HadisController extends Controller
     {
 
         $validator = Validator::make(request()->all(), [
-            // Validation if needed
+            // Validation if needed for incoming filters
         ]);
-        return Hadis::with('teller', 'categories', 'books', 'chapters')->filter(request(['search', 'teller', 'category', 'book', 'chapter']))->paginate(3); // TODO: MAKE IT MORE READABLE
+        return Hadis::latest()->filter(request(['search', 'teller', 'category', 'book', 'chapter']))->paginate(3); // TODO: MAKE IT MORE READABLE
 
     }
 
-    public function showShorts(int $num)
+    public function latest()
+    {
+        return Hadis::latest()->get()->take('2');
+    }
+
+    public function show(Hadis $hadis)
+    {
+
+        return $hadis;
+
+    }
+
+    public function showShorts()
     {
 
 //        return Hadis::whereRaw("char_length(arabic) < " . request('chars'))->get()->take($num);
 
-        return Hadis::where('is_featured', 1)->whereRaw('char_length(arabic) <= ' . (request('chars') ?? 80 ))->get()->take($num);
+        return Hadis::where('is_featured', 1)->whereRaw('char_length(arabic) <= ' . (request('chars') ?? 80))->get();
     }
 
     public function toggleFeature(Hadis $hadis)
     {
         $is_featured = $hadis->is_featured;
 
-//        dd($hadis->attributesToArray());
+
         $validator = Validator::make($hadis->attributesToArray(), [
-            'arabic' => [ 'string', 'max:80']
+            'arabic' => ['string', 'max:80']
         ]);
 
         if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
 
-//        if (!$is_featured ) {
-//            if (Str::length($hadis->arabic) > 80) return ["errors" => 'featured Hadises must be less than 80, current:' . Str::length($hadis->arabic)];
-//        }
-
-        $hadis->update(['is_featured' => ! $is_featured]);
+        $hadis->update(['is_featured' => !$is_featured]);
 
         return ['success' => $hadis->arabic . (!$is_featured ? " will be shown soon" : " won't be shown anymore")];
     }
 
-    public function latest()
+    public function update(Hadis $hadis, Request $request)
     {
-        return Hadis::latest()->get()->take('2');
+        $validator = Validator::make($request->all(), [ // TODO: Separate into a new Request class
+            'hadis_arabic' => ['required_without_all:kurdish,description,hadis_number,hadis_teller_id,category_ids, book_ids, chapter_ids', "unique:hadis,arabic,{$hadis->id}", new ArabicChars],
+            'hadis_kurdish' => ['required_without_all:arabic,description,hadis_number,hadis_teller_id,category_ids, book_ids, chapter_ids', "unique:hadis,kurdish,{$hadis->id}", new KurdishChars],
+            'hadis_description' => ['required_without_all:arabic,kurdish,hadis_number,hadis_teller_id,category_ids, book_ids, chapter_ids', new KurdishChars],
+            'hadis_number' => ['required_without_all:arabic,kurdish,description,hadis_teller_id,category_ids, book_ids, chapter_ids', "unique:hadis,hadis_number,{$hadis->id}", 'numeric'],
+            'hadis_teller_id' => ['required_without_all:arabic,kurdish,description,hadis_number,category_ids,book_ids,chapter_ids', 'numeric', 'exists:tellers,id'],
+
+            'category_ids' => ['array', 'exists:categories,id', 'required_without_all:arabic,kurdish,description,hadis_number,hadis_teller_id,book_ids,chapter_ids'],
+            'book_ids' => ['array', 'exists:books,id', 'required_without_all:arabic,kurdish,description,hadis_number,hadis_teller_id, category_ids, chapter_ids'],
+            'chapter_ids' => ['array', 'exists:chapters,id', 'required_without_all:arabic,kurdish,description,hadis_number,hadis_teller_id, category_ids, book_ids']
+        ]);
+
+        if ($validator->fails()) {
+
+            if (key_exists('hadis_number', $validator->errors()->messages()) && $request->get('hadis_number') != $hadis->hadis_number) {
+                $duplicated_hadis_number = $request->get('hadis_number');
+                $hadis_with_hadis_number = Hadis::where('hadis_number', $duplicated_hadis_number)->first();
+                return response()
+                    ->json(
+                        [
+                            'errors' => "Hadis number: {$duplicated_hadis_number} is already assigned to another hadis",
+                            'duplicated_hadis_id' => $hadis_with_hadis_number?->id
+                        ],
+                        422
+                    );
+            }
+
+
+            return response()->json(['errors' => $validator->errors()->all()], 422);
+        }
+
+        $hadis->update(
+            [
+                "arabic" => $request->get('hadis_arabic') ?? $hadis->arabic,
+                "kurdish" => $request->get('hadis_kurdish') ?? $hadis->kurdish,
+                "description" => $request->get("hadis_description") ?? $hadis->description,
+                "hadis_number" => $request->get('hadis_number') ?? $hadis->hadis_number,
+                "teller_id" => $request->get('hadis_teller_id') ?? $hadis->teller_id,
+                "arabic_search" => preg_replace('/\p{M}/u', '', $request->get('hadis_arabic'))
+
+            ]);
+
+        $hadis->categories()->syncWithoutDetaching($request->get('category_ids') ?? $hadis->categories->pluck('id')->toArray());
+        $hadis->books()->syncWithoutDetaching($request->get('book_ids') ?? $hadis->books->pluck('id')->toArray());
+        $hadis->chapters()->syncWithoutDetaching($request->get('chapter_ids') ?? $hadis->chapters->pluck('id')->toArray());
+
+
+        return ["success" => "Hadis updated successfully", "updatedHadis" => $hadis];
     }
 
     public function store(Request $request)
@@ -92,26 +146,33 @@ class HadisController extends Controller
         $newHadis->categories()->attach($request->get('hadis_category_ids'));
 
 
-        return ['success' => "Hadis added successfully", 'hadis' => $newHadis];
+        return ['success' => "Hadis added successfully", 'newHadis' => $newHadis];
 
     }
 
-    public function update(Hadis $hadis, Request $request)
+    public function destroySet(Hadis $hadis, Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'arabic' => ["unique:hadis,arabic,{$hadis->id}", new ArabicChars],
-            'kurdish' => ["unique:hadis,kurdish,{$hadis->id}", new KurdishChars],
-            'description' => [new KurdishChars],
-            'hadis_number' => ["unique:hadis,hadis_number,{$hadis->hadis_number}", 'numeric'],
-            'hadis_teller_id' => ['required_without_all', 'numeric', 'exists:tellers,id'],
+//        dd($request->all(),$hadis);
 
-        ]);
+        $hadis->categories()->detach($request->get('category_id') ?? []);
+        $hadis->books()->detach($request->get('book_id') ?? []);
+        $hadis->chapters()->detach($request->get('chapter_id') ?? []);
+
+//        if ($request->has('category_id'))
+//            $hadis->categories()->detach($request->get('category_id'));
+//
+//        if ($request->has('book_id'))
+//            $hadis->books()->detach($request->get('book_id'));
+//
+//        if ($request->has('chapter_id'))
+//            $hadis->chapters()->detach($request->get('chapter_id'));
+
 
     }
 
     public function destroy(Hadis $hadis)
     {
         $hadis->delete();
-        return ["success" => "$hadis->name deleted successfully"];
+        return ["success" => "$hadis->arabic deleted successfully"];
     }
 }

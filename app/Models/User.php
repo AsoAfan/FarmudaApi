@@ -3,14 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Console\QuestionHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Question;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+//    protected $with = ['questions'];
 
     /**
      * The attributes that are mass assignable.
@@ -42,4 +47,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    public function setPassworAttribute()
+    {
+
+        return $this->attributes['password'] = Hash::make($this->attributes['password']);
+
+    }
 }
