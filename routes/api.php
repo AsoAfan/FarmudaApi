@@ -2,9 +2,13 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TellerController;
+use App\Mail\EmailOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+//Route::get('send', function () {
+//    \Illuminate\Support\Facades\Mail::to('aso.sargaty@yahoo.com')->send(new \App\Mail\OTP("aso afan"));
+//});
 
 /*
 |--------------------------------------------------------------------------
@@ -43,17 +47,22 @@ Route::middleware(['guest:sanctum'])->group(function () {
 
     Route::post('auth/register', [\App\Http\Controllers\Auth\AuthController::class, 'register'])
         ->missing(fn() => response()->json(['errors' => "route not found"], 404)); // TODO: Guest
+    // Resend otp code
+    Route::get('resend/', [\App\Http\Controllers\Auth\AuthController::class, 'sendOtp']);
 
     Route::post('auth/login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);// TODO: Guest
 
-    Route::get('not-auth', function (){
-        return response()->json(["errors" => 'You are not authorized'],401);
+    Route::get('not-auth', function () {
+        return response()->json(["errors" => 'You are not authorized'], 401);
     })->name('login');
 
 });
 
 
 Route::middleware('json')->group(function () {
+
+
+    Route::post('auth/verify-email/{user:otp_secret_slug}', [\App\Http\Controllers\EmailVerificationController::class, 'checkOtp'])->missing(fn() => response()->json(["errors" => "Unknown"]));
 
     Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -64,10 +73,13 @@ Route::middleware('json')->group(function () {
         // User
 
 
-
         // Question
         Route::post('question/store', [\App\Http\Controllers\QuestionController::class, 'store']); // TODO: Auth
-        Route::put('question/update/{question}', [\App\Http\Controllers\QuestionController::class, 'update']); // TODO: Auth
+        Route::put('question/update/{question}', [\App\Http\Controllers\QuestionController::class, 'update'])
+            ->missing(fn() => response()->json(["errors" => "Question not found"], 404)); // TODO: Auth
+
+        Route::delete('question/destroy/{question}', [\App\Http\Controllers\QuestionController::class, 'destroy'])
+            ->missing(fn() => response()->json(["errors" => "Question not found"], 404)); // TODO: Auth
     });
 
     Route::get('question/show', [\App\Http\Controllers\QuestionController::class, 'index']); // TODO: All Users
@@ -126,7 +138,7 @@ Route::middleware('json')->group(function () {
     Route::put('book/update/{book}', [\App\Http\Controllers\BookController::class, 'update'])
         ->missing(fn() => response()->json(['errors' => 'Book not found'], 404)); // update TODO: Admins
 
-    Route::delete('book/delete/{book}', [\App\Http\Controllers\BookController::class, 'destroy'])
+    Route::delete('book/destroy/{book}', [\App\Http\Controllers\BookController::class, 'destroy'])
         ->missing(fn() => response()->json(["errors" => "book not found"], 404)); // delete TODO: Admins
 
 
@@ -136,7 +148,7 @@ Route::middleware('json')->group(function () {
 
     Route::put('/chapter/update/{chapter}', [\App\Http\Controllers\ChapterController::class, 'update'])
         ->missing(fn() => response()->json(["errors" => "Chapter not found"], 404)); // update TODO: Admins
-    Route::delete('/chapter/delete/{chapter}', [\App\Http\Controllers\ChapterController::class, 'destroy'])
+    Route::delete('/chapter/destroy/{chapter}', [\App\Http\Controllers\ChapterController::class, 'destroy'])
         ->missing(fn() => response()->json(["errors" => "Chapter not found"], 404)); // delete TODO: Admins
 
 

@@ -3,13 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Console\QuestionHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Question;
 
 class User extends Authenticatable
 {
@@ -26,6 +24,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'otp_secret',
+        'otp_expires_at',
+        'email_verified_at',
+        'otp_attempt_count',
+        'otp_secret_slug',
+        'latest_otp_attempt',
     ];
 
     /**
@@ -44,7 +48,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 

@@ -16,3 +16,12 @@ Route::get('sanctum/csrf-cookie', function () {
     return response()->json(['csrf' => csrf_token()]);
 });
 
+Route::get('/', function (){
+    return view('welcome');
+});
+
+Route::get('auth/google', [\App\Http\Controllers\Auth\SocialController::class, 'google']);
+
+Route::get('auth/google/callback', [\App\Http\Controllers\Auth\SocialController::class, 'callback']);
+
+

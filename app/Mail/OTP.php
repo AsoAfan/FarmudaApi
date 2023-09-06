@@ -9,14 +9,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EmailOtp extends Mailable implements ShouldQueue
+class OTP extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public $otp)
+    public function __construct(private $username, private $otp)
     {
         //
     }
@@ -27,7 +27,7 @@ class EmailOtp extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Email Otp',
+            subject: 'O T P',
         );
     }
 
@@ -37,8 +37,8 @@ class EmailOtp extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'welcome',
-            with: ['otp' => $this->otp]
+            markdown: 'mail.o-t-p',
+            with: ['username' => $this->username, 'otp' => $this->otp]
         );
     }
 

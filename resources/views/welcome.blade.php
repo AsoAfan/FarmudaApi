@@ -789,9 +789,11 @@
                 <a href="{{ url('/home') }}"
                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Home</a>
             @else
-                <p class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{$otp}}</p>
+                <p class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Login</p>
 
-                @if (Route::has('register'))
+                <img src="https://lh3.googleusercontent.com/u/1/drive-viewer/AITFw-wTFG2tC-jQqb2Pa_uunyzzQR0yZa_vRXHz5rhgR7PCw2NEc0OYiq8uSBhKnWp2Ztld046S-ar5q_vdFyoQS6mmSzIqaQ=w1920-h968" class="logo" alt="Laravel Logo">
+
+            @if (Route::has('register'))
                     <a href="{{ route('register') }}"
                        class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
                 @endif
