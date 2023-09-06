@@ -41,7 +41,7 @@ class AuthController extends Controller
         // TODO: Check for internet connection
 
         if ($newUser) {
-            $this->sendOtp($newUser);
+            $this->sendOtp(user:$newUser);
         }
 
 

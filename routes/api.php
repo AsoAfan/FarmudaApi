@@ -6,6 +6,8 @@ use App\Mail\EmailOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+include "api/guest.php";
+
 //Route::get('send', function () {
 //    \Illuminate\Support\Facades\Mail::to('aso.sargaty@yahoo.com')->send(new \App\Mail\OTP("aso afan"));
 //});
@@ -45,24 +47,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware(['guest:sanctum'])->group(function () {
 
-    Route::post('auth/register', [\App\Http\Controllers\Auth\AuthController::class, 'register'])
-        ->missing(fn() => response()->json(['errors' => "route not found"], 404)); // TODO: Guest
-    // Resend otp code
-    Route::get('resend/', [\App\Http\Controllers\Auth\AuthController::class, 'sendOtp']);
-
-    Route::post('auth/login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);// TODO: Guest
-
-    Route::get('not-auth', function () {
-        return response()->json(["errors" => 'You are not authorized'], 401);
-    })->name('login');
-
 });
 
 
 Route::middleware('json')->group(function () {
 
 
-    Route::post('auth/verify-email/{user:otp_secret_slug}', [\App\Http\Controllers\EmailVerificationController::class, 'checkOtp'])->missing(fn() => response()->json(["errors" => "Unknown"]));
 
     Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -85,30 +75,25 @@ Route::middleware('json')->group(function () {
     Route::get('question/show', [\App\Http\Controllers\QuestionController::class, 'index']); // TODO: All Users
 
 
-// User
-    Route::get('user/show', [\App\Http\Controllers\UserController::class, 'index']); // TODO: Admins
-
 
 // Hadis (read, create, update, delete)
     Route::post('hadis/show', [\App\Http\Controllers\HadisController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
 
     Route::get('hadis/show/{hadis}', [\App\Http\Controllers\HadisController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
-    Route::get('hadis/show/', [\App\Http\Controllers\HadisController::class, 'showShorts']); // read |   with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
+    Route::get('hadis/show/', [\App\Http\Controllers\HadisController::class, 'showShorts']); // read |  featured Hadises with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
     Route::get('hadis/latest', [\App\Http\Controllers\HadisController::class, 'latest'])->middleware('auth:sanctum'); // read | 2 latest Hadises TODO: ALL_USERS
 
     Route::post('hadis/store', [\App\Http\Controllers\HadisController::class, 'store']); // create(Add new hadis) TODO: ADMINS
 
-    Route::get('/hadis/toggle-feature/{hadis}', [\App\Http\Controllers\HadisController::class, 'toggleFeature'])
-        ->missing(fn() => response()->json(["errors" => "Hadis not found"], 404)); // update toggle statues toFALSE if True and to TRUE if False
 
     Route::put('hadis/update/{hadis}', [\App\Http\Controllers\HadisController::class, "update"])
         ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // update TODO:  Admins
 
-    Route::delete('hadis/destroy/{hadis}', [\App\Http\Controllers\HadisController::class, 'destroy'])
-        ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // Delete  TODO: Admins
 
-    Route::delete('hadis/destroy-set/{hadis}', [\App\Http\Controllers\HadisController::class, 'destroySet'])
-        ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // Delete  TODO: Admins
+
+
+//    ======================================================================================================================
+
 
 // Teller (create, read, update, delete)
     Route::get('teller/show', [TellerController::class, 'show']); // Read TODO: All_USERS
