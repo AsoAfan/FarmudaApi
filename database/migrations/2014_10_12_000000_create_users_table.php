@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password')->nullable();
-            $table->enum('role', ['admin', 'guider', 'user'])->default('user');
+            $table->enum('role', ['admin', 'editor', 'guider', 'user'])->default('user');
+            // TODO: Num. of hadises added by an admin/editor and its relationship
             $table->rememberToken();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('otp_secret')->nullable();

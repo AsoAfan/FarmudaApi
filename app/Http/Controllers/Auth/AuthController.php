@@ -41,15 +41,14 @@ class AuthController extends Controller
         // TODO: Check for internet connection
 
         if ($newUser) {
-            $this->sendOtp(user:$newUser);
+            $this->sendOtp($newUser);
         }
 
 
     }
 
-    public function sendOtp(Request $request, $user = null)
+    public function sendOtp(Request $request, $user = null): array
     {
-
 
         if (!$user) $user = User::where('email', $request->get('email'))->first();
 
@@ -85,7 +84,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user->email_verified_at) return response()->json(['errors' => "verify email first", 'user_email' => $user->email], 401);
+        if ($user && !$user->email_verified_at) return response()->json(['errors' => "verify email first", 'user_email' => $user->email], 401);
 
 
         if (!Auth::attempt($request->only(['email', 'password']))) return ['errors' => "Invalid credentials"];

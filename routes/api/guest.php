@@ -9,7 +9,7 @@ Route::middleware(['guest:sanctum'])->group(function () {
     Route::post('login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
 
     // Resend otp code
-    Route::get('resend', [\App\Http\Controllers\Auth\AuthController::class, 'sendOtp']);
+    Route::post('resend', [\App\Http\Controllers\Auth\AuthController::class, 'sendOtp']);
 
     // Verify email
     Route::post('verify-email/{user:otp_secret_slug}', [\App\Http\Controllers\EmailVerificationController::class, 'checkOtp'])

@@ -24,12 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'otp_secret',
-        'otp_expires_at',
-        'email_verified_at',
-        'otp_attempt_count',
         'otp_secret_slug',
-        'latest_otp_attempt',
     ];
 
     /**
@@ -40,6 +35,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'otp_secret',
+        'otp_expires_at',
+        'email_verified_at',
+        'otp_attempt_count',
+        'latest_otp_attempt',
     ];
 
     /**
