@@ -17,7 +17,9 @@ class SocialController extends Controller
     {
         $socialUser = Socialite::driver('google')->user();
         $user = $this->findOrCreate($socialUser);
-        return ['user' => $user, 'token' => $user->createToken('API_TOKEN')->plainTextToken];
+
+
+        return ['user' => $user, 'token' => $user->createToken('API_TOKEN')->plainTextToken, 'request' => request()->all()];
     }
 
 

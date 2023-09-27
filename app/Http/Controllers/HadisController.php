@@ -18,7 +18,7 @@ class HadisController extends Controller
         $validator = Validator::make(request()->all(), [
             // Validation if needed for incoming filters
         ]);
-        return Hadis::latest()->filter(request(['search', 'teller', 'category', 'book', 'chapter']))->paginate(3); // TODO: MAKE IT MORE READABLE
+        return Hadis::all()->skip(5)->take(10);
 
     }
 
@@ -150,7 +150,7 @@ class HadisController extends Controller
 
     }
 
-    public function destroySet(Hadis $hadis, Request $request)
+    public function destroyRelated(Hadis $hadis, Request $request)
     {
 //        dd($request->all(),$hadis);
 

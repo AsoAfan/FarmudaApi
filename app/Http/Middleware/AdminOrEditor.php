@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Editor
+class AdminOrEditor
 {
     /**
      * Handle an incoming request.
@@ -15,9 +15,11 @@ class Editor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role === 'editor')
+
+//        dd(auth()->check());
+        if (auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'editor'))
             return $next($request);
 
-        abort(403, "unauthorized");
+        abort(403, 'Unauthorized');
     }
 }

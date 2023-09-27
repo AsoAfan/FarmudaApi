@@ -15,7 +15,7 @@ class EmailVerificationController extends Controller
     {
 //        if (!$user->otp_attempt_count <= 3 ) return ['errors' => 'a lot of failed attempts please try again after 24h'];
 
-        if ($user->otp_expires_at < now()) return response()->json(['errors' => "Otp expired"], 403);
+        if ($user->otp_expires_at > now()) return response()->json(['errors' => "Otp expired"], 403);
 
         $validator = Validator::make([$request->get('otp_code')], [
             "otp_code" => 'required|numeric|min:6|max:6'

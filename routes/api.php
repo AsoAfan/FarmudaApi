@@ -43,6 +43,7 @@ Route::middleware('json')->group(function () {
     include_once "api/admin.php";
     include_once "api/admin_editor.php";
     include_once "api/auth.php";
+    include_once "api/all_users.php";
     include_once "api/guest.php";
 
 });

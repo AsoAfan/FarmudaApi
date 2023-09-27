@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HadisController;
+use App\Http\Controllers\TellerController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['admin', 'editor'])->group(function () {
+Route::middleware(['auth:sanctum','admin-editor'])->group(function () {
+    Route::get('/ae/test', fn() => auth()->user());
 
 // Hadis
-    Route::post('hadis/store', [\App\Http\Controllers\HadisController::class, 'store']); // create(Add new hadis) TODO: ADMINS, EDITOR
-    Route::put('hadis/update/{hadis}', [\App\Http\Controllers\HadisController::class, "update"])
+    Route::post('hadis/store', [HadisController::class, 'store']); // create(Add new hadis) TODO: ADMINS, EDITOR
+    Route::put('hadis/update/{hadis}', [HadisController::class, "update"])
         ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // update TODO:  Admins, EDITOR
 
 // Teller

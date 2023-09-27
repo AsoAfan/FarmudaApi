@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\AdminOrEditor;
 use App\Http\Middleware\ApiResponse;
 use App\Http\Middleware\Editor;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -42,7 +43,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -69,6 +70,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'json' => ApiResponse::class,
         'admin' => Admin::class,
-        'editor' => Editor::class
+        'admin-editor' => AdminOrEditor::class,
+        'editor' => Editor::class,
     ];
 }

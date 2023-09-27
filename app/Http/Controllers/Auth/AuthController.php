@@ -41,26 +41,28 @@ class AuthController extends Controller
         // TODO: Check for internet connection
 
         if ($newUser) {
-            $this->sendOtp($newUser);
+            return $this->sendOtp($newUser);
         }
 
+        return response()->json(['errors' => "An error occurred while sending email", 'status' => response()->status()], response()->status());
 
     }
 
-    public function sendOtp(Request $request, $user = null): array
+    public function sendOtp($user = null)
     {
 
-        if (!$user) $user = User::where('email', $request->get('email'))->first();
+        if (!$user) $user = User::where('email', request()->get('email'))->first();
 
+        if (!$user) return response()->json(['errors' => \request()->get('email') . " not associated with any user", 'status' => 404], 404);
 
         if ($user->email_verified_at) return ['errors' => $user->email . ' is verified with username: ' . $user->name];
         $otp = mt_rand(100000, 999999);
         Mail::to($user->email)->send(new OTP($user->username, $otp));
-        $hashedOtp = Hash::make($otp);
+        $otp = Hash::make($otp);
 //       dd($hashedOtp);
         $user->update([
-            'otp_secret' => $hashedOtp,
-            'otp_secret_slug' => Str::slug($hashedOtp),
+            'otp_secret' => $otp,
+            'otp_secret_slug' => Str::slug($otp),
             'otp_expires_at' => now()->addMinutes(5),
         ]);
 

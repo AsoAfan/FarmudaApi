@@ -16,9 +16,8 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
 {
-//    dd('Admin middleware executed', Auth::user()); // Add this line for debugging
 
-    if (Auth::check() && Auth::user()->role === 'admin') {
+    if (auth()->check() && (auth()->user()->role === 'admin')) {
         return $next($request);
     }
 
