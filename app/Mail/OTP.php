@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OTP extends Mailable
+class OTP extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -27,7 +27,7 @@ class OTP extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'O T P',
+            subject: 'Email Verification',
         );
     }
 

@@ -14,17 +14,17 @@ class Hadis extends Model
 
     protected $guarded = [];
 
-    protected $with = ['teller', 'categories','books', 'chapters'];
+    protected $with = ['teller', 'categories', 'books', 'chapters']; // TODO: return books of chapters(chapters.books)
 
-    protected $hidden = ['arabic_search', 'pivot', 'teller_id'];
+    protected $hidden = ['arabic_search', 'pivot', 'teller_id', 'categories_count'];
 
 
     public function scopeFilter($query, array $filters)
     {
 
-        /*
+        /**
          *
-         *  Must have filters for hadises
+         *  Must-have filters for hadises
          * 1. search (arabic, kurdish and hadis_number => PartialMatch)
          * 2. teller (name => ExactMatch)
          * 3. categories (name => ExactMatch)
@@ -50,9 +50,8 @@ class Hadis extends Model
         $query->when($filters['teller'] ?? false, function ($query, $teller) {
             $query->whereHas('teller', function ($q) use ($teller) {
                 $q->where('name', $teller);
-
             });
-        });
+        }); // Teller Done
 
 
         // 3. categories
@@ -86,16 +85,16 @@ class Hadis extends Model
 
     }
 
-//    public function feature()
-//    {
-//        return $this->belongsTo(FeaturedHadis::class);
-//}
+
+    public function favourites()
+    {
+        $this->hasMany(Favourite::class);
+    }
 
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
-
 
 
     public function books()

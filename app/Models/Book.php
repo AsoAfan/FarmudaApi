@@ -11,6 +11,8 @@ class Book extends Model
 
     protected $fillable = ["name", "slug"];
 
+    protected $hidden = ['pivot'];
+
     public function chapters()
     {
         return $this->belongsToMany(Chapter::class);

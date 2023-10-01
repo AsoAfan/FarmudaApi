@@ -12,10 +12,10 @@ return new class extends Migration {
     {
         Schema::create('hadis', function (Blueprint $table) {
             $table->id();
-            $table->string('arabic')->unique();
-            $table->string('kurdish')->unique();
-            $table->string("arabic_search")->unique();
-            $table->text('description')->nullable();
+            $table->longText('arabic');
+            $table->longText('kurdish');
+            $table->longText("arabic_search");
+            $table->longText('description');
             $table->unsignedInteger('hadis_number');
             $table->foreignId('teller_id')->references('id')->on('tellers')->cascadeOnDelete();
             $table->boolean('is_featured')->default(false);

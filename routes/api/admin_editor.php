@@ -5,19 +5,30 @@ use App\Http\Controllers\HadisController;
 use App\Http\Controllers\TellerController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum','admin-editor'])->group(function () {
+Route::middleware(['auth:sanctum', 'admin-editor'])->group(function () {
     Route::get('/ae/test', fn() => auth()->user());
 
 // Hadis
-    Route::post('hadis/store', [HadisController::class, 'store']); // create(Add new hadis) TODO: ADMINS, EDITOR
+    Route::post('/hadis/store', [HadisController::class, 'store']); // create(Add new hadis) TODO: ADMINS, EDITOR
+
+    Route::get('/hadis/toggle-feature/{hadis}', [HadisController::class, 'toggleFeature'])
+        ->missing(fn() => response()->json(["errors" => "Hadis not found", 'status' => 404], 404)); // update toggle statues toFALSE if True and to TRUE if False
+
+
+    Route::put('/hadis/featured/update', [HadisController::class, "updateFeaturedLength"]);
+
     Route::put('hadis/update/{hadis}', [HadisController::class, "update"])
         ->missing(fn() => response()->json(['errors' => "Hadis not found"], 404)); // update TODO:  Admins, EDITOR
+
+    Route::delete('/hadis/destroy/{hadis}', [HadisController::class, 'destroy'])
+        ->missing(fn() => response()->json(['errors' => "Hadis not found", 'status' => 404], 404)); // Delete  TODO: Admins
+
 
 // Teller
     Route::post('teller/store', [TellerController::class, 'store']); // Create(Add new teller) TODO: Admins, EDITOR
 
     Route::put('teller/update/{teller}', [TellerController::class, 'update'])
-        ->missing(fn() => response()->json(["errors" => "Category not found"], 404)); // Update TODO: Admins, EDITOR
+        ->missing(fn() => response()->json(["errors" => "Teller not found"], 404)); // Update TODO: Admins, EDITOR
 
 // Category
     Route::post('category/store', [CategoryController::class, 'store']); // create(Add new category) TODO: Admins, EDITOR

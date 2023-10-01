@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password')->nullable();
+            $table->enum('gender', ['male', 'female'])->default('male');
             $table->enum('role', ['admin', 'editor', 'guider', 'user'])->default('user');
             // TODO: Num. of hadises added by an admin/editor and its relationship
             $table->rememberToken();
@@ -23,7 +24,7 @@ return new class extends Migration {
             $table->string('otp_secret_slug')->nullable(); // TODO:refactor later
             $table->timestamp('otp_expires_at')->nullable();
             $table->integer('otp_attempt_count')->default(0);
-            $table->timestamp('latest_otp_attempt')->nullable();
+            $table->date('latest_otp_attempt')->nullable();
             $table->timestamps();
         });
     }

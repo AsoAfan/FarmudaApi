@@ -14,33 +14,59 @@ class HadisController extends Controller
 
     public function index()
     {
-
         $validator = Validator::make(request()->all(), [
-            // Validation if needed for incoming filters
+            'take' => 'numeric',
+            'skip' => 'numeric',
+            'category' => 'array',
+            'book' => 'array',
+            'chapter' => 'array'
         ]);
-        return Hadis::all()->skip(5)->take(10);
+
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+
+//        dd(array_filter(request(["search", 'teller', 'category', 'book', 'chapter',]),
+//            fn($value) => $value !== [null]));
+
+        $skip = \request('skip') ?? 0;
+        $take = \request('take') ?? 25;
+
+        return Hadis::latest()
+            ->filter(
+                array_filter(request(["search", 'teller', 'category', 'book', 'chapter']),
+                    fn($value) => $value !== [null])
+            )->skip($skip)
+            ->take($take)
+            ->get();
+        // TODO: Double check for skipping algorithm
+
+//        $validator = Validator::make(request()->all(), [
+//            // Validation if needed for incoming filters
+//        ]);
+//        return Hadis::all();
 
     }
 
     public function latest()
     {
-        return Hadis::latest()->get()->take('2');
-    }
+        return Hadis::latest()->get()->take(2);
+    } // DONE
 
     public function show(Hadis $hadis)
     {
 
         return $hadis;
 
-    }
+    } // DONE
 
-    public function showShorts()
+    public function showFeatures()
     {
 
 //        return Hadis::whereRaw("char_length(arabic) < " . request('chars'))->get()->take($num);
 
-        return Hadis::where('is_featured', 1)->whereRaw('char_length(arabic) <= ' . (request('chars') ?? 80))->get();
-    }
+        return Hadis::where('is_featured', 1)->get();
+//        ->whereRaw('char_length(arabic) <= ' . 50)
+
+    } // DONE
 
     public function toggleFeature(Hadis $hadis)
     {
@@ -48,18 +74,37 @@ class HadisController extends Controller
 
 
         $validator = Validator::make($hadis->attributesToArray(), [
-            'arabic' => ['string', 'max:80']
+            'arabic' => ['string', 'max:50']
         ]);
 
         if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
 
         $hadis->update(['is_featured' => !$is_featured]);
 
-        return ['success' => $hadis->arabic . (!$is_featured ? " will be shown soon" : " won't be shown anymore")];
+        return ['success' => $hadis->arabic . (!$is_featured ? " added to featured list" : " removed from featured list")];
+    } // DONE
+
+    public function updateFeaturedLength(Request $request)
+    {
+//        dd("test");
+        $validator = Validator::make($request->all(), [
+            'maxLength' => "required|numeric|min:1"
+        ]);
+
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 406);
+        $limit_old = config('myApp.featured_max_length');
+//        dd($request->get('maxLength'));
+        config(['myApp.featured_max_length' => $request->get('maxLength')]);
+        return \response(['success' => "max limit for featured hadises updated from $limit_old to " . config('myApp.featured_max_length')]);
     }
 
     public function update(Hadis $hadis, Request $request)
     {
+        /**
+         * not sure if checking role again rather than it was checked with middleware is necessary, remove for now
+         * @TODO  Gate::authorize('update', $hadis);
+         */
+
         $validator = Validator::make($request->all(), [ // TODO: Separate into a new Request class
             'hadis_arabic' => ['required_without_all:kurdish,description,hadis_number,hadis_teller_id,category_ids, book_ids, chapter_ids', "unique:hadis,arabic,{$hadis->id}", new ArabicChars],
             'hadis_kurdish' => ['required_without_all:arabic,description,hadis_number,hadis_teller_id,category_ids, book_ids, chapter_ids', "unique:hadis,kurdish,{$hadis->id}", new KurdishChars],
@@ -81,7 +126,8 @@ class HadisController extends Controller
                     ->json(
                         [
                             'errors' => "Hadis number: {$duplicated_hadis_number} is already assigned to another hadis",
-                            'duplicated_hadis_id' => $hadis_with_hadis_number?->id
+                            'duplicated_hadis_id' => $hadis_with_hadis_number?->id,
+                            'status' => 422
                         ],
                         422
                     );
@@ -102,17 +148,22 @@ class HadisController extends Controller
 
             ]);
 
+
         $hadis->categories()->syncWithoutDetaching($request->get('category_ids') ?? $hadis->categories->pluck('id')->toArray());
         $hadis->books()->syncWithoutDetaching($request->get('book_ids') ?? $hadis->books->pluck('id')->toArray());
         $hadis->chapters()->syncWithoutDetaching($request->get('chapter_ids') ?? $hadis->chapters->pluck('id')->toArray());
 
 
-        return ["success" => "Hadis updated successfully", "updatedHadis" => $hadis];
-    }
+        return ["success" => "Hadis updated successfully", "updatedHadis" => $hadis->fresh(), 'status' => 200];
+    } // DONE
 
     public function store(Request $request)
     {
-        $atLeastOne = (!$request->get('muslim_chapter_ids') && !$request->get('buxari_chapter_ids') ? 'required' : '');
+        /**
+         * not sure if checking the role again rather than it was checked with middleware is necessary, remove for now
+         * @TODO  Gate::authorize('create');
+         */
+
 
         $validator = Validator::make($request->all(), [
             'hadis_arabic' => ['unique:hadis,arabic', 'required', new ArabicChars],
@@ -128,8 +179,17 @@ class HadisController extends Controller
         ]);
 
 
-        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()], 422);
-
+        if ($validator->fails()) {
+            if (array_key_exists('hadis_number', $validator->errors()->messages())) {
+                $duplicated_hadis = Hadis::where('hadis_number', $request->get('hadis_number'))->first();
+                return response()->json([
+                    "errors" => 'hadis number: ' . $request->get('hadis_number') . ' is already assigned to another hadis',
+                    'duplicated_hadis_id' => $duplicated_hadis->id,
+                    'status' => 422
+                ], 422);
+            }
+            return response()->json(["errors" => $validator->errors()->all()], 422);
+        }
 
         $newHadis = Hadis::create([
             'arabic' => $request->get('hadis_arabic'),
@@ -152,20 +212,20 @@ class HadisController extends Controller
 
     public function destroyRelated(Hadis $hadis, Request $request)
     {
-//        dd($request->all(),$hadis);
 
-        $hadis->categories()->detach($request->get('category_id') ?? []);
-        $hadis->books()->detach($request->get('book_id') ?? []);
-        $hadis->chapters()->detach($request->get('chapter_id') ?? []);
+        $validator = Validator::make($request->all(), [
+            'category_ids' => ["array", "exists:categories,id"],
+            'book_ids' => ["array", "exists:books,id"],
+            'chapter_ids' => ["array", "exists:chapters,id"]
+        ]);
 
-//        if ($request->has('category_id'))
-//            $hadis->categories()->detach($request->get('category_id'));
-//
-//        if ($request->has('book_id'))
-//            $hadis->books()->detach($request->get('book_id'));
-//
-//        if ($request->has('chapter_id'))
-//            $hadis->chapters()->detach($request->get('chapter_id'));
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+
+        $hadis->categories()->detach($request->get('category_ids') ?? []);
+        $hadis->books()->detach($request->get('book_ids') ?? []);
+        $hadis->chapters()->detach($request->get('chapter_ids') ?? []);
+
+        return response(['success' => "Operation done successfully", 'status' => 200]);
 
 
     }

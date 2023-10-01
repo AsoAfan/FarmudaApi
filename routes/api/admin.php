@@ -19,16 +19,13 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // TODO: ADD URL TO UPDATE USER ROLE
     Route::get('/users', [UserController::class, 'index']); // TODO: Admins
 
+    Route::get('/user/warn/{user}', [UserController::class, 'warn']);
+
     Route::put('/user/role/{user}', [UserController::class, 'updateRole']);
 
 
 // Hadises
-    Route::get('/hadis/toggle-feature/{hadis}', [HadisController::class, 'toggleFeature'])
-        ->missing(fn() => response()->json(["errors" => "Hadis not found", 'status' => 404], 404)); // update toggle statues toFALSE if True and to TRUE if False
 
-
-    Route::delete('/hadis/destroy/{hadis}', [HadisController::class, 'destroy'])
-        ->missing(fn() => response()->json(['errors' => "Hadis not found", 'status' => 404], 404)); // Delete  TODO: Admins
 
     Route::delete('/hadis/destroy-related/{hadis}', [HadisController::class, 'destroyRelated'])
         ->missing(fn() => response()->json(['errors' => "Hadis not found", 'status' => 404], 404)); // Delete  TODO: Admins

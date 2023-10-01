@@ -25,16 +25,20 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'name' => ['required', 'string', new KurdishChars],
-            'email' => ['required', 'unique:users,email'],
-            'password' => ['required', 'min:8', Password::default()]
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'gender' => ['required', 'in:male,female'],
+            'password' => ['required', 'min:8', 'confirmed', Password::default()],
+            'password_confirmation' => ['required']
         ]);
 
         if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
 
+
         $newUser = User::create([
             "name" => $request->get('name'),
             "email" => $request->get('email'),
+            "gender" => $request->get('gender'),
             "password" => $request->get('password')
         ]);
 
@@ -51,19 +55,24 @@ class AuthController extends Controller
     public function sendOtp($user = null)
     {
 
-        if (!$user) $user = User::where('email', request()->get('email'))->first();
+        $user = $user ?: User::where('email', request('email'))->first();
 
-        if (!$user) return response()->json(['errors' => \request()->get('email') . " not associated with any user", 'status' => 404], 404);
+        if (!$user) return response()->json(['errors' => request()->get('email') . " not associated with any user", 'status' => 404], 404);
 
         if ($user->email_verified_at) return ['errors' => $user->email . ' is verified with username: ' . $user->name];
+
+//                                        TODO:can be better in feature
+        if ($user->otp_attempt_count > config('myApp.max_otp_attempts', 3)) return response()->json(['errors' => 'a lot of requests received please try again tomorrow', "status" => 403], 403);
+
         $otp = mt_rand(100000, 999999);
+//        \Illuminate\Support\Facades\Log::info("OTP Sent");
         Mail::to($user->email)->send(new OTP($user->username, $otp));
         $otp = Hash::make($otp);
 //       dd($hashedOtp);
         $user->update([
             'otp_secret' => $otp,
             'otp_secret_slug' => Str::slug($otp),
-            'otp_expires_at' => now()->addMinutes(5),
+            'otp_expires_at' => now()->addMinutes(config('myApp.otp_expiry_minutes', 5)),
         ]);
 
         return ['success' => "Email sent", "otpHashedSlug" => $user->otp_secret_slug];

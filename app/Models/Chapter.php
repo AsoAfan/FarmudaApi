@@ -11,6 +11,8 @@ class Chapter extends Model
 
     protected $fillable = ['name', 'slug', 'book_id'];
 
+    protected $hidden = ['pivot'];
+
 
 
     public function books()

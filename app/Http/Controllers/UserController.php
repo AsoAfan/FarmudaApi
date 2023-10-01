@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\RoleChangedNotification;
+use App\Notifications\WarningNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,13 +15,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::with(['questions'])->get();
+        return User::with(['questions'])->get(['id', 'name', 'email', 'role', 'created_at']);
     }
 
 
     public function current()
     {
-        return auth()->user();
+        return auth()->user()->with('favourites.hadis')->find(auth()->id());
     }
 
     /**
@@ -39,6 +41,14 @@ class UserController extends Controller
         return [$user];
     }
 
+    public function warn(User $user)
+    {
+        $user->notify(new WarningNotification($user->name));
+        return response(['success' => $user->name . " warned", 'status' => 200]);
+    }
+
+
+
     /**
      * Update the specified resource in storage.
      */
@@ -53,12 +63,20 @@ class UserController extends Controller
             'role' => ['string', 'in:user,guider,editor,admin']
         ]);
 
+
+        if ($user->role === $request->role) return ["success" => "Nothing to do {$user->name} is already {$request->role}", "statues" => 200];
+
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
         $f_role = $user->role;
         $user->role = $request->role;
         $user->save();
 
-        return ['success' => "Role of {$user->name} Updated from {$f_role} to {$user->role}", 'status' => 200];
+        $user->notify(new RoleChangedNotification($user->name, $f_role));
+        $user->notify(new WarningNotification());
+
+        return [
+            'success' => "Role of {$user->name} Updated from {$f_role} to {$user->role}", 'status' => 200
+        ];
 
     }
 

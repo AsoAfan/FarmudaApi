@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Hadis;
 use App\Models\Question;
+use App\Policies\HadisPolicy;
 use App\Policies\QuestionPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -15,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        Question::class => QuestionPolicy::class
+        Question::class => QuestionPolicy::class,
+        Hadis::class => HadisPolicy::class
     ];
 
     /**
