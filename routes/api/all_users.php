@@ -6,6 +6,11 @@ use App\Http\Controllers\HadisController;
 use App\Http\Controllers\TellerController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('/test', function () {
+    return ['test' => \route('testssss')];
+})->name('testssss');
+
 Route::get('question/show', [\App\Http\Controllers\QuestionController::class, 'index']); // TODO: All Users
 
 Route::post('/hadis/show', [HadisController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
