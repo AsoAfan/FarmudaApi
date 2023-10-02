@@ -59,6 +59,24 @@ class User extends Authenticatable
     ];
 
 
+    public function conversations()
+    {
+
+
+        return $this->hasMany(Conversation::class,
+            'sender_id'
+        )
+            ->orWhere('receiver_id', auth()->id()
+            );
+    }
+
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+
     public function questions()
     {
         return $this->hasMany(Question::class);

@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\FavouriteController;
-use App\Http\Controllers\HadisController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -16,6 +14,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // User
     Route::get('/user', [\App\Http\Controllers\UserController::class, 'current']);
+
+    // Chats
+    Route::get('/messages', [\App\Http\Controllers\MessageController::class, 'index']);
+    Route::post('/messages/test', [\App\Http\Controllers\MessageController::class, 'store']);
 
     // Notifications
     Route::get('/user/notifications', [NotificationController::class, 'index']);
@@ -33,17 +35,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->missing(fn() => response()->json(["errors" => "Question not found"], 404)); // TODO: Auth
 
 
-
-
 // Hadis
 
 
     Route::get('/favourite', [FavouriteController::class, 'index']);
 
     Route::get('/favourite/{hadis}', [FavouriteController::class, 'store'])
-    ->missing(fn() => response()->json(["errors" => "Page not found", "status" => 404], 404));
-
-
+        ->missing(fn() => response()->json(["errors" => "Page not found", "status" => 404], 404));
 
 
 });
