@@ -15,7 +15,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         return \request()->user();
     });
 
-// User
+// User     api/
     // TODO: ADD URL TO UPDATE USER ROLE
     Route::get('/users', [UserController::class, 'index']); // TODO: Admins
 
