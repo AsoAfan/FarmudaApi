@@ -201,9 +201,9 @@ class HadisController extends Controller
             "arabic_search" => preg_replace('/\p{M}/u', '', $request->get('hadis_arabic'))
         ]);
 
-//        $newHadis->books()->attach($request->get('book_ids'));
-//        $newHadis->chapters()->attach($request->get('chapter_ids'));
-//        $newHadis->categories()->attach($request->get('hadis_category_ids'));
+        $newHadis->books()->attach($request->get('book_ids'));
+        $newHadis->chapters()->attach($request->get('chapter_ids'));
+        $newHadis->categories()->attach($request->get('category_ids'));
 
 
         return ['success' => "Hadis added successfully", 'newHadis' => $newHadis];
