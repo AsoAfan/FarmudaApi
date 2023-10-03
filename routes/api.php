@@ -1,5 +1,14 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavouriteController;
+use App\Http\Controllers\HadisController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TellerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -216,7 +225,7 @@ Route::middleware('json')->group(function () {
     Route::get('/chapter/show', [\App\Http\Controllers\ChapterController::class, 'index']); // read TODO: ALL_USERS
 
 
-    include_once __DIR__ . '/api/all_users.php';
+//    include_once __DIR__ . '/api/all_users.php';
 //    include_once base_path("routes\\api\\admin_editor.php");
 //
 //    include_once base_path("routes\\api\\auth.php");
