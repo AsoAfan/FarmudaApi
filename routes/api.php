@@ -41,7 +41,7 @@ Route::middleware('json')->group(function () {
         return ["test" => glob(__DIR__ . '/*.php')];
     })->name('test1');
 
-    include_once base_path('\/routes\/api\/admin.php');
+//    include_once base_path('\/routes\/api\/admin.php');
 //    include_once base_path("routes\\api\\admin_editor.php");
 //
 //    include_once base_path("routes\\api\\auth.php");
