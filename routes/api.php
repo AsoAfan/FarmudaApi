@@ -41,10 +41,22 @@ Route::middleware('json')->group(function () {
         return ["test" => route('test1')];
     })->name('test1');
 
-    include app_path('routes/api/admin.php');
-    include_once "api/admin_editor.php";
-    include_once "api/auth.php";
-    include_once "api/all_users.php";
-    include_once "api/guest.php";
+    include_once(
+    base_path('routes\\api\\admin.php')
+    );
+    include_once(
+    base_path("routes\\api\\admin_editor.php")
+    );
+
+    include_once(
+    base_path("routes\\api\\auth.php")
+    );
+
+    include_once(
+    base_path("routes\\api\\all_users.php")
+    );
+    include_once(
+    base_path("routes\\api\\guest.php")
+    );
 
 });
