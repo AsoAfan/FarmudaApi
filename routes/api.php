@@ -38,15 +38,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('json')->group(function () {
     Route::get('test1', function () {
-        return ["test" => route('test1')];
+        return ["test" => base_path()];
     })->name('test1');
 
-    include_once base_path('routes\\api\\admin.php');
-    include_once base_path("routes\\api\\admin_editor.php");
-
-    include_once base_path("routes\\api\\auth.php");
-
-    include_once base_path("routes\\api\\all_users.php");
-    include_once base_path("routes\\api\\guest.php");
+//    include_once base_path('routes\\api\\admin.php');
+//    include_once base_path("routes\\api\\admin_editor.php");
+//
+//    include_once base_path("routes\\api\\auth.php");
+//
+//    include_once base_path("routes\\api\\all_users.php");
+//    include_once base_path("routes\\api\\guest.php");
 
 });
