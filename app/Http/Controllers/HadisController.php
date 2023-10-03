@@ -172,9 +172,9 @@ class HadisController extends Controller
             'hadis_number' => ['required', 'unique:hadis,hadis_number', 'numeric'],
             'hadis_teller_id' => ['required', 'numeric', 'exists:tellers,id'],
 
-            'category_ids' => ['array', 'exists:categories,id'],
-            'book_ids' => ['array', 'exists:books,id'],
-            'chapter_ids' => ['array', 'exists:chapters,id']
+            'hadis_category_ids' => ['array', 'exists:categories,id'],
+            'hadis_book_ids' => ['array', 'exists:books,id'],
+            'hadis_chapter_ids' => ['array', 'exists:chapters,id']
 
         ]);
 
@@ -201,9 +201,9 @@ class HadisController extends Controller
             "arabic_search" => preg_replace('/\p{M}/u', '', $request->get('hadis_arabic'))
         ]);
 
-        $newHadis->books()->attach($request->get('book_ids'));
-        $newHadis->chapters()->attach($request->get('chapter_ids'));
-        $newHadis->categories()->attach($request->get('category_ids'));
+        $newHadis->books()->attach($request->get('hadis_book_ids'));
+        $newHadis->chapters()->attach($request->get('hadis_chapter_ids'));
+        $newHadis->categories()->attach($request->get('hadis_category_ids'));
 
 
         return ['success' => "Hadis added successfully", 'newHadis' => $newHadis];
