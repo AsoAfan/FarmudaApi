@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\HadisController;
 use App\Http\Controllers\NotificationController;
