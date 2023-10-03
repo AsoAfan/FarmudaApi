@@ -34,7 +34,7 @@ class TellerController extends Controller
             'slug' => $request->get('slug')
         ]);
 
-        return ["success" => "Teller added successfully", $newTeller];
+        return ["success" => "Teller added successfully", "newTeller" => $newTeller];
 
     }
 
