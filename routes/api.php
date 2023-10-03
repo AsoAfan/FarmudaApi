@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('json')->group(function () {
     Route::get('test1', function () {
-        return ["test" => glob(__DIR__ . '/*.php')];
+        return ["test" => glob(__DIR__ . '/*', GLOB_ONLYDIR)];
     })->name('test1');
 
 //    include_once base_path('\/routes\/api\/admin.php');
