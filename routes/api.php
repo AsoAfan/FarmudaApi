@@ -36,18 +36,15 @@ use Illuminate\Support\Facades\Route;
 //})->middleware('cros');
 
 
-
-
-
-
 Route::middleware('json')->group(function () {
-Route::get('test1', function (){
-   return ["test" => \route('test1')];
-})->name('test1');
-    include_once "./api/admin.php";
-    include_once "./api/admin_editor.php";
-    include_once "./api/auth.php";
-    include_once "./api/all_users.php";
-    include_once "./api/guest.php";
+    Route::get('test1', function () {
+        return ["test" => \route('test1')];
+    })->name('test1');
+
+    include_once "api/admin.php";
+    include_once "api/admin_editor.php";
+    include_once "api/auth.php";
+    include_once "api/all_users.php";
+    include_once "api/guest.php";
 
 });
