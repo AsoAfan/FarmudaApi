@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class WarningNotification extends Notification
+class PromotionNotification extends Notification
 {
     use Queueable;
 
@@ -15,8 +15,10 @@ class WarningNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private readonly string $name,
-        private readonly string $message
+        private readonly string $admin,
+        private readonly string $user,
+        private readonly string $o_role,
+        private readonly string $role
     )
     {
         //
@@ -29,23 +31,16 @@ class WarningNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database'];
     }
 
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->greeting("Hello " . $this->name)
-                    ->line("you have been warned, {$this->message}");
-    }
-
-    public function toDatabase(object $notifiable)
+    public function toDatabase(object $notifiable): array
     {
         return [
-            'message' => $this->name . " Has been warned"
+            "message" => $this->admin. " wants to promote " . $this->user . " from " . $this->o_role . " to " . $this->role
         ];
     }
 

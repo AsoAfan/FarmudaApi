@@ -1,0 +1,139 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    direction: rtl;
+}
+
+body {
+    background-color: #537188;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    color: #537188;
+}
+
+img {
+    width: 100%;
+}
+
+.corner {
+    width: 24rem;
+}
+
+.icon-1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.icon-2 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.icon-3 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.logo {
+    width: 5.4rem;
+    position: absolute;
+    top: 0;
+    left: 1.6rem;
+}
+
+.container {
+    background-color: #e1d4bb;
+    padding: 2.4rem;
+    border-radius: 11px;
+    position: relative;
+    /* width: 80rem; */
+}
+
+.title-container {
+    /* display: flex; */
+    align-items: center;
+    text-align: center;
+    margin-bottom: 3.2rem;
+    text-align: center;
+}
+
+.primary-title {
+    justify-self: center;
+}
+
+.note {
+    width: 100%;
+    margin-bottom: 7.2rem;
+    /* position: relative; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.8rem;
+}
+
+.line {
+    display: block;
+    width: 10rem;
+    height: 1px;
+    background-color: #537188;
+    /* position: absolute; */
+}
+
+.left-line {
+    left: 0;
+}
+
+.right-line {
+    right: 0;
+}
+
+.main {
+    text-align: center;
+}
+
+.main p {
+    margin-bottom: 4.8rem;
+}
+
+.inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: 3.6rem;
+}
+
+.input {
+    font-size: 2.6rem;
+    background-color: rgba(83, 113, 136, 0.6);
+    border-radius: 6px;
+    color: #fff;
+    padding: 1rem;
+}
+
+.side-header {
+    text-decoration: underline;
+    margin-bottom: 4.2rem;
+}
+
+.btn {
+    outline: none;
+    border: none;
+    background-color: #537188;
+    color: #fff;
+    width: 100%;
+    padding: 1.2rem;
+    border-radius: 9px;
+}

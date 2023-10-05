@@ -46,7 +46,7 @@ use Illuminate\Support\Facades\Route;
 //    return response()->json(['message' => 'CORS test successful']);
 //})->middleware('cros');
 
-
+//Route::middleware('cors')->group(function () {
 Route::middleware('json')->group(function () {
     Route::get('test1', function () {
         return ["test" => glob(__DIR__ . '/*/*.php'),
@@ -64,12 +64,14 @@ Route::middleware('json')->group(function () {
         });
 
 // User     api/
-        // TODO: ADD URL TO UPDATE USER ROLE
         Route::get('/users', [UserController::class, 'index']); // TODO: Admins
 
         Route::get('/user/warn/{user}', [UserController::class, 'warn']);
 
+        // TODO: ADD URL TO UPDATE USER ROLE - DONE
+        Route::post('/user/role/update/{user}', [\App\Http\Controllers\AdminController::class, 'promoteRequest']);
         Route::put('/user/role/{user}', [UserController::class, 'updateRole']);
+
 
 
 // Hadises
@@ -209,7 +211,7 @@ Route::middleware('json')->group(function () {
 
 
     // ALL_USERS
-    Route::get('question/show', [QuestionController::class, 'index']); // TODO: All Users
+    Route::get('/question/show', [QuestionController::class, 'index'])->middleware('json'); // TODO: All Users
 
     Route::post('/hadis/show', [HadisController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
     Route::get('/hadis/show/{hadis}', [HadisController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
@@ -236,3 +238,4 @@ Route::middleware('json')->group(function () {
 //    include_once base_path("routes\\api\\guest.php");
 
 });
+//});

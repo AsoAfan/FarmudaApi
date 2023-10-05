@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\AdminOrEditor;
 use App\Http\Middleware\ApiResponse;
+use App\Http\Middleware\Cors;
 use App\Http\Middleware\Editor;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'admin' => Admin::class,
         'admin-editor' => AdminOrEditor::class,
         'editor' => Editor::class,
+
     ];
 }

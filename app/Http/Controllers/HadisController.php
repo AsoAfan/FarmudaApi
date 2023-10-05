@@ -48,6 +48,7 @@ class HadisController extends Controller
 
     public function latest()
     {
+
         return Hadis::latest()->get()->take(2);
     } // DONE
 

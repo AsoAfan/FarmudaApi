@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -41,12 +40,11 @@ class UserController extends Controller
         return [$user];
     }
 
-    public function warn(User $user)
+    public function warn(User $user, Request $request)
     {
-        $user->notify(new WarningNotification($user->name));
+        $user->notify(new WarningNotification($user->name, $request->get('message') ?? "Please be careful"));
         return response(['success' => $user->name . " warned", 'status' => 200]);
     }
-
 
 
     /**
@@ -59,23 +57,28 @@ class UserController extends Controller
 
     public function updateRole(Request $request, User $user)
     {
-        $validator = Validator::make(array_map('strtolower', $request->all()), [
-            'role' => ['string', 'in:user,guider,editor,admin']
-        ]);
+//        $validator = Validator::make(array_map('strtolower', $request->all()), [
+//            'role' => ['string', 'in:user,guider,editor,admin']
+//        ]);
 
 
         if ($user->role === $request->role) return ["success" => "Nothing to do {$user->name} is already {$request->role}", "statues" => 200];
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+//        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+//        Mail::to(User::where('role', "admin")->get());
         $f_role = $user->role;
         $user->role = $request->role;
         $user->save();
 
         $user->notify(new RoleChangedNotification($user->name, $f_role));
-        $user->notify(new WarningNotification());
+//        $user->notify(new WarningNotification());
 
         return [
-            'success' => "Role of {$user->name} Updated from {$f_role} to {$user->role}", 'status' => 200
+            "username" => $user->name,
+            "previousRole" => $f_role,
+            "newRole" => $user->role,
+            'success' => "Role of {$user->name} Updated from {$f_role} to {$user->role}",
+            'status' => 200
         ];
 
     }

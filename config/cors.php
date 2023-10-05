@@ -15,20 +15,20 @@ return [
     |
     */
 
-    'paths' => ['sanctum/csrf-cookie'],
+    'paths' => ['*'],
 
-    'allowed_methods' => ['GET'],
+    'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*.test'],
+    'allowed_origins' => ['https://farmudaa.com'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => [''],
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

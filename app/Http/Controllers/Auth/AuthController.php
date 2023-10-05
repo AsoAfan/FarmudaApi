@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Mail\EmailOtp;
 use App\Mail\OTP;
 use App\Models\User;
-use App\Rules\KurdishChars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -43,10 +42,9 @@ class AuthController extends Controller
         ]);
 
         // TODO: Check for internet connection
-
-        if ($newUser) {
+        if ($newUser)
             return $this->sendOtp($newUser);
-        }
+
 
         return response()->json(['errors' => "An error occurred while sending email", 'status' => response()->status()], response()->status());
 

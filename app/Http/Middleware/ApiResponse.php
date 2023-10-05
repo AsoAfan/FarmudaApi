@@ -17,6 +17,9 @@ class ApiResponse
     {
         $response = $next($request);
 
-        return response()->json($response->original, $response->status());
+        $response->setContent(json_encode($response->getOriginalContent()));
+        $response->header('Content-Type', 'application/json');
+
+        return $response;
     }
 }

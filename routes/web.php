@@ -12,12 +12,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('sanctum/csrf-cookie', function () {
-    return response()->json(['csrf' => csrf_token()]);
-});
+Route::get('sanctum/csrf-cookie');
 
 Route::get('/', function (){
-    return view('welcome');
+    return redirect("https://farmudaa.com");
 });
 
 Route::get('auth/google', [\App\Http\Controllers\Auth\SocialController::class, 'google']);
