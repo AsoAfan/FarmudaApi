@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -44,6 +45,25 @@ class UserController extends Controller
     {
         $user->notify(new WarningNotification($user->name, $request->get('message') ?? "Please be careful"));
         return response(['success' => $user->name . " warned", 'status' => 200]);
+    }
+
+
+    /**
+     * Updated profile image
+     */
+    public function updateProfileImage(Request $request, User $user)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'imgUrl' => 'unique:users,profile_image|required'
+        ]);
+
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+
+        $user->profile_image = $request->get('imgUrl');
+        $user->save();
+
+        return ['success' => "profile image updated successfully", 'imgUrl' => $user->profile_image];
     }
 
 

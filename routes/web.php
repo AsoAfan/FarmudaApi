@@ -18,8 +18,8 @@ Route::get('/', function (){
     return redirect("https://farmudaa.com");
 });
 
-Route::get('auth/google', [\App\Http\Controllers\Auth\SocialController::class, 'google']);
+Route::get('/auth/google', [\App\Http\Controllers\Auth\SocialController::class, 'google']);
 
-Route::get('auth/google/callback', [\App\Http\Controllers\Auth\SocialController::class, 'callback']);
+Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\SocialController::class, 'callback']);
 
 
