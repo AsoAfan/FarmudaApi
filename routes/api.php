@@ -155,10 +155,7 @@ Route::middleware('json')->group(function () {
 
         // User
         Route::get('/user', [\App\Http\Controllers\UserController::class, 'current']);
-
-        // Chats
-        Route::get('/messages', [\App\Http\Controllers\MessageController::class, 'index']);
-        Route::post('/messages/test', [\App\Http\Controllers\MessageController::class, 'store']);
+        Route::post('/user/image/{user}', [UserController::class, 'update']);
 
         // Notifications
         Route::get('/user/notifications', [NotificationController::class, 'index']);

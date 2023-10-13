@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->longText('arabic');
             $table->longText('kurdish');
+            $table->longText('badini');
             $table->longText("arabic_search");
             $table->longText('description');
             $table->unsignedInteger('hadis_number');

@@ -19,6 +19,7 @@ class HadisFactory extends Factory
         return [
             'arabic' => $this->faker->paragraph,
             'kurdish' => $this->faker->paragraph,
+            'badini' => $this->faker->paragraph ,
             'description' => $this->faker->paragraph,
             'arabic_search' => $this->faker->paragraph,
             'hadis_number' => $this->faker->numerify,

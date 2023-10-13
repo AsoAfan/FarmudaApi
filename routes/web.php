@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('sanctum/csrf-cookie');
+Route::get('sanctum/csrf-cookie', function (){
+    return ['success' => 'CSRF token set successfully'];
+});
 
 Route::get('/', function (){
     return redirect("https://farmudaa.com");

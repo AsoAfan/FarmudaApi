@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -51,28 +52,56 @@ class UserController extends Controller
     /**
      * Updated profile image
      */
-    public function updateProfileImage(Request $request, User $user)
-    {
-
-        $validator = Validator::make($request->all(), [
-            'imgUrl' => 'unique:users,profile_image|required'
-        ]);
-
-        if ($validator->fails()) return response(['errors' => $validator->errors()->all(), 'status' => 406], 406);
-
-        $user->profile_image = $request->get('imgUrl');
-        $user->save();
-
-        return ['success' => "profile image updated successfully", 'imgUrl' => $user->profile_image];
-    }
+//    public function updateProfileImage(Request $request, User $user)
+//    {
+//        $is_allowed = Gate::check('update', $user);
+//
+//        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 403], 403);
+//
+//        $validator = Validator::make($request->all(), [
+//            'imgUrl' => 'unique:users,profile_image|required'
+//        ]);
+//
+//        if ($validator->fails()) return response(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+//
+//        $user->profile_image = $request->get('imgUrl');
+//        $user->save();
+//
+//        return ['success' => "profile image updated successfully", 'imgUrl' => $user->profile_image];
+//    }
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $is_allowed = Gate::check('update', $user);
+        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 403], 403);
+
+
+        $validator = Validator::make($request->all(), [
+            'profileImage' => 'unique:users,profile_image',
+            'imageName' => 'string|required_with:profileImage', // TODO: Validate image_type
+            'name' => 'string',
+            'email' => 'email|unique:users,email,' . $user->email,
+            'gender' => 'in:male,female'
+        ]);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+
+
+//        Can be better by using $request->input(field_value, default_value)
+        $user->update([
+            'profile_image' => $request->get('profileImage') ?? $user->profile_image,
+            'name' => $request->get('name') ?? $user->name,
+            'email' => $request->get('email') ?? $user->email,
+            'gender' => $request->get('gender') ?? $user->gender,
+            'email_verified_at' => $request->has('email') ? null : $user->email_verified_at
+        ]);
+
+
+        return ['success' => "user updated successfully", 'updatedUser' => $user];
+
     }
 
     public function updateRole(Request $request, User $user)
@@ -106,8 +135,24 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $is_allowed = Gate::check('delete', $user);
+        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 403], 403);
+
+        $user->delete();
+
+        return ['success' => $user->name . "deleted successfully"];
+    }
+
+    public function forceDestroy(User $user)
+    {
+        $is_allowed = Gate::check('delete', $user);
+        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 403], 403);
+
+        $user->forceDelete();
+        return ['success' => $user->name . ' deleted permanently'];
+
+
     }
 }

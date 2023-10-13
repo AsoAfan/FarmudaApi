@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('image_name')->nullable();
             $table->longText('profile_image')->nullable();
             $table->string('name');
             $table->string('email')->unique();
@@ -27,6 +28,7 @@ return new class extends Migration {
             $table->integer('otp_attempt_count')->default(0);
             $table->date('latest_otp_attempt')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

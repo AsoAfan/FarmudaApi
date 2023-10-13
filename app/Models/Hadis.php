@@ -25,7 +25,7 @@ class Hadis extends Model
         /**
          *
          *  Must-have filters for hadises
-         * 1. search (arabic, kurdish and hadis_number => PartialMatch)
+         * 1. search (arabic, kurdish OR badini and hadis_number => PartialMatch)
          * 2. teller (name => ExactMatch)
          * 3. categories (name => ExactMatch)
          * 4. Books (name => ExactMatch)
@@ -35,10 +35,12 @@ class Hadis extends Model
 
 
         // 1. Search
-        $query->when($filters['search'] ?? false, function ($query, $search) {
-            $query->where(function ($query) use ($search) {
+        $query->when($filters['search'] ?? false, function ($query, $search) use ($filters) {
+            $query->where(function ($query) use ($search, $filters) {
                 $query->where('arabic_search', 'like', "%{$search}%")
-                    ->orWhere('kurdish', 'like', "%{$search}%")
+                    ->orWhere(
+                        ($filters['lang'] ?? "ku") == "bd" ? 'badini' : "kurdish",
+                        'like', "%{$search}%")
                     ->orWhere('hadis_number', 'like', "%{$search}%");
 //                    ->orWhereHas('chapters', function ($query) use ($search){
 //                        $query->where('name', 'like', "%$search%"); }); Search in Chapters also

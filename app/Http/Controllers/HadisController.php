@@ -32,7 +32,7 @@ class HadisController extends Controller
 
         return Hadis::latest()
             ->filter(
-                array_filter(request(["search", 'teller', 'category', 'book', 'chapter']),
+                array_filter(request(['lang', 'search', 'teller', 'category', 'book', 'chapter']),
                     fn($value) => $value !== [null])
             )->skip($skip)
             ->take($take)
