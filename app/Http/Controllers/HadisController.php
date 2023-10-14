@@ -185,7 +185,7 @@ class HadisController extends Controller
                 $duplicated_hadis = Hadis::where('hadis_number', $request->get('hadis_number'))->first();
                 return response()->json([
                     "errors" => 'hadis number: ' . $request->get('hadis_number') . ' is already assigned to another hadis',
-                    'duplicated_hadis_id' => $duplicated_hadis->id,
+                    'duplicated_hadis_id' => $duplicated_hadis?->id,
                     'status' => 422
                 ], 422);
             }
@@ -207,7 +207,7 @@ class HadisController extends Controller
         $newHadis->categories()->attach($request->get('hadis_category_ids'));
 
 
-        return ['success' => "Hadis added successfully", 'newHadis' => $newHadis];
+        return ['success' => "Hadis added successfully", 'data' => $newHadis];
 
     }
 

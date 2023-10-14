@@ -52,7 +52,7 @@ Route::middleware('json')->group(function () {
         return ["test" => glob(__DIR__ . '/*/*.php'),
 
         ];
-    })->name('test1');
+    })->name('test1'); // DEV
 
 
     // ADMIN
@@ -61,12 +61,12 @@ Route::middleware('json')->group(function () {
         Route::get('/a/test', function () {
 //        dd(request()->route()->middleware());
             return \request()->user();
-        });
+        }); // DEV
 
-// User     api/
-        Route::get('/users', [UserController::class, 'index']); // TODO: Admins
+// User
+        Route::get('/users', [UserController::class, 'index']); // returns all users
 
-        Route::get('/user/warn/{user}', [UserController::class, 'warn']);
+        Route::get('/warn/{user}', [UserController::class, 'warn']); // send warning notification to user => {user} -> id
 
         // TODO: ADD URL TO UPDATE USER ROLE - DONE
         Route::post('/user/role/update/{user}', [\App\Http\Controllers\AdminController::class, 'promoteRequest']);

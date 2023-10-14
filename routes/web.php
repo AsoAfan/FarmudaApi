@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('sanctum/csrf-cookie', function (){
-    return ['success' => 'CSRF token set successfully'];
+Route::get('/sanctum/csrf-cookie', function (){
+    return ['csrf' => csrf_token()];
 });
 
 Route::get('/', function (){
