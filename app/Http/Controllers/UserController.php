@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function current()
     {
-        return [auth()->user()];
+        return auth()->user();
     }
 
     /**
