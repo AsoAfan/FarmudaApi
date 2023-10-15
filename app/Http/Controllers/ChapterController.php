@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Rules\ArabicChars;
 use App\Rules\KurdishChars;
-use App\Rules\SlugValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +15,7 @@ class ChapterController extends Controller
      */
     public function index()
     {
-        return Chapter::with('hadises')->get();
+        return Chapter::all();
     }
 
     /**
@@ -26,30 +25,20 @@ class ChapterController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'name' => ['required', 'unique:chapters,name', new ArabicChars],
-            'slug' => ['required', 'unique:chapters,slug', new SlugValidator],
             'book_id' => ['required', 'exists:books,id']
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 400);
 
 
         $newChapter = Chapter::create([
-                'name' => $request->get('name'),
-                'slug' => $request->get('slug')
+                'name' => $request->get('name')
             ]
         );
 
         $newChapter->books()->attach($request->get('book_id'));
 
-        return ["success" => "Chapter added successfully", "newChapter" => $newChapter];
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return ["success" => "Chapter added successfully", "data" => $newChapter];
     }
 
     /**
@@ -60,16 +49,15 @@ class ChapterController extends Controller
         //
 
         $validator = Validator::make($request->all(), [
-            'name' => ['required_without:slug', "unique:chapters,name,{$chapter->id}", new KurdishChars],
-            'slug' => ['required_without:name', "unique:chapters,name,{$chapter->id}", new SlugValidator]
+            'name' => ['required_without:slug', "unique:chapters,name,{$chapter->id}", new KurdishChars]
         ]);
 
-        if ($validator->fails()) return ["errors" => $validator->errors()->all()];
+        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
 
         $chapter->update($request->all());
 
-        return ["success" => "chapter updated successfully", 'newChapter' => $chapter];
+        return ["success" => "chapter updated successfully", 'data' => $chapter];
     }
 
     /**
@@ -78,7 +66,9 @@ class ChapterController extends Controller
     public function destroy(Chapter $chapter)
     {
         //
-        $chapter->delete();
-        return ['success' => $chapter->name . " deleted successfully"];
+        $delete = $chapter->delete();
+        if (!$delete) return response(['errors' => 'An error occured while deleting chapter'], 400);
+
+        return ['success' => $chapter->name . " deleted successfully", 'data' => $chapter->id];
     }
 }

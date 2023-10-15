@@ -14,8 +14,7 @@ class FavouriteController extends Controller
 
 
         return response()->json([
-                "fav" => Favourite::where('user_id', auth()->id())->get(),
-                'status' => 200
+                "data" => Favourite::where('user_id', auth()->id())->get(),
             ]
         );
 
@@ -26,9 +25,9 @@ class FavouriteController extends Controller
         try {
             auth()->user()->favourites()->create(['hadis_id' => $hadis->id]);
 
-            return response()->json(['success' => "{$hadis->arabic} Added to " . auth()->user()->name . "'s favourite list", 'status' => 200]);
+            return response()->json(['success' => "{$hadis->arabic} Added to " . auth()->user()->name . "'s favourite list"]);
         } catch (QueryException $exception) {
-            return response()->json(["errors" => "Duplicated entry", "status" => 422], 422);
+            return response()->json(["errors" => "Duplicated entry"], 400);
         }
 
 

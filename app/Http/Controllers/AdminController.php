@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\PromotionNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,24 +23,28 @@ class AdminController extends Controller
 
         if ($validator->fails()) return response()->json(
             [
-                'errors' => $validator->errors()->all(),
-                'status' => 406
+                'errors' => $validator->errors()->all()
             ],
-            406
+            400
         );
 
 
+//        $admins = User::where('role', 'admin')->where('id', Auth::id())->toSql();
+//        Log::info(User::where('role', 'admin')->toSql());
+//        Which one is better using reject function on collection instance or one additional where
+
         $admin = Auth::user();
-        $admins = User::where('role', 'admin')->get();
+        $admins = User::where('role', 'admin')->where('id', '!=' , Auth::id())->get();
         Notification::send($admins,
             new PromotionNotification(
                 admin: $admin->name,
                 user: $user->name,
+                user_id: Hash::make($user->id),
                 o_role: $user->role,
                 role: $request->get('role')
             ));
 
-        return ["user_id" => $user->id, 'role' => $request->get('role')];
+        return ['success' => 'Notification sent successfully'];
 
 
     }

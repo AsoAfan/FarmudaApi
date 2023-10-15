@@ -8,7 +8,7 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        return auth()->user()->notifications()->get(['data', 'read_at']);
+        return auth()->user()->notifications()->get(['id', 'data', 'read_at']);
     }
 
     public function unreadAll()
@@ -17,7 +17,6 @@ class NotificationController extends Controller
 
         return [
             'success' => "All available notifications marked as unread for " . auth()->user()->name,
-            'status' => 200
         ];
 
     }
@@ -28,37 +27,33 @@ class NotificationController extends Controller
 
         return [
             'success' => "All available notifications marked as read for " . auth()->user()->name,
-            'status' => 200
         ];
 
     }
 
     public function getReadNotifications()
     {
-        return [
-            'readNotifications' =>
-                auth()->user()
-                    ->readNotifications()
-                    ->get([
-                        'data',
-                        'read_at'
-                    ])
-        ];
+        return auth()->user()
+            ->readNotifications()
+            ->get([
+                'id',
+                'data',
+                'read_at'
+            ]);
     }
 
     public function getUnreadNotifications()
     {
 
-        return [
-            'unreadNotifications' =>
-                auth()->user()
-                    ->unreadNotifications()
-                    ->get([
-                        'data',
-                        'read_at'
-                    ])
-
-        ];
+        return auth()->user()
+            ->unreadNotifications()
+            ->get(
+                [
+                    'id',
+                    'data',
+                    'read_at'
+                ]
+            );
 
     }
 

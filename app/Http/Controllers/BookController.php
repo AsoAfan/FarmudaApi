@@ -14,41 +14,42 @@ class BookController extends Controller
 
     public function index()
     {
-        return Book::with("chapters.hadises")->get();
+        return ['data' => Book::all()];
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             "name" => ["required", "unique:books,name", new ArabicChars],
-            "slug" => ['required', 'unique:books,slug', new SlugValidator]
         ]);
 
-        if ($validator->fails()) return ['errors' => $validator->errors()->all()];
+        if ($validator->fails()) return ['errors' => $validator->errors()->all(), 400];
 
         $newBook = Book::create($request->all());
 
-        return ['success' => "Book successfully created", 'newBook' => $newBook];
+        return ['success' => "Book successfully created", 'data' => $newBook];
     }
 
     public function update(Book $book, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "name" => ["required_without:slug", "unique:books,name,$book->id", new ArabicChars],
-            "slug" => ["required_without:name", "unique:books,slug,$book->id", new SlugValidator]
+            "name" => ["unique:books,name,$book->id", new ArabicChars],
+
         ]);
 
-        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()], 422);
+        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()], 400);
 
         $book->update($request->all());
 
-        return ["success" => "Book updated successfully", "newBook" => $book];
+        return ["success" => "Book updated successfully", "data" => $book];
     }
 
-    public function destroy(Book $book, Request $request)
+    public function destroy(Book $book)
     {
-        $book->delete();
+       $delete =  $book->delete();
 
-        return ["success" => "$book->name successfully deleted"];
+       if (!$delete) return response(['errors' => 'An error occurred while deleting '], 400);
+
+        return ["success" => "$book->name successfully deleted", 'data' => $book->id];
     }
 }

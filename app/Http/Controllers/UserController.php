@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,13 +17,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::with(['questions'])->get(['id', 'name', 'email', 'role', 'created_at']);
+        return ['data' => User::all(['id', 'name', 'email', 'role', 'created_at'])];
     }
 
 
     public function current()
     {
-        return auth()->user()->with('favourites.hadis')->find(auth()->id());
+        return ['data' => auth()->user()->with('favourites.hadis')->find(auth()->id())];
     }
 
     /**
@@ -31,7 +32,9 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        // Done in \App\Http\Controllers\Auth\AuthController
+        /*
+         * Done in \App\Http\Controllers\Auth\AuthController
+         */
     }
 
     /**
@@ -39,13 +42,13 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return [$user];
+        return ['data' => $user];
     }
 
     public function warn(User $user, Request $request)
     {
         $user->notify(new WarningNotification($user->name, $request->get('message') ?? "Please be careful"));
-        return response(['success' => $user->name . " warned", 'status' => 200]);
+        return ['success' => $user->name . " warned"];
     }
 
 
@@ -87,7 +90,7 @@ class UserController extends Controller
             'email' => 'email|unique:users,email,' . $user->email,
             'gender' => 'in:male,female'
         ]);
-        if ($validator->fails()) return response(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
 
 //        Can be better by using $request->input(field_value, default_value)
@@ -100,7 +103,7 @@ class UserController extends Controller
         ]);
 
 
-        return ['success' => "user updated successfully", 'updatedUser' => $user];
+        return ['success' => "user updated successfully", 'data' => $user];
 
     }
 
@@ -111,7 +114,26 @@ class UserController extends Controller
 //        ]);
 
 
+//        dd(Auth::user()->notifications()->first()->data['user_id']);
+
+//dd(Auth::user()->notifications()->findOrFail($request->get('notification_id'))->data);
+
+        $notification = Auth::user()->notifications()->findOr(
+            $request->get('notification_id'),
+            fn() => abort(400, "Invalid notification id")
+        );
+        $user_id = $notification->data['user_id'];
+        $role = $notification->data['user_role'];
+
+//        dd($user_id);
+
+        if (!($request->user_id === $user_id)) return response(['errors' => 'Process can not be done'], 400);
+
+        if (!($request->role == $role)) return response(['errors' => 'Process can not be done'], 400);
+
         if ($user->role === $request->role) return ["success" => "Nothing to do {$user->name} is already {$request->role}", "statues" => 200];
+
+        // TODO: If denied: delete notification as nothing happen
 
 //        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
 //        Mail::to(User::where('role', "admin")->get());
@@ -127,7 +149,6 @@ class UserController extends Controller
             "previousRole" => $f_role,
             "newRole" => $user->role,
             'success' => "Role of {$user->name} Updated from {$f_role} to {$user->role}",
-            'status' => 200
         ];
 
     }
@@ -138,11 +159,12 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $is_allowed = Gate::check('delete', $user);
-        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 403], 403);
+        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 400], 400);
 
-        $user->delete();
+        $delete = $user->delete();
+        if ($delete) return response(['errors' => 'An error occurred while deleting user'], 400);
 
-        return ['success' => $user->name . "deleted successfully"];
+        return ['success' => $user->name . "deleted successfully", 'data' => $user->id];
     }
 
     public function forceDestroy(User $user)

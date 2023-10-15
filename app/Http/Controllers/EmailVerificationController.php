@@ -50,6 +50,6 @@ class EmailVerificationController extends Controller
         }
 
 
-        return response()->json(["success" => "$user->email verified successfully", "status" => 200]);
+        return response()->json(["success" => "$user->email verified successfully"]);
     }
 }

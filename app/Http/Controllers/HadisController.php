@@ -15,29 +15,29 @@ class HadisController extends Controller
     public function index()
     {
         $validator = Validator::make(request()->all(), [
-            'take' => 'numeric',
-            'skip' => 'numeric',
+            'page' => 'numeric',
             'category' => 'array',
             'book' => 'array',
             'chapter' => 'array'
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 406);
 
 //        dd(array_filter(request(["search", 'teller', 'category', 'book', 'chapter',]),
 //            fn($value) => $value !== [null]));
 
-        $skip = \request('skip') ?? 0;
-        $take = \request('take') ?? 25;
+        $page = request('page');
+        $take = 20;
 
-        return Hadis::latest()
-            ->filter(
-                array_filter(request(['lang', 'search', 'teller', 'category', 'book', 'chapter']),
-                    fn($value) => $value !== [null])
-            )->skip($skip)
-            ->take($take)
-            ->get();
-        // TODO: Double check for skipping algorithm
+        return ['data' =>
+            Hadis::latest()
+                ->filter(
+                    array_filter(request(['lang', 'search', 'teller', 'category', 'book', 'chapter']),
+                        fn($value) => $value !== [null])
+                )->skip($page * $take)
+                ->take($take)
+                ->get()];
+        // TODO: Double check for skipping algorithm => DONE
 
 //        $validator = Validator::make(request()->all(), [
 //            // Validation if needed for incoming filters
@@ -49,13 +49,13 @@ class HadisController extends Controller
     public function latest()
     {
 
-        return Hadis::latest()->get()->take(2);
+        return ['data' => Hadis::latest()->take(2)];
     } // DONE
 
     public function show(Hadis $hadis)
     {
 
-        return $hadis;
+        return ['data' => $hadis];
 
     } // DONE
 
@@ -64,7 +64,7 @@ class HadisController extends Controller
 
 //        return Hadis::whereRaw("char_length(arabic) < " . request('chars'))->get()->take($num);
 
-        return Hadis::where('is_featured', 1)->get();
+        return ['data' => Hadis::where('is_featured', 1)->get()];
 //        ->whereRaw('char_length(arabic) <= ' . 50)
 
     } // DONE
@@ -72,33 +72,36 @@ class HadisController extends Controller
     public function toggleFeature(Hadis $hadis)
     {
         $is_featured = $hadis->is_featured;
+        // CHeck again why I did that: using additional variable for $hadis->is_featured in line 84
 
 
         $validator = Validator::make($hadis->attributesToArray(), [
             'arabic' => ['string', 'max:50']
         ]);
 
-        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
+        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
         $hadis->update(['is_featured' => !$is_featured]);
 
         return ['success' => $hadis->arabic . (!$is_featured ? " added to featured list" : " removed from featured list")];
     } // DONE
 
-    public function updateFeaturedLength(Request $request)
-    {
-//        dd("test");
-        $validator = Validator::make($request->all(), [
-            'maxLength' => "required|numeric|min:1"
-        ]);
+    /*
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 406);
-        $limit_old = config('myApp.featured_max_length');
-//        dd($request->get('maxLength'));
-        config(['myApp.featured_max_length' => $request->get('maxLength')]);
-        return \response(['success' => "max limit for featured hadises updated from $limit_old to " . config('myApp.featured_max_length')]);
-    }
+        public function updateFeaturedLength(Request $request)
+        {
+    //        dd("test");
+            $validator = Validator::make($request->all(), [
+                'maxLength' => "required|numeric|min:1"
+            ]);
 
+            if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 406);
+            $limit_old = config('myApp.featured_max_length');
+    //        dd($request->get('maxLength'));
+            config(['myApp.featured_max_length' => $request->get('maxLength')]);
+            return response(['success' => "max limit for featured hadises updated from $limit_old to " . config('myApp.featured_max_length')]);
+        }
+    */
     public function update(Hadis $hadis, Request $request)
     {
         /**
@@ -127,15 +130,14 @@ class HadisController extends Controller
                     ->json(
                         [
                             'errors' => "Hadis number: {$duplicated_hadis_number} is already assigned to another hadis",
-                            'duplicated_hadis_id' => $hadis_with_hadis_number?->id,
-                            'status' => 422
+                            'data' => $hadis_with_hadis_number?->id
                         ],
-                        422
+                        400
                     );
             }
 
 
-            return response()->json(['errors' => $validator->errors()->all()], 422);
+            return response()->json(['errors' => $validator->errors()->all()], 400);
         }
 
         $hadis->update(
@@ -155,7 +157,7 @@ class HadisController extends Controller
         $hadis->chapters()->syncWithoutDetaching($request->get('chapter_ids') ?? $hadis->chapters->pluck('id')->toArray());
 
 
-        return ["success" => "Hadis updated successfully", "updatedHadis" => $hadis->fresh(), 'status' => 200];
+        return ["success" => "Hadis updated successfully", "data" => $hadis->fresh()];
     } // DONE
 
     public function store(Request $request)
@@ -186,8 +188,7 @@ class HadisController extends Controller
                 return response()->json([
                     "errors" => 'hadis number: ' . $request->get('hadis_number') . ' is already assigned to another hadis',
                     'duplicated_hadis_id' => $duplicated_hadis?->id,
-                    'status' => 422
-                ], 422);
+                ], 400);
             }
             return response()->json(["errors" => $validator->errors()->all()], 422);
         }
@@ -220,20 +221,21 @@ class HadisController extends Controller
             'chapter_ids' => ["array", "exists:chapters,id"]
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 406], 406);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all(), 'status' => 400], 406);
 
         $hadis->categories()->detach($request->get('category_ids') ?? []);
         $hadis->books()->detach($request->get('book_ids') ?? []);
         $hadis->chapters()->detach($request->get('chapter_ids') ?? []);
 
-        return response(['success' => "Operation done successfully", 'status' => 200]);
+        return response(['success' => "Operation done successfully"]);
 
 
     }
 
     public function destroy(Hadis $hadis)
     {
-        $hadis->delete();
-        return ["success" => "$hadis->arabic deleted successfully"];
+        $delete = $hadis->delete();
+        if (!$delete) return response(['errors' => 'An error occurred while deleting hadis'], 400);
+        return ["success" => "$hadis->arabic deleted successfully", 'data' => $hadis->id];
     }
 }

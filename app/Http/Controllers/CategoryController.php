@@ -17,8 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-        return Category::with('hadises')->get();
+        return ['data' => Category::all()];
     }
 
     /**
@@ -29,19 +28,18 @@ class CategoryController extends Controller
         //
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'unique:categories,name', new KurdishChars],
-            'slug' => ['required', 'unique:categories,slug', new SlugValidator]
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 400);
 
         $newCategory = Category::create([
             'name' => $request->get('name'),
-            'slug' => $request->get('slug')
+
         ]);
 
-        if (!$newCategory) return ['errors' => response()->status()];
+        if (!$newCategory) return response()->json(['errors' => response()->status()], 400);
 
-        return ["success" => 'Category created successfully', "newCategory" => $newCategory];
+        return ["success" => 'Category created successfully', "data" => $newCategory];
         
     }
 
@@ -58,16 +56,15 @@ class CategoryController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => ['required_without:slug', 'unique:categories,name,' . $category->id, new KurdishChars],
-            'slug' => ['required_without:name', 'unique:categories,slug,' . $category->id, new SlugValidator]
+            'name' => ['required_without:slug', 'unique:categories,name,' . $category->id, new KurdishChars]
         ]);
 
 
-        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 422);
+        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
         $category->update($request->all());
 
-        return ['success' => "Data updated successfully", "newCategory" => $category]; // TODO: Optimize returned data
+        return ['success' => "Data updated successfully", "data" => $category]; // TODO: Optimize returned data
     }
 
 
@@ -77,7 +74,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return ["success" => $category->name . " deleted successfully"];
+        return ["success" => $category->name . " deleted successfully", 'data'=> $category->id];
 
     }
 }

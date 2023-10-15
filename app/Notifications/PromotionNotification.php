@@ -17,6 +17,7 @@ class PromotionNotification extends Notification
     public function __construct(
         private readonly string $admin,
         private readonly string $user,
+        private readonly string $user_id,
         private readonly string $o_role,
         private readonly string $role
     )
@@ -40,6 +41,9 @@ class PromotionNotification extends Notification
     public function toDatabase(object $notifiable): array
     {
         return [
+            'type' => 'promotion',
+            'user_id' => $this->user_id,
+            'user_role' => $this->role,
             "message" => $this->admin. " wants to promote " . $this->user . " from " . $this->o_role . " to " . $this->role
         ];
     }

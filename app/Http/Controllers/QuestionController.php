@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Rules\KurdishOrArabicChars;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
@@ -23,7 +24,7 @@ class QuestionController extends Controller
     public function current()
     {
 //        auth()->user()->questions()->first();
-        return Question::where('user_id', auth()->id());
+        return ['data' => Question::where('user_id', auth()->id())];
     }
 
     /**
@@ -39,10 +40,9 @@ class QuestionController extends Controller
 
 
         if ($validator->fails())
-            return response()->json([
+            return response([
                 'errors' => $validator->errors()->all(),
-                'status' => 406
-            ], 406
+            ], 400
             );
 
         $newQuestion = Question::create([
@@ -50,7 +50,7 @@ class QuestionController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return ['success' => "{$newQuestion->user->name}'s question added successfully"];
+        return ['success' => "{$newQuestion->user->name}'s question added successfully", 'data' => $newQuestion];
     }
 
     /**
@@ -66,21 +66,21 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-//        $auth = Gate::inspect('update', $question);
-//        if (!$auth->allowed()) return response()->json(['errors' => "Unauthorized user"], 403);
+        $auth = Gate::check('update', $question);
+        if (!$auth->allowed()) return response()->json(['errors' => "Unauthorized user"], 400);
 
 
         $validator = Validator::make($request->all(), [
             'body' => ['min:10', new KurdishOrArabicChars]
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 422], 422);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 400);
 
         $question->update(
             $request->only('body')
         );
 
-        return ['success' => "Question updated successfully", 'updatedQuestion' => $question];
+        return ['success' => "Question updated successfully", 'data' => $question];
     }
 
     /**
@@ -88,12 +88,13 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-//        $auth = Gate::inspect('delete', $question);
-//        if (!$auth->allowed()) return response()->json(['errors' => "Unauthorized user"], 403);
+        $auth = Gate::check('delete', $question);
+        if (!$auth->allowed()) return response()->json(['errors' => "Unauthorized user"], 400);
 
 
-        $question->delete();
+        $delete = $question->delete();
+        if (!$delete) return response(['errors' => 'An occurred while deleting question'], 400);
 
-        return ['success' => $question->body . " has been deleted successfully"];
+        return ['success' => $question->body . " has been deleted successfully", 'data' => $question->id];
     }
 }
