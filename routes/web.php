@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,5 +24,6 @@ Route::get('/', function (){
 Route::get('/auth/google', [\App\Http\Controllers\Auth\SocialController::class, 'google']);
 
 Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\SocialController::class, 'callback']);
+//Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
 
 

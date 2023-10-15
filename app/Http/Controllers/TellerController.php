@@ -52,12 +52,12 @@ class TellerController extends Controller
         return ["success" => "Data updated success fully", "data" => $teller];
     }
 
-    public function destroy(Request $request, Teller $teller)
+    public function destroy(Teller $teller)
     {
 
         $delete = $teller->delete();
         if (!$delete) return response(['errors' => ['An error occurred while deleting teller']], 400);
-        return ['success' => $teller->name . " deleted successfully"];
+        return ['success' => $teller->name . " deleted successfully", 'data' => $teller->id];
 
     }
 

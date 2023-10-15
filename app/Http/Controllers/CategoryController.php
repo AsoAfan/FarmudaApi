@@ -17,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return ['data' => Category::all()];
+        return Category::all();
     }
 
     /**

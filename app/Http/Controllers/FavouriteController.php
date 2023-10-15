@@ -13,10 +13,9 @@ class FavouriteController extends Controller
     {
 
 
-        return response()->json([
-                "data" => Favourite::where('user_id', auth()->id())->get(),
-            ]
-        );
+        return Favourite::where('user_id', auth()->id())->get();
+
+
 
     }
 

@@ -29,14 +29,13 @@ class HadisController extends Controller
         $page = request('page');
         $take = 20;
 
-        return ['data' =>
-            Hadis::latest()
-                ->filter(
-                    array_filter(request(['lang', 'search', 'teller', 'category', 'book', 'chapter']),
-                        fn($value) => $value !== [null])
-                )->skip($page * $take)
-                ->take($take)
-                ->get()];
+        return Hadis::latest()
+            ->filter(
+                array_filter(request(['lang', 'search', 'teller', 'category', 'book', 'chapter']),
+                    fn($value) => $value !== [null])
+            )->skip($page * $take)
+            ->take($take)
+            ->get();
         // TODO: Double check for skipping algorithm => DONE
 
 //        $validator = Validator::make(request()->all(), [

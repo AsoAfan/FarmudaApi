@@ -9,10 +9,9 @@ class Chapter extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'book_id'];
+    protected $fillable = ['name', 'book_id'];
 
     protected $hidden = ['pivot'];
-
 
 
     public function books()
