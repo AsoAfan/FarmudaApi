@@ -98,7 +98,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($request->only(['email', 'password']))) return ['errors' => "Invalid credentials"];
 
-        return ['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user];
+        return ['success' => "Token generated successfully", 'data' =>['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user]];
     }
 
     public function logout()
