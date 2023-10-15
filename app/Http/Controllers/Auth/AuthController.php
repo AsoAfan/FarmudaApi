@@ -89,7 +89,7 @@ class AuthController extends Controller
             'password' => ['required']
         ]);
 
-        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
+        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
         $user = User::where('email', $request->email)->first();
 
@@ -98,7 +98,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($request->only(['email', 'password']))) return ['errors' => ["Invalid credentials"]];
 
-        return ['success' => "Token generated successfully", 'data' =>['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user]];
+        return ['success' => "Token generated successfully", 'data' => ['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user]];
     }
 
     public function logout()
