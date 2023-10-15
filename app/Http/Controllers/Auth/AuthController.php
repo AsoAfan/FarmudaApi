@@ -31,7 +31,7 @@ class AuthController extends Controller
             'password_confirmation' => ['required']
         ]);
 
-        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()]);
+        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
 
         $newUser = User::create([
@@ -46,7 +46,7 @@ class AuthController extends Controller
             return $this->sendOtp($newUser);
 
 
-        return response()->json(['errors' => "An error occurred while sending email", 'status' => response()->status()], response()->status());
+        return response(['errors' => "An error occurred while sending email", 'status' => response()->status()], response()->status());
 
     }
 
@@ -55,12 +55,12 @@ class AuthController extends Controller
 
         $user = $user ?: User::where('email', request('email'))->first();
 
-        if (!$user) return response()->json(['errors' => request()->get('email') . " not associated with any user", 'status' => 404], 404);
+        if (!$user) return response()->json(['errors' => request()->get('email') . " not associated with any user"], 400);
 
-        if ($user->email_verified_at) return ['errors' => $user->email . ' is verified with username: ' . $user->name];
+        if ($user->email_verified_at) return response(['errors' => $user->email . ' is verified with username: ' . $user->name], 400);
 
 //                                        TODO:can be better in feature
-        if ($user->otp_attempt_count > config('myApp.max_otp_attempts', 3)) return response()->json(['errors' => 'a lot of requests received please try again tomorrow', "status" => 403], 403);
+        if ($user->otp_attempt_count > config('myApp.max_otp_attempts', 3)) return response(['errors' => 'a lot of requests received please try again tomorrow'], 400);
 
         $otp = mt_rand(100000, 999999);
 //        \Illuminate\Support\Facades\Log::info("OTP Sent");
@@ -93,10 +93,10 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user && !$user->email_verified_at) return response()->json(['errors' => "verify email first", 'user_email' => $user->email], 401);
+        if ($user && !$user->email_verified_at) return response(['errors' => "verify email first", 'user_email' => $user->email], 400);
 
 
-        if (!Auth::attempt($request->only(['email', 'password']))) return ['errors' => ["Invalid credentials"]];
+        if (!Auth::attempt($request->only(['email', 'password']))) return response(['errors' => ["Invalid credentials"]], 400);
 
         return ['success' => "Token generated successfully", 'data' => ['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user]];
     }

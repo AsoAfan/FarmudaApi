@@ -27,7 +27,7 @@ class FavouriteController extends Controller
 
             return response()->json(['success' => "{$hadis->arabic} Added to " . auth()->user()->name . "'s favourite list"]);
         } catch (QueryException $exception) {
-            return response()->json(["errors" => "Duplicated entry"], 400);
+            return response(["errors" => "Duplicated entry"], 400);
         }
 
 

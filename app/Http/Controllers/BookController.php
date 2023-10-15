@@ -23,7 +23,7 @@ class BookController extends Controller
             "name" => ["required", "unique:books,name", new ArabicChars],
         ]);
 
-        if ($validator->fails()) return ['errors' => $validator->errors()->all(), 400];
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
         $newBook = Book::create($request->all());
 
@@ -37,7 +37,7 @@ class BookController extends Controller
 
         ]);
 
-        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()], 400);
+        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
         $book->update($request->all());
 

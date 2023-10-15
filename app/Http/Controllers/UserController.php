@@ -80,7 +80,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $is_allowed = Gate::check('update', $user);
-        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 403], 403);
+        if (!$is_allowed) return response(['errors' => ['unauthorized']], 400);
 
 
         $validator = Validator::make($request->all(), [
@@ -127,9 +127,9 @@ class UserController extends Controller
 
 //        dd($user_id);
 
-        if (!($request->user_id === $user_id)) return response(['errors' => 'Process can not be done'], 400);
-
-        if (!($request->role == $role)) return response(['errors' => 'Process can not be done'], 400);
+        if (!($request->user_id === $user_id)) return response(['errors' => ['Process can not be done']], 400);
+        // can be modified to one if because action same for both
+        if (!($request->role == $role)) return response(['errors' => ['Process can not be done']], 400);
 
         if ($user->role === $request->role) return ["success" => "Nothing to do {$user->name} is already {$request->role}", "statues" => 200];
 
@@ -159,10 +159,10 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $is_allowed = Gate::check('delete', $user);
-        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 400], 400);
+        if (!$is_allowed) return response(['errors' => ['unauthorized']], 400);
 
         $delete = $user->delete();
-        if ($delete) return response(['errors' => 'An error occurred while deleting user'], 400);
+        if ($delete) return response(['errors' => ['An error occurred while deleting user']], 400);
 
         return ['success' => $user->name . "deleted successfully", 'data' => $user->id];
     }
@@ -170,7 +170,7 @@ class UserController extends Controller
     public function forceDestroy(User $user)
     {
         $is_allowed = Gate::check('delete', $user);
-        if (!$is_allowed) return response(['errors' => 'unauthorized', 'status' => 403], 403);
+        if (!$is_allowed) return response(['errors' => ['unauthorized']], 400);
 
         $user->forceDelete();
         return ['success' => $user->name . ' deleted permanently'];

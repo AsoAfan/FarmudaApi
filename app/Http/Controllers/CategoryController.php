@@ -30,14 +30,14 @@ class CategoryController extends Controller
             'name' => ['required', 'unique:categories,name', new KurdishChars],
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 400);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
         $newCategory = Category::create([
             'name' => $request->get('name'),
 
         ]);
 
-        if (!$newCategory) return response()->json(['errors' => response()->status()], 400);
+        if (!$newCategory) return response(['errors' => response()->status()], 400);
 
         return ["success" => 'Category created successfully', "data" => $newCategory];
         

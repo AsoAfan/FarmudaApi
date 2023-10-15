@@ -67,14 +67,14 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         $auth = Gate::check('update', $question);
-        if (!$auth->allowed()) return response()->json(['errors' => "Unauthorized user"], 400);
+        if (!$auth->allowed()) return response(['errors' => "Unauthorized user"], 400);
 
 
         $validator = Validator::make($request->all(), [
             'body' => ['min:10', new KurdishOrArabicChars]
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 400);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
         $question->update(
             $request->only('body')
@@ -89,11 +89,11 @@ class QuestionController extends Controller
     public function destroy(Question $question)
     {
         $auth = Gate::check('delete', $question);
-        if (!$auth->allowed()) return response()->json(['errors' => "Unauthorized user"], 400);
+        if (!$auth->allowed()) return response(['errors' => "Unauthorized user"], 400);
 
 
         $delete = $question->delete();
-        if (!$delete) return response(['errors' => 'An occurred while deleting question'], 400);
+        if (!$delete) return response(['errors' => ['An occurred while deleting question']], 400);
 
         return ['success' => $question->body . " has been deleted successfully", 'data' => $question->id];
     }

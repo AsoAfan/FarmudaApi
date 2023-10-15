@@ -21,7 +21,7 @@ class HadisController extends Controller
             'chapter' => 'array'
         ]);
 
-        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 406);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
 //        dd(array_filter(request(["search", 'teller', 'category', 'book', 'chapter',]),
 //            fn($value) => $value !== [null]));

@@ -21,7 +21,7 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return response()->json(['errors' => "route not found for auth users"], 404);
+                return response()->json(['errors' => ["route not found for auth users"]], 400);
 //                return redirect(RouteServiceProvider::HOME);
             }
         }

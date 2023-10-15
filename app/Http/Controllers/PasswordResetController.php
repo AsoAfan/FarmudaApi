@@ -18,7 +18,7 @@ class PasswordResetController extends Controller
             'email' => "required|email"
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all(), 'status' => 403], 403);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
 
     }

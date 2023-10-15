@@ -24,7 +24,7 @@ class TellerController extends Controller
             'name' => ['required', 'unique:tellers,name', new ArabicChars],
         ]);
 
-        if ($validator->fails()) return response()->json(["errors" => $validator->errors()->all()], 400);
+        if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
 
         $newTeller = Teller::create([
@@ -44,7 +44,7 @@ class TellerController extends Controller
         ]);
 
 
-        if ($validator->fails()) return response()->json([$validator->errors()], 400);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
 
         $teller->update($request->all());
@@ -56,7 +56,7 @@ class TellerController extends Controller
     {
 
         $delete = $teller->delete();
-        if (!$delete) return response(['errors' => 'An error occurred while deleting teller'], 400);
+        if (!$delete) return response(['errors' => ['An error occurred while deleting teller']], 400);
         return ['success' => $teller->name . " deleted successfully"];
 
     }

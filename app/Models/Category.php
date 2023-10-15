@@ -11,7 +11,7 @@ class Category extends Model
 
 
 protected $fillable = ['name', 'slug'];
-    protected $hidden = ['id', 'pivot'];
+    protected $hidden = ['pivot'];
 
     public function hadises()
     {

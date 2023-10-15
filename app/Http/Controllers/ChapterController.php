@@ -28,7 +28,7 @@ class ChapterController extends Controller
             'book_id' => ['required', 'exists:books,id']
         ]);
 
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 400);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
 
         $newChapter = Chapter::create([
