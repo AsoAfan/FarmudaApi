@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function current()
     {
-        return ['data' => auth()->user()->with('favourites.hadis')->find(auth()->id())];
+        return [auth()->user()];
     }
 
     /**
