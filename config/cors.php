@@ -15,11 +15,11 @@ return [
     |
     */
 
-    'paths' => ['api/*', '/sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://farmudaa.com/*', 'http://localhost:3000/*'],
+    'allowed_origins' => ['farmudaa.com/*', 'http://localhost:3000/*'],
 
     'allowed_origins_patterns' => [],
 
