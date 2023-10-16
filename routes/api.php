@@ -11,6 +11,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TellerController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -189,8 +191,23 @@ Route::middleware('json')->group(function () {
     Route::middleware(['guest:sanctum'])->group(function () {
 
         // Password reset
-        Route::post('/forget-password',[\App\Http\Controllers\PasswordResetController::class,'sendLink']);
+        Route::post('/forget-password',[\App\Http\Controllers\Auth\PasswordResetController::class,'sendLink'])->name('password.email');
 
+//        Route::post('/forgot-password', function (Request $request) {
+//            $request->validate(['email' => 'required|email']);
+//
+//            $status = Password::sendResetLink(
+//                $request->only('email')
+//            );
+//
+//            return $status === Password::RESET_LINK_SENT
+//                ? ['success' => 'good']
+//                : ['errors' => 'bad'];
+//        })->middleware('guest')->name('password.email');
+//
+//        Route::get('/reset-password/{token}', function (string $token) {
+//            return view('auth.reset-password', ['token' => $token]);
+//        })->middleware('guest')->name('password.reset');
 
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);
