@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->longText('kurdish');
             $table->longText('badini');
             $table->longText("arabic_search");
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->unsignedInteger('hadis_number');
             $table->foreignId('teller_id')->references('id')->on('tellers')->cascadeOnDelete();
             $table->boolean('is_featured')->default(false);

@@ -169,13 +169,15 @@ class HadisController extends Controller
 
         $validator = Validator::make($request->all(), [
             'hadis_arabic' => ['unique:hadis,arabic', 'required', new ArabicChars],
-            'hadis_kurdish' => ['unique:hadis,kurdish', 'required', new KurdishChars],
-            'hadis_description' => [new KurdishChars],
+            'hadis_kurdish' => ['required', new ArabicChars],
+            'hadis_badini' => ['nullable', new ArabicChars],
+            'hadis_hawramy' => ['nullable', new ArabicChars],
+            'hadis_description' => ['nullable',new ArabicChars],
             'hadis_number' => ['required', 'unique:hadis,hadis_number', 'numeric'],
             'hadis_teller_id' => ['required', 'numeric', 'exists:tellers,id'],
 
             'hadis_category_ids' => ['array', 'exists:categories,id'],
-            'hadis_book_ids' => ['array', 'exists:books,id'],
+            'hadis_book_ids' => ['array', 'exists:books,id'], // TODO: Check this remove if possible, get books of the hadis from associated chapter
             'hadis_chapter_ids' => ['array', 'exists:chapters,id']
 
         ]);
@@ -195,6 +197,7 @@ class HadisController extends Controller
         $newHadis = Hadis::create([
             'arabic' => $request->get('hadis_arabic'),
             'kurdish' => $request->get('hadis_kurdish'),
+            "badini" => $request->get('hadis_badini'),
             'description' => $request->get('hadis_description'),
             'hadis_number' => $request->get('hadis_number'),
             'teller_id' => $request->get('hadis_teller_id'),

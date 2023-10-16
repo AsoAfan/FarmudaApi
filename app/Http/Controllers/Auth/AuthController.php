@@ -96,7 +96,7 @@ class AuthController extends Controller
         if ($user && !$user->email_verified_at) return response(['errors' => "verify email first", 'user_email' => $user->email], 400);
 
 
-        if (!Auth::attempt($request->only(['email', 'password']))) return response(['errors' => ["Invalid credentials"]], 400);
+        if (!Auth::attempt($request->only(['email', 'password']))) return response(['errors' => ["ئیمەڵ/وشەی نهێنی هەڵەیە"]], 400);
 
         return ['success' => "Token generated successfully", 'data' => ['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user]];
     }

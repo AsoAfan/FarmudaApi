@@ -15,7 +15,7 @@ class ChapterController extends Controller
      */
     public function index()
     {
-        return Chapter::with('books')->get();
+        return Chapter::all();
     }
 
     /**
@@ -49,13 +49,15 @@ class ChapterController extends Controller
         //
 
         $validator = Validator::make($request->all(), [
-            'name' => ['required_without:slug', "unique:chapters,name,{$chapter->id}", new KurdishChars]
+            'name' => ['required_without:book_id', "unique:chapters,name,{$chapter->id}", new KurdishChars],
+            'book_ids' => ['required' ,'array', 'exists:books,id', 'required_without:name']
         ]);
 
         if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
 
-        $chapter->update($request->all());
+        $chapter->books()->sync($request->get('book_ids') ?? []);
+        $chapter->update($request->only('name'));
 
         return ["success" => "chapter updated successfully", 'data' => $chapter];
     }

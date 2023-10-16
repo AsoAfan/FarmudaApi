@@ -188,6 +188,9 @@ Route::middleware('json')->group(function () {
     // GUEST
     Route::middleware(['guest:sanctum'])->group(function () {
 
+        // Password reset
+        Route::post('/forget-password',[\App\Http\Controllers\PasswordResetController::class,'sendLink']);
+
 
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);
