@@ -19,7 +19,8 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://farmudaa.com', 'http://localhost:*'],
+    // 'https://farmudaa.com', 'http://localhost:*'
+    'allowed_origins' => [],
 
     'allowed_origins_patterns' => [],
 
