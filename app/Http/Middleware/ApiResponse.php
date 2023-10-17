@@ -20,7 +20,8 @@ class ApiResponse
         $response->setContent(json_encode($response->getOriginalContent()));
         $response->header('Content-Type', 'application/json');
 
+
 //        return $response;
-    return response(status: 400);
+        return response(['errors' => "Server on maintenance"], 400);
     }
 }
