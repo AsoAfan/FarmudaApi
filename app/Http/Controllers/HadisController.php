@@ -60,7 +60,7 @@ class HadisController extends Controller
 
     public function count()
     {
-        return Hadis::all()->count();
+        return Hadis::count();
     }
 
     public function showFeatures()

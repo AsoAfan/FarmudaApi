@@ -32,6 +32,8 @@ class BookController extends Controller
             'name' => $request->get('name')
         ]);
 
+        return ['success' => "Book added successfully", 'data' => $newBook];
+
     }
 
     public function update(Book $book, Request $request)
