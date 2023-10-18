@@ -25,7 +25,7 @@ class BookObserver
     {
         $book->activities()->create([
             'action' => 'Book updated',
-            'data' => $book->getOriginal(),
+            'data' => json_encode($book->getOriginal()),
             'user_id' => auth()->id()
         ]);
     }
