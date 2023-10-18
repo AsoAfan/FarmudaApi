@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Rules\ArabicChars;
-use App\Rules\SlugValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +13,7 @@ class BookController extends Controller
 
     public function index()
     {
-        return  Book::all();
+        return Book::all();
     }
 
     public function store(Request $request)
@@ -25,7 +24,9 @@ class BookController extends Controller
 
         if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
-        $newBook = Book::create($request->all());
+        $newBook = Book::create($request->only('name'));
+
+
 
         return ['success' => "Book successfully created", 'data' => $newBook];
     }
@@ -46,9 +47,9 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
-       $delete =  $book->delete();
+        $delete = $book->delete();
 
-       if (!$delete) return response(['errors' => 'An error occurred while deleting '], 400);
+        if (!$delete) return response(['errors' => 'An error occurred while deleting '], 400);
 
         return ["success" => "$book->name successfully deleted", 'data' => $book->id];
     }

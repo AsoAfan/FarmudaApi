@@ -28,7 +28,7 @@ class CleanUpActivityLogs extends Command
     {
 
         Activity::where('created_at', '>', now()->subDays(40))->get()->each(function ($activity){
-            // TODO: Backup database and delete all logs
+            // TODO(: Backup database and delete all logs
         });
     }
 }
