@@ -50,11 +50,6 @@ use Illuminate\Support\Facades\Route;
 
 //Route::middleware('cors')->group(function () {
 Route::middleware('json')->group(function () {
-    Route::get('test1', function () {
-        return ["test" => glob(__DIR__ . '/*/*.php'),
-
-        ];
-    })->name('test1'); // DEV
 
 
     // ADMIN
