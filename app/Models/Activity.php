@@ -11,7 +11,7 @@ class Activity extends Model
 
     protected $table = 'activities';
 
-    protected $fillable = ['user_id'];
+    protected $fillable = [ 'action', 'data', 'user_id'];
 
     public function user()
     {

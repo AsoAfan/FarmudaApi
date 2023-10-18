@@ -44,17 +44,19 @@ class BookObserver
 
     /**
      * Handle the Book "restored" event.
+     *
+     * public function restored(Book $book): void
+     * {
+     * //
+     * }
      */
-    public function restored(Book $book): void
-    {
-        //
-    }
 
     /**
      * Handle the Book "force deleted" event.
+     *
+     * public function forceDeleted(Book $book): void
+     * {
+     * //
+     * }
      */
-    public function forceDeleted(Book $book): void
-    {
-        //
-    }
 }
