@@ -26,10 +26,11 @@ class BookController extends Controller
 
         if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
-        return ['success' => "Book successfully created"];
 
 
-        $newBook = Book::create($request->all());
+        $newBook = Book::create([
+            'name' => $request->get('name')
+        ]);
 
     }
 
