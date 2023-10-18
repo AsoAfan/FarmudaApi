@@ -25,7 +25,7 @@ class ChapterController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'name' => ['required', 'unique:chapters,name', new ArabicChars],
-            'book_id' => ['required', 'exists:books,id']
+            'book_ids' => ['required', 'exists:books,id']
         ]);
 
         if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
