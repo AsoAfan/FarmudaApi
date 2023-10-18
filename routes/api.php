@@ -29,8 +29,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-include "api/admin.php";
-
 /*
  *
  * User roles
@@ -58,7 +56,7 @@ Route::middleware('json')->group(function () {
 
 
     // ADMIN
-    include "api/admin.php";
+    include_once "api/admin.php";
     // ADMIN_EDITOR
     Route::middleware(['auth:sanctum', 'admin-editor'])->group(function () {
         Route::get('/ae/test', fn() => auth()->user());
