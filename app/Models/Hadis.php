@@ -14,7 +14,7 @@ class Hadis extends Model
 
     protected $guarded = [];
 
-    protected $with = ['teller', 'categories', 'books', 'chapters']; // TODO: return books of chapters(chapters.books)
+    protected $with = ['teller', 'categories', 'chapters.books']; // TODO: return books of chapters(chapters.books)
 
     protected $hidden = ['arabic_search', 'pivot', 'teller_id', 'categories_count'];
 
@@ -70,7 +70,7 @@ class Hadis extends Model
         $query->when(($filters['book'] ?? false), function ($query, $book) {
             $query
                 ->withCount('books')
-                ->whereHas('books', function ($query) use ($book) {
+                ->whereHas('chapters.books', function ($query) use ($book) {
                     $query->distinct()->whereIn('name', $book); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
                 }, '=', count($book));
         });

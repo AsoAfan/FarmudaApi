@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Answer extends Model
 {
     use HasFactory;
+
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'model');
+    }
 }
