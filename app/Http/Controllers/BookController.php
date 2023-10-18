@@ -19,15 +19,18 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             "name" => ["required", "unique:books,name", new ArabicChars],
         ]);
 
         if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
 
+        return ['success' => "Book successfully created"];
+
+
         $newBook = Book::create($request->all());
 
-        return ['success' => "Book successfully created", 'data' => $newBook];
     }
 
     public function update(Book $book, Request $request)
