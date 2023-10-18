@@ -2,10 +2,19 @@
 
 namespace App\Providers;
 
+use App\Models\Book;
+use App\Models\Category;
+use App\Models\Chapter;
+use App\Models\Hadis;
+use App\Models\Teller;
+use App\Observers\BookObserver;
+use App\Observers\CategoryObserver;
+use App\Observers\ChapterObserver;
+use App\Observers\HadisObserver;
+use App\Observers\TellerObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,12 +29,23 @@ class EventServiceProvider extends ServiceProvider
         ],
     ];
 
+    protected $observers = [
+        Hadis::class => HadisObserver::class,
+        Teller::class => TellerObserver::class,
+        Category::class => CategoryObserver::class,
+        Book::class => BookObserver::class,
+        Chapter::class => ChapterObserver::class
+
+    ];
+
+
     /**
      * Register any events for your application.
      */
     public function boot(): void
     {
         //
+//        Hadis::observe(HadisObserver::class);
     }
 
     /**

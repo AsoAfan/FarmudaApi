@@ -88,6 +88,11 @@ class Hadis extends Model
     }
 
 
+    public function activity()
+    {
+        return $this->morphMany(Activity::class, 'model');
+    }
+
     public function favourites()
     {
         $this->hasMany(Favourite::class);

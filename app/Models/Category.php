@@ -13,6 +13,11 @@ class Category extends Model
     protected $fillable = ['name'];
     protected $hidden = ['pivot'];
 
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'model');
+    }
+
     public function hadises()
     {
         return $this->belongsToMany(Hadis::class);

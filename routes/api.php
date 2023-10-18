@@ -11,8 +11,6 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TellerController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,6 +28,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+include "api/admin.php";
 
 /*
  *
@@ -73,7 +73,6 @@ Route::middleware('json')->group(function () {
         // TODO: ADD URL TO UPDATE USER ROLE - DONE
         Route::post('/user/role/update/{user}', [\App\Http\Controllers\AdminController::class, 'promoteRequest']);
         Route::put('/user/role/{user}', [UserController::class, 'updateRole']);
-
 
 
 // Hadises
@@ -191,7 +190,7 @@ Route::middleware('json')->group(function () {
     Route::middleware(['guest:sanctum'])->group(function () {
 
         // Password reset
-        Route::post('/forget-password',[\App\Http\Controllers\Auth\PasswordResetController::class,'sendLink'])->name('password.email');
+        Route::post('/forget-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'sendLink'])->name('password.email');
 
 //        Route::post('/forgot-password', function (Request $request) {
 //            $request->validate(['email' => 'required|email']);
@@ -256,3 +255,19 @@ Route::middleware('json')->group(function () {
 
 });
 //});
+
+
+// Tests
+
+Route::get('test-poly', function () {
+//    $ac = new \App\Models\Activity();
+//    $hadis = \App\Models\Hadis::find(1);
+//    $ac->user_id = 1;
+//   $ac->model()->associate($hadis);
+//   $ac->save();
+    return ['data' => \App\Models\Activity::with([
+            'model' => fn($query) => $query->select('id', 'arabic'),
+            'user' => fn($query) => $query->select('id', 'name')
+        ]
+    )->get()];
+});

@@ -21,7 +21,7 @@ class ApiResponse
         $response->header('Content-Type', 'application/json');
 
 
-//        return $response;
-        return response(['errors' => "Server on maintenance"], 400);
+        return $response;
+//        return response(['errors' => "Server on maintenance"], 400);
     }
 }

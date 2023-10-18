@@ -13,6 +13,11 @@ class Book extends Model
 
     protected $hidden = ['pivot'];
 
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'model');
+    }
+
     public function chapters()
     {
         return $this->belongsToMany(Chapter::class);

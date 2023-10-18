@@ -14,6 +14,11 @@ class Chapter extends Model
     protected $hidden = ['pivot'];
 
 
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'model');
+    }
+
     public function books()
     {
         return $this->belongsToMany(Book::class);

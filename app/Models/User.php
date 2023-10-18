@@ -65,23 +65,10 @@ class User extends Authenticatable
     ];
 
 
-    public function conversations()
+    public function activities()
     {
-
-
-        return $this->hasMany(Conversation::class,
-            'sender_id'
-        )
-            ->orWhere('receiver_id', auth()->id()
-            );
+        return $this->hasMany(Activity::class);
     }
-
-
-    public function messages()
-    {
-        return $this->hasMany(Message::class);
-    }
-
 
     public function questions()
     {
