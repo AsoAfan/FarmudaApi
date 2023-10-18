@@ -58,6 +58,11 @@ class HadisController extends Controller
 
     } // DONE
 
+    public function count()
+    {
+        return Hadis::all()->count();
+    }
+
     public function showFeatures()
     {
 
@@ -172,7 +177,7 @@ class HadisController extends Controller
             'hadis_kurdish' => ['required', new ArabicChars],
             'hadis_badini' => ['nullable', new ArabicChars],
             'hadis_hawramy' => ['nullable', new ArabicChars],
-            'hadis_description' => ['nullable',new ArabicChars],
+            'hadis_description' => ['nullable', new ArabicChars],
             'hadis_number' => ['required', 'unique:hadis,hadis_number', 'numeric'],
             'hadis_teller_id' => ['required', 'numeric', 'exists:tellers,id'],
 

@@ -224,6 +224,7 @@ Route::middleware('json')->group(function () {
     // ALL_USERS
     Route::get('/question/show', [QuestionController::class, 'index'])->middleware('json'); // TODO: All Users
 
+    Route::get('/hadis/count', [HadisController::class, 'count']);
     Route::post('/hadis/show', [HadisController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
     Route::get('/hadis/show/{hadis}', [HadisController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
     Route::get('/hadis/featured', [HadisController::class, 'showFeatures']); // read |  featured Hadises with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
