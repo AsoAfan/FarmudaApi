@@ -18,9 +18,9 @@ class GoogleServiceProvider extends ServiceProvider
             $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
             $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
             $client->setRedirectUri(env('GOOGLE_DRIVE_REDIRECT_URI'));
-            $client->setAccessType('offline');
+            $client->setAccessType('online');
 
-            $accessToken = "ya29.a0AfB_byAOYbZHzXA8L46QE3YjLmsMG4idYg-EDdWMdXUZPrlVpE0IvthaYxq-UPtf8VJKfbusAkdg_DkadmmAujZYsFuhdZm1FKEI8nHRG4UGKpO_JO6wnSIjoimDdt0RLiMrUH03ecME-SzB-oqNpKtFKSCbgRL-UQaCgYKAWkSARESFQGOcNnCcYexcNgh3O8P54SC68LGxw0169";
+            $accessToken = "ya29.a0AfB_byBdpPVUfo70h1e-8nuFve0gt_VSASN9j4TNkMPrW-oeiYyaQ2APyEbISN9-xG35W_c7mqHL7lExZ0-enQDN_rI6KnvZlkZk2Xlsy9pziu153UdCEu8p9fE4NB79I3KVW0C5mtsBLUBp66M8RGb90WUDpxvsHWkaCgYKAbUSARESFQGOcNnCDhvWwz8Im6gmmb0gPPAyBA0170";
 // Obtain the access token from OAuth (you will have this after user consent)
             $client->setAccessToken($accessToken);
             return $client;

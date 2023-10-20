@@ -10,7 +10,9 @@ class SocialController extends Controller
 {
     public function google()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')
+            ->scopes(['https://www.googleapis.com/auth/drive'])
+            ->redirect();
     }
 
     public function callback()
