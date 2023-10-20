@@ -19,7 +19,7 @@ class SocialController extends Controller
         $user = $this->findOrCreate($socialUser);
 
 
-        return ['user' => $user, 'token' => $user->createToken('API_TOKEN')->plainTextToken, 'request' => request()->all()];
+        return ['google' => $socialUser ,'user' => $user, 'token' => $user->createToken('API_TOKEN')->plainTextToken, 'request' => request()->all()];
     }
 
 
