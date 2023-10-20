@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GoogleDriveController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +26,8 @@ Route::get('/auth/google', [\App\Http\Controllers\Auth\SocialController::class, 
 
 Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\SocialController::class, 'callback']);
 //Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
+
+
+Route::get('/google-drive/list', [GoogleDriveController::class, 'listFiles']);
 
 
