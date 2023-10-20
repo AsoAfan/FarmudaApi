@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('action');
-            $table->json('data')->nullable();
+            $table->text('data')->nullable();
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
             $table->foreignId('user_id')->constrained()->noActionOnDelete();
