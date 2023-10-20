@@ -20,7 +20,7 @@ class GoogleServiceProvider extends ServiceProvider
             $client->setRedirectUri(env('GOOGLE_DRIVE_REDIRECT_URI'));
             $client->setAccessType('online');
 
-            $accessToken = "ya29.a0AfB_byBdpPVUfo70h1e-8nuFve0gt_VSASN9j4TNkMPrW-oeiYyaQ2APyEbISN9-xG35W_c7mqHL7lExZ0-enQDN_rI6KnvZlkZk2Xlsy9pziu153UdCEu8p9fE4NB79I3KVW0C5mtsBLUBp66M8RGb90WUDpxvsHWkaCgYKAbUSARESFQGOcNnCDhvWwz8Im6gmmb0gPPAyBA0170";
+            $accessToken = "a29.a0AfB_byBwOUJBQEY_IElACT03Mv11LK4RA0t9vBU9TxwQdPfmB1e4N8lfxQ0qZQJPWMVblbUjT430uGACkaa_m-1fVZxE9upiiJckU7X5aS1AnSKSCR_2DTRSLPCfHlbi5yd9DMUrZrATWi4X6q73XhcWlAUSuhOm5qAUaCgYKAS0SARESFQGOcNnCtOb44OTrX7vj_BGelA-dSw0171";
 // Obtain the access token from OAuth (you will have this after user consent)
             $client->setAccessToken($accessToken);
             return $client;
