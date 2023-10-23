@@ -24,7 +24,7 @@ class CategoryObserver
     {
         $category->activities()->create([
             'action' => 'Category updated',
-            'data' => $category->getOriginal(),
+            'data' => json_encode($category->getOriginal()),
             'user_id' => auth()->id()
         ]);
     }

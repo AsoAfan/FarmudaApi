@@ -26,7 +26,7 @@ class HadisObserver
     {
         $hadis->activity()->create([
             'action' => 'Hadis Updated',
-            'data' => $hadis->getOriginal(),
+            'data' => json_encode($hadis->getOriginal()),
             'user_id' => auth()->id()
         ]);
     }
