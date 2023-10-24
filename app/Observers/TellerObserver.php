@@ -37,7 +37,7 @@ class TellerObserver
     {
         $teller->activities()->create([
             'action' => 'Teller deleted',
-            'data' => $teller->getOriginal(),
+            'data' => json_encode($teller->getOriginal()),
             'user_id' => auth()->id()
         ]);
     }

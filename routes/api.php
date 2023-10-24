@@ -10,7 +10,7 @@ use App\Http\Controllers\HadisController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TellerController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserController;    
 use Illuminate\Support\Facades\Route;
 
 

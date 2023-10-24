@@ -37,7 +37,7 @@ class BookObserver
     {
         $book->activities()->create([
             'action' => 'Book deleted',
-            'data' => $book->getOriginal(),
+            'data' => json_encode($book->getOriginal()),
             'user_id' => auth()->id()
         ]);
     }

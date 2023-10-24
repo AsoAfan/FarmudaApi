@@ -31,15 +31,16 @@ class CategoryObserver
 
     /**
      * Handle the Category "deleted" event.
-     * public function deleted(Category $category): void
-     * {
-     * $category->activities()->create([
-     * 'action' => 'Category deleted',
-     * 'data' => $category->getOriginal(),
-     * 'user_id' => auth()->id()
-     * ]);
-     * }
      */
+    public function deleted(Category $category): void
+    {
+        $category->activities()->create([
+            'action' => 'Category deleted',
+            'data' => json_encode($category->getOriginal()),
+            'user_id' => auth()->id()
+        ]);
+    }
+
 
     /**
      * Handle the Category "force deleted" event.
