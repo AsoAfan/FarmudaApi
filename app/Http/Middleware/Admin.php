@@ -20,8 +20,9 @@ class Admin
     if (auth()->check() && (auth()->user()->role === 'admin')) {
         return $next($request);
     }
+    dd("test");
 
-    abort(403, 'Unauthorized');
+    return \response(['errors' => "unauthorized"], 400);
 }
 
 }
