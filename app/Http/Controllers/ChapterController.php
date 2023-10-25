@@ -16,6 +16,7 @@ class ChapterController extends Controller
     public function index()
     {
         return Chapter::with('books:id,name')->get();
+
     }
 
     /**

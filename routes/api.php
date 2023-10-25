@@ -60,8 +60,11 @@ Route::middleware('json')->group(function () {
             return \request()->user();
         }); // DEV
 
+
+
 // User
         Route::get('/users', [UserController::class, 'index']); // returns all users
+        Route::get('/admins', [\App\Http\Controllers\AdminController::class, 'index']);
 
         Route::get('/warn/{user}', [UserController::class, 'warn']); // send warning notification to user => {user} -> id
 

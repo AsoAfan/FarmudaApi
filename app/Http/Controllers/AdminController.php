@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
     //
+    private $admins;
+
+    public function __construct()
+    {
+        $this->admins = User::where('role', 'admin');
+    }
+
+
+    public function index()
+    {
+        return $this->admins->get();
+    }
 
     public function promoteRequest(User $user, Request $request)
     {
@@ -21,12 +33,11 @@ class AdminController extends Controller
             'role' => ['string', 'in:user,guider,editor,admin']
         ]);
 
-        if ($validator->fails()) return response()->json(
+        if ($validator->fails()) return response(
             [
                 'errors' => $validator->errors()->all()
             ],
-            400
-        );
+            400);
 
 
 //        $admins = User::where('role', 'admin')->where('id', Auth::id())->toSql();
@@ -34,7 +45,7 @@ class AdminController extends Controller
 //        Which one is better using reject function on collection instance or one additional where
 
         $admin = Auth::user();
-        $admins = User::where('role', 'admin')->where('id', '!=' , Auth::id())->get();
+        $admins = $this->admins->where('id', '!=', Auth::id())->get();
         Notification::send($admins,
             new PromotionNotification(
                 admin: $admin->name,
