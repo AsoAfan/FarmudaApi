@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
 //        dd("User Controller");
-        return ['data' => User::all(['id', 'name', 'email', 'role', 'created_at'])];
+        return ['data' => User::all(['id', 'name', 'email', 'role'])];
     }
 
 

@@ -10,7 +10,7 @@ use App\Http\Controllers\HadisController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TellerController;
-use App\Http\Controllers\UserController;    
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 
 
 /*
@@ -61,8 +60,11 @@ Route::middleware('json')->group(function () {
         }); // DEV
 
 
+        // Backup
+//        Route::get('backup', [\App\Http\Controllers\DownloadController::class, 'index']);
 
-// User
+
+        // User
         Route::get('/users', [UserController::class, 'index']); // returns all users
         Route::get('/admins', [\App\Http\Controllers\AdminController::class, 'index']);
 
@@ -270,3 +272,5 @@ Route::get('test-poly', function () {
         ]
     )->get()];
 });
+
+        Route::get('backup', [\App\Http\Controllers\DownloadController::class, 'index']);
