@@ -22,7 +22,7 @@ class DownloadController extends Controller
 //            dd($b);
             $file_names = [];
             foreach ($d as $fileInfo) {
-                $file_names = $fileInfo->getBasename();
+                $file_names[] = $fileInfo->getBasename();
             }
             return [
                 "storage_files" => $a,
