@@ -208,7 +208,7 @@ return [
          */
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
-
+        'mail' => [],
 
         'slack' => [
             'webhook_url' => '',
