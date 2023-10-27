@@ -148,7 +148,7 @@ return [
              * The disk names on which the backups will be stored.
              */
             'disks' => [
-                'local'
+                'public'
             ],
         ],
 
@@ -208,14 +208,7 @@ return [
          */
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
-        'mail' => [
-            'to' => 'aso.sargaty@gmail.com',
 
-            'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
-            ],
-        ],
 
         'slack' => [
             'webhook_url' => '',
