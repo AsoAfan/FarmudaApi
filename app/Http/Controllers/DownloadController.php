@@ -15,7 +15,8 @@ class DownloadController extends Controller
     public function index()
     {
 
-        dd(File::files(storage_path(). '/app/'. env('APP_NAME')));
+        $a = (File::files(storage_path(). '/app/'. env('APP_NAME')))[0];
+        return ["name" => $a->getBasename()];
 //                                     dd(now()->format('Y-m-d-H-i-s'));                 2023-10-27-02-15-24
 //          Storage::download("Laravel/" . now()->format('Y-m-d-H-i-s') . ".zip");
 //        return Storage::delete("Laravel/" . now()->format('Y-m-d-H-i-s') . ".zip");
