@@ -18,7 +18,7 @@ class DownloadController extends Controller
         try {
             $a = (File::files(storage_path()));
             $b = (File::directories(public_path()));
-            $b = (File::directories(storage_path(). '/app'));
+            $b = (File::files(storage_path(). '/app'));
 //            dd($b);
             return ["storage_path" => $a, "storage.app_path" => $b];
 
