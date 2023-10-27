@@ -45,7 +45,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-//            'dump' => ['dump_binary_path' => "C:\Program Files\MySQL\MySQL Server 8.0\bin"],
+            'dump' => ['dump_binary_path' => "C:\Program Files\MySQL\MySQL Server 8.0\bin"],
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),

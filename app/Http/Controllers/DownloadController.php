@@ -14,18 +14,8 @@ class DownloadController extends Controller
 {
     public function index()
     {
-        DB::unprepared('FLUSH TABLES WITH READ LOCK;');
-        Artisan::queue('backup:run');
 
-        // Get the output of the command (you can use this for debugging)
-        $output = Artisan::output();
-
-        // You can also check the exit code if needed
-        $exitCode = Artisan::output();
-
-        // You can return a response or redirect to a specific route after running the command
-        DB::unprepared('UNLOCK TABLES');
-            return $output;
+        dd(File::files(storage_path(). '/app/'. env('APP_NAME')));
 //                                     dd(now()->format('Y-m-d-H-i-s'));                 2023-10-27-02-15-24
 //          Storage::download("Laravel/" . now()->format('Y-m-d-H-i-s') . ".zip");
 //        return Storage::delete("Laravel/" . now()->format('Y-m-d-H-i-s') . ".zip");
