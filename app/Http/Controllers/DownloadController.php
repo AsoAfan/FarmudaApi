@@ -20,11 +20,16 @@ class DownloadController extends Controller
             $e = (File::files(storage_path() . '/app'));
             $f = (File::directories(storage_path() . '/app'));
 //            dd($b);
+            $file_names = [];
+            foreach ($d as $fileInfo) {
+                $file_names = $fileInfo->getBasename();
+            }
             return [
                 "storage_files" => $a,
                 "storage_directory" => $b,
                 "public_directory" => $c,
                 "public_files" => $d[0]->getBasename(),
+                "public_file_names" => $file_names,
                 "storage_app_directory" => $e,
                 "storage_app_files" => $f,
 
