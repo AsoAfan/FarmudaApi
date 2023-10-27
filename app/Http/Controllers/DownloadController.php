@@ -24,7 +24,7 @@ class DownloadController extends Controller
                 "storage_files" => $a,
                 "storage_directory" => $b,
                 "public_directory" => $c,
-                "public_files" => $d,
+                "public_files" => $d[0]->getBasename(),
                 "storage_app_directory" => $e,
                 "storage_app_files" => $f,
 
