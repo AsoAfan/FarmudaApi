@@ -238,6 +238,8 @@ Route::middleware('json')->group(function () {
         return file_get_contents(__DIR__ . '/api/all_users.php');
     });
 
+    require __DIR__ . '/api/all_users.php';
+
     Route::get('/teller/show', [TellerController::class, 'show']); // Read TODO: All_USERS
 
     Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
