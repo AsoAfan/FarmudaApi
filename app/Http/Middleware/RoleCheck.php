@@ -6,20 +6,19 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminOrEditor
+class RoleCheck
 {
     /**
      * Handle an incoming request.
      *
      * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-
-//        dd(auth()->check());
-        if (auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'editor'))
+        $user = auth()->user();
+        if ($user && in_array($user->role, $roles))
             return $next($request);
 
-        abort(403, 'Unauthorized');
+        return response(['errors' => "unauthenticated"], 400);
     }
 }

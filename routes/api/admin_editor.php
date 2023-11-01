@@ -7,7 +7,7 @@ use App\Http\Controllers\HadisController;
 use App\Http\Controllers\TellerController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum', 'admin-editor'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin,editor'])->group(function () {
     Route::get('/ae/test', fn() => auth()->user());
 
 // Hadis

@@ -3,10 +3,10 @@
 namespace App\Http;
 
 use App\Http\Middleware\Admin;
-use App\Http\Middleware\AdminOrEditor;
 use App\Http\Middleware\ApiResponse;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\Editor;
+use App\Http\Middleware\RoleCheck;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -72,7 +72,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'json' => ApiResponse::class,
         'admin' => Admin::class,
-        'admin-editor' => AdminOrEditor::class,
+        'role' => RoleCheck::class,
         'editor' => Editor::class,
 
     ];
