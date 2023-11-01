@@ -50,8 +50,6 @@ use Illuminate\Support\Facades\Route;
 //Route::middleware('cors')->group(function () {
 Route::middleware('json')->group(function () {
 
-    include_once __DIR__ . '/api/test.php';
-
 
     // ADMIN
     Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -235,7 +233,8 @@ Route::middleware('json')->group(function () {
     Route::post('/hadis/show', [HadisController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
     Route::get('/hadis/show/{hadis}', [HadisController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
     Route::get('/hadis/featured', [HadisController::class, 'showFeatures']); // read |  featured Hadises with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
-    Route::get('/hadis/latest', [HadisController::class, 'latest']); // read | 2 latest Hadises TODO: ALL_USERS
+
+    include_once __DIR__ . '/api/all_users.php';
 
     Route::get('/teller/show', [TellerController::class, 'show']); // Read TODO: All_USERS
 
@@ -275,4 +274,4 @@ Route::get('test-poly', function () {
     )->get()];
 });
 
-        Route::get('backup', [\App\Http\Controllers\DownloadController::class, 'index']);
+Route::get('backup', [\App\Http\Controllers\DownloadController::class, 'index']);
