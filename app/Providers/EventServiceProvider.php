@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Answer;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Chapter;
 use App\Models\Hadis;
 use App\Models\Teller;
+use App\Observers\AnswerObserver;
 use App\Observers\BookObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\ChapterObserver;
@@ -34,7 +36,8 @@ class EventServiceProvider extends ServiceProvider
         Teller::class => TellerObserver::class,
         Category::class => CategoryObserver::class,
         Book::class => BookObserver::class,
-        Chapter::class => ChapterObserver::class
+        Chapter::class => ChapterObserver::class,
+        Answer::class => AnswerObserver::class
 
     ];
 

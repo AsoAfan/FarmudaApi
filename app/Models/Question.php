@@ -13,8 +13,15 @@ class Question extends Model
 
 //    protected $with = ['user'];
 
+    public function answer()
+    {
+        return $this->hasOne(Answer::class);
+
+    }
+
+
     public function user()
     {
-            return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -13,9 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable ,SoftDeletes, canResetPassword;
-
-
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, canResetPassword;
 
 
 //    protected $with = ['questions'];
@@ -72,7 +70,7 @@ class User extends Authenticatable
 
     public function questions()
     {
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Question::class)->where('is_Anonymous', '==', 0);
     }
 
     public function favourites()

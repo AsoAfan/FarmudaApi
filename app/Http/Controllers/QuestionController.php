@@ -16,15 +16,15 @@ class QuestionController extends Controller
     public function index()
     {
 
+        return Question::with(['user', 'answer'])->get();
 
-        return Question::with('user')->get();
     }
 
 
-    public function current()
+    public function current(): array
     {
-//        auth()->user()->questions()->first();
-        return ['data' => Question::where('user_id', auth()->id())];
+        return auth()->user()->questions()->first();
+//        return  Question::where('user_id', auth()->id());
     }
 
     /**
