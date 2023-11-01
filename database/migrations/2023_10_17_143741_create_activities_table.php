@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->text('data')->nullable();
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
-            $table->foreignId('user_id')->constrained()->noActionOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->noActionOnDelete();
 
             $table->timestamps();
         });

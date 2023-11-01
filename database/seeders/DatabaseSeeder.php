@@ -17,29 +17,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        Category::create([
-            'name' => "Kind",
-            'slug' => 'c'
-        ]);
+         \App\Models\User::factory()->create();
 
 
-        Teller::create([
-            'name' => 'ابو هريرة',
-            'slug' => 'a'
+        Category::factory()->create();
 
 
-        ]);
+       Teller::factory(3)->create();
 
 
         Hadis::factory(25)->create();
 
 
-        Book::create([
-            'name' => "Buxari",
-            'slug' => "buxary"
-        ]);
+
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

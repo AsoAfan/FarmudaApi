@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class BooksFactory extends Factory
+class TellerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class BooksFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => "صحيح البخاري"
+            'name' => $this->faker->name
         ];
     }
 }
