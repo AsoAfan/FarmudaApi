@@ -25,7 +25,7 @@ class AnswerController extends Controller
             ]);
 
         } catch (UniqueConstraintViolationException $e) {
-            return ['errors' => "Question already answered"];
+            return response(['errors' => "Question already answered"], 400);
         }
         return ['success' => "Answer stored successfully", 'data' => $newAnswer];
 
