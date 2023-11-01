@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest:sanctum'])->group(function () {
 
     // Password reset
-    Route::post('/forget-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'sendLink'])->name('password.email');
+    Route::post('/forget-password', [PasswordResetController::class, 'sendLink'])->name('password.email');
 
 //        Route::post('/forgot-password', function (Request $request) {
 //            $request->validate(['email' => 'required|email']);

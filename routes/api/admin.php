@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChapterController;
@@ -12,12 +13,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     // User
     Route::get('/users', [UserController::class, 'index']); // returns all users
-    Route::get('/admins', [\App\Http\Controllers\AdminController::class, 'index']);
+    Route::get('/admins', [AdminController::class, 'index']);
 
     Route::get('/warn/{user}', [UserController::class, 'warn']); // send warning notification to user => {user} -> id
 
     // TODO: ADD URL TO UPDATE USER ROLE - DONE
-    Route::post('/user/role/update/{user}', [\App\Http\Controllers\AdminController::class, 'promoteRequest']);
+    Route::post('/user/role/update/{user}', [AdminController::class, 'promoteRequest']);
     Route::put('/user/role/{user}', [UserController::class, 'updateRole']);
 
 
