@@ -50,6 +50,8 @@ use Illuminate\Support\Facades\Route;
 //Route::middleware('cors')->group(function () {
 Route::middleware('json')->group(function () {
 
+    include_once __DIR__ . '/api/test.php';
+
 
     // ADMIN
     Route::middleware(['auth:sanctum', 'admin'])->group(function () {
