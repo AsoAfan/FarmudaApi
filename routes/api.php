@@ -234,7 +234,9 @@ Route::middleware('json')->group(function () {
     Route::get('/hadis/show/{hadis}', [HadisController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
     Route::get('/hadis/featured', [HadisController::class, 'showFeatures']); // read |  featured Hadises with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
 
-    include_once __DIR__ . '/api/all_users.php';
+    Route::get('test/aa', function () {
+        return file_get_contents(__DIR__ . '/api/all_users.php');
+    });
 
     Route::get('/teller/show', [TellerController::class, 'show']); // Read TODO: All_USERS
 
