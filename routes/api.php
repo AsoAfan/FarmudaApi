@@ -54,16 +54,6 @@ Route::middleware('json')->group(function () {
     // ADMIN
     Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
-        Route::get('/a/test', function () {
-//        dd(request()->route()->middleware());
-            return \request()->user();
-        }); // DEV
-
-
-        // Backup
-//        Route::get('backup', [\App\Http\Controllers\DownloadController::class, 'index']);
-
-
         // User
         Route::get('/users', [UserController::class, 'index']); // returns all users
         Route::get('/admins', [\App\Http\Controllers\AdminController::class, 'index']);
@@ -234,7 +224,7 @@ Route::middleware('json')->group(function () {
 //
 //    include_once base_path("routes\\api\\auth.php");
 //
-    include_once __DIR__ . '/api/all_users.php';
+    require __DIR__ . '/api/all_users.php';
 //    include_once base_path("routes\\api\\guest.php");
 
 });
