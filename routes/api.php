@@ -227,28 +227,6 @@ Route::middleware('json')->group(function () {
 
 
     // ALL_USERS
-    Route::get('/question/show', [QuestionController::class, 'index'])->middleware('json'); // TODO: All Users
-
-    Route::get('/hadis/count', [HadisController::class, 'count']);
-    Route::post('/hadis/show', [HadisController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
-    Route::get('/hadis/show/{hadis}', [HadisController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
-    Route::get('/hadis/featured', [HadisController::class, 'showFeatures']); // read |  featured Hadises with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
-
-    Route::get('test/aa', function () {
-        return file_get_contents(__DIR__ . '/api/all_users.php');
-    });
-
-    require __DIR__ . '/api/all_users.php';
-
-    Route::get('/teller/show', [TellerController::class, 'show']); // Read TODO: All_USERS
-
-    Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
-
-
-    Route::get('/book/show', [BookController::class, 'index']); // read TODO: ALL_USERS
-
-
-    Route::get('/chapter/show', [\App\Http\Controllers\ChapterController::class, 'index']); // read TODO: ALL_USERS
 
 
 //    include_once __DIR__ . '/api/all_users.php';
@@ -256,7 +234,7 @@ Route::middleware('json')->group(function () {
 //
 //    include_once base_path("routes\\api\\auth.php");
 //
-//    include_once base_path("routes\\api\\all_users.php");
+    include_once __DIR__ . '/api/all_users.php';
 //    include_once base_path("routes\\api\\guest.php");
 
 });
