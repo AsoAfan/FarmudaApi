@@ -48,7 +48,7 @@ class HadisController extends Controller
     public function latest()
     {
 
-        return ['data' => Hadis::latest()->take(2)];
+        return Hadis::latest()->take(2);
     } // DONE
 
     public function show(Hadis $hadis): Hadis
@@ -68,7 +68,7 @@ class HadisController extends Controller
 
 //        return Hadis::whereRaw("char_length(arabic) < " . request('chars'))->get()->take($num);
 
-        return ['data' => Hadis::where('is_featured', 1)->get()];
+        return Hadis::where('is_featured', 1)->get();
 //        ->whereRaw('char_length(arabic) <= ' . 50)
 
     } // DONE
@@ -242,7 +242,7 @@ class HadisController extends Controller
     public function destroy(Hadis $hadis)
     {
         $delete = $hadis->delete();
-        if (!$delete) return response(['errors' => 'An error occurred while deleting hadis'], 400);
-        return ["success" => "$hadis->arabic deleted successfully", 'data' => $hadis->id];
+        if (!$delete) return response(['errors' => 'Deleting hadis failed successfully'], 400);
+        return ["success" => "Hadis deleted successfully", 'data' => $hadis->id];
     }
 }
