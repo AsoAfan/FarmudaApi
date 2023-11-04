@@ -51,10 +51,10 @@ class HadisController extends Controller
         return ['data' => Hadis::latest()->take(2)];
     } // DONE
 
-    public function show(Hadis $hadis)
+    public function show(Hadis $hadis): Hadis
     {
 
-        return ['data' => $hadis];
+        return $hadis;
 
     } // DONE
 
@@ -109,7 +109,7 @@ class HadisController extends Controller
     public function update(Hadis $hadis, Request $request)
     {
         /**
-         * not sure if checking role again rather than it was checked with middleware is necessary, remove for now
+         * not sure if checking the role again rather than it was checked with middleware is necessary, remove for now
          * @TODO  Gate::authorize('update', $hadis);
          */
 
