@@ -13,6 +13,8 @@ return new class extends Migration {
         Schema::create('chapter_hadis', function (Blueprint $table) {
             $table->foreignId('chapter_id')->constrained()->cascadeOnDelete();
             $table->foreignId('hadis_id')->constrained()->cascadeOnDelete();
+
+            $table->unique(['chapter_id', 'hadis_id']);
         });
     }
 

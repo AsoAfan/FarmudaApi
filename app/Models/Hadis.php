@@ -25,65 +25,92 @@ class Hadis extends Model
         /**
          *
          *  Must-have filters for hadises
-         * 1. search (arabic, kurdish OR badini and hadis_number => PartialMatch)
-         * 2. teller (name => ExactMatch)
-         * 3. categories (name => ExactMatch)
-         * 4. Books (name => ExactMatch)
-         * 5. Chapters (name => ExactMatch)
+         * 1. Language
+         * 2. Search (arabic, hawramy, kurdish, badiny OR badiny and hadis_number => PartialMatch)
+         * 3. Hukim (option [s, h, z, m] => MustExists)
+         * 4. Teller (name => ExactMatch)
+         * 5. Categories (name => ExactMatch)
+         * 6. Books (name => ExactMatch)
+         * 7. Chapters (name => ExactMatch)
          *
          * */
 
 
-        // 1. Search
-        $query->when($filters['search'] ?? false, function ($query, $search) use ($filters) {
-            $query->where(function ($query) use ($search, $filters) {
-                $query->where('arabic_search', 'like', "%{$search}%")
-                    ->orWhere(
-                        ($filters['lang'] ?? "ku") == "bd" ? 'badini' : "kurdish",
-                        'like', "%{$search}%")
-                    ->orWhere('hadis_number', 'like', "%{$search}%");
+        $language = match ($filters['lang'] ?? null) {
+            'hr' => 'hawramy',
+            'bd' => 'badiny',
+            default => 'kurdish'
+        };
+
+
+        // callbacks can be modified to arrow functions
+
+
+        // 1. language
+        // TODO: Return only specified language column not all three
+
+
+        // 2. Search
+        $query->when($filters['search'] ?? false, function ($query, $search) use ($language, $filters) {
+
+            if (is_numeric($filters['search'])) $query->Where('hadis_number', 'like', "{$search}%");
+            else
+                $query->where(function ($query) use ($language, $search, $filters) {
+                    $query
+                        ->where('arabic_search', 'like', "%{$search}%")
+//                ($filters['lang'] ?? "ku") == "bd" ? 'badiny' : "kurdish"
+                        ->orWhere(
+                            $language,
+                            'like', "%{$search}%");
+
+
 //                    ->orWhereHas('chapters', function ($query) use ($search){
 //                        $query->where('name', 'like', "%$search%"); }); Search in Chapters also
-            });
+                });
+
+
         });
 
 
-        // 2. teller
+        // 3. hukim
+        $query->when($filters['hukim'] ?? false, function ($query, $hukim) {
+            $query->where('hukim', $hukim);
+        });
+
+        // 4. teller
         $query->when($filters['teller'] ?? false, function ($query, $teller) {
-            $query->whereHas('teller', function ($q) use ($teller) {
-                $q->where('name', $teller);
+            $query->whereHas('teller', function ($query) use ($teller) {
+                $query->where('id', $teller);
             });
-        }); // Teller Done
+        });
 
-
-        // 3. categories
+        // 5. categories
         $query->when(($filters['category'] ?? false), function ($query, $category) {
             $query
                 ->withCount('categories')
                 ->whereHas('categories', function ($query) use ($category) {
-                    $query->distinct()->whereIn('name', $category); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+                    $query->distinct()->whereIn('id', $category); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
                 }, '=', count($category));
         });
 
-
-        // 4. books
+        // 6. books
         $query->when(($filters['book'] ?? false), function ($query, $book) {
             $query
                 ->withCount('books')
                 ->whereHas('chapters.books', function ($query) use ($book) {
-                    $query->distinct()->whereIn('name', $book); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+                    $query->distinct()->whereIn('id', $book); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
                 }, '=', count($book));
         });
 
-
-        // 5. chapters
+        // 7. chapters
         $query->when(($filters['chapter'] ?? false), function ($query, $chapter) {
             $query
                 ->withCount('chapters')
                 ->whereHas('chapters', function ($query) use ($chapter) {
-                    $query->distinct()->whereIn('name', $chapter); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME
+                    $query->distinct()->whereIn('id', $chapter); // TODO: FIX FILTER NOT WORKING FOR ALL IN A TIME: DONE
                 }, '=', count($chapter));
         });
+
 
     }
 

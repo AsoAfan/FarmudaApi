@@ -18,7 +18,7 @@ class HadisFactory extends Factory
     public function definition(): array
     {
         return [
-            'arabic' => $this->faker->paragraph,
+            'arabic' => $this->faker->paragraph(mt_rand(15, 255)),
             'kurdish' => $this->faker->paragraph,
             'description' => $this->faker->paragraph,
             'arabic_search' => $this->faker->paragraph,

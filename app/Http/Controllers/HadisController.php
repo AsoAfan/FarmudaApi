@@ -7,6 +7,7 @@ use App\Rules\ArabicChars;
 use App\Rules\KurdishChars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class HadisController extends Controller
 {
@@ -16,9 +17,11 @@ class HadisController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'page' => 'numeric',
+            "teller" => "numeric" ,
             'category' => 'array',
             'book' => 'array',
-            'chapter' => 'array'
+            'chapter' => 'array',
+            'hukim' => 'string'
         ]);
 
         if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
@@ -31,11 +34,12 @@ class HadisController extends Controller
 
         return Hadis::latest()
             ->filter(
-                array_filter(request(['lang', 'search', 'teller', 'category', 'book', 'chapter']),
+                array_filter(
+                    request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
                     fn($value) => $value !== [null])
-            )->skip($page * $take)
-            ->take($take)
-            ->get();
+            )
+            ->skip($page * $take)
+            ->take($take)->get();
         // TODO: Double check for skipping algorithm => DONE
 
 //        $validator = Validator::make(request()->all(), [
@@ -203,6 +207,7 @@ class HadisController extends Controller
             'arabic' => $request->get('hadis_arabic'),
             'kurdish' => $request->get('hadis_kurdish'),
             "badini" => $request->get('hadis_badini'),
+            "hawramy" => $request->get('hadis_hawramy'),
             'description' => $request->get('hadis_description'),
             'hadis_number' => $request->get('hadis_number'),
             'teller_id' => $request->get('hadis_teller_id'),
@@ -243,6 +248,6 @@ class HadisController extends Controller
     {
         $delete = $hadis->delete();
         if (!$delete) return response(['errors' => 'Deleting hadis failed successfully'], 400);
-        return ["success" => "Hadis deleted successfully", 'data' => $hadis->id];
+        return ["success" => Str::take($hadis->arabic, 10) . "... deleted successfully", 'data' => $hadis->id];
     }
 }

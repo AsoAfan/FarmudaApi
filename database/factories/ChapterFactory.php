@@ -19,7 +19,6 @@ class ChapterFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'book_id' => Book::factory()->create()
         ];
     }
 }

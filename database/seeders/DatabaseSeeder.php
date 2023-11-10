@@ -6,8 +6,10 @@ namespace Database\Seeders;
 use App\Models\Book;
 use App\Models\BuxariChapter;
 use App\Models\Category;
+use App\Models\Chapter;
 use App\Models\Hadis;
 use App\Models\Teller;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,13 +19,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         \App\Models\User::factory()->create();
+         User::factory()->create();
+
+         Book::factory(5)->create();
+
+         Chapter::factory(5)->create();
+        Category::factory(5)->create();
 
 
-        Category::factory()->create();
+       Teller::factory(5)->create();
 
-
-       Teller::factory(3)->create();
 
 
         Hadis::factory(25)->create();

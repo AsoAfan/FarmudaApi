@@ -14,9 +14,12 @@ return new class extends Migration {
             $table->id();
             $table->longText('arabic');
             $table->longText('kurdish');
-            $table->longText('badini')->nullable();
+            $table->longText('badiny')->nullable();
+            $table->longText('hawramy')->nullable();
             $table->longText("arabic_search");
             $table->longText('description')->nullable();
+            // s => sahih, h => hasan, z => za`if, m => mawzu`
+            $table->enum('hukim', ['s', 'h', 'z', 'm']);
             $table->unsignedInteger('hadis_number');
             $table->foreignId('teller_id')->references('id')->on('tellers')->cascadeOnDelete();
             $table->boolean('is_featured')->default(false);
