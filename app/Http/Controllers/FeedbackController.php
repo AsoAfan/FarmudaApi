@@ -35,7 +35,7 @@ class FeedbackController extends Controller
     }
 
 
-    public function delete(Feedback $feedback)
+    public function delete(Feedback $feedback): array
     {
         $feedback->delete();
 
@@ -44,7 +44,7 @@ class FeedbackController extends Controller
 
     }
 
-    public function destroy(Feedback $feedback)
+    public function destroy(Feedback $feedback): array
     {
 
         $feedback->forceDelete();
