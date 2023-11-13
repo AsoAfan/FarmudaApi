@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HadisController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TellerController;
@@ -16,12 +17,13 @@ Route::get('/hadis/show/{hadis}', [HadisController::class, 'show']); // read | U
 Route::get('/hadis/featured', [HadisController::class, 'showFeatures']); // read |  featured Hadises with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
 Route::get('/hadis/latest', [HadisController::class, 'latest']);
 
-Route::get('/teller/show', [TellerController::class, 'show']); // Read TODO: All_USERS
+Route::get('/teller/show', [TellerController::class, 'show']); // Read
 
 Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
 
 
-Route::get('/book/show', [BookController::class, 'index']); // read TODO: ALL_USERS
+Route::get('/book/show', [BookController::class, 'index']); // read
 
 
-Route::get('/chapter/show', [ChapterController::class, 'index']); // read TODO: ALL_USERS
+Route::get('/chapter/show', [ChapterController::class, 'index']); // read
+

@@ -78,6 +78,11 @@ class User extends Authenticatable
         return $this->hasMany(Favourite::class);
     }
 
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
     public function setPassworAttribute()
     {
 

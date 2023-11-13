@@ -52,7 +52,7 @@ class HadisController extends Controller
     public function latest()
     {
 
-        return Hadis::latest()->take(2);
+        return Hadis::latest()->get()->take(2);
     } // DONE
 
     public function show(Hadis $hadis): Hadis

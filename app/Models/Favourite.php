@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Favourite extends Model
 {
-    use HasFactory;
+    use HasFactory, HasFilters;
 
     protected $hidden = ['id', 'created_at', 'updated_at', 'user_id', 'hadis_id'];
 
-    protected $with = ['hadis'];
+
 
     protected $fillable = ['hadis_id', "user_id"];
 

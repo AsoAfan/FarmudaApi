@@ -43,4 +43,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->missing(fn() => response()->json(["errors" => "Page not found", "status" => 404], 404));
 
 
+//    Feedback
+    Route::post('/user-feedback', [FeedbackController::class, 'store']);
+
+
 });
