@@ -16,15 +16,15 @@ class EmailVerificationController extends Controller
 //                                        TODO:can be better in feature
         if ($user->otp_attempt_count >= config('myApp.max_otp_attempts')) return response(['errors' => ['a lot of requests please try again after 24h']], 400);
 
-        if ($user->otp_expires_at < now()) {
-            $user->update([
-                'otp_secret' => null,
-                'otp_attempt_count' => $user->otp_attempt_count++
-            ]);
-            $user->increment('otp_attempt_count');
+        /*    if ($user->otp_expires_at < now()) {
+                $user->update([
+                    'otp_secret' => null,
+                    'otp_attempt_count' => $user->otp_attempt_count++
+                ]);
+                $user->increment('otp_attempt_count');
 
-            return response(['errors' => ["Otp expired"]], 400);
-        }
+                return response(['errors' => ["Otp expired"]], 400);
+            }*/
         // not-expired code is a code that: expire date is more than current date
 
         $validator = Validator::make([$request->get('otp_code')], [
@@ -46,7 +46,7 @@ class EmailVerificationController extends Controller
             ]);
         } else {
             $user->increment('otp_attempt_count');
-            return response(['errors' => ["Invalid OTP code"]],400);
+            return response(['errors' => ["Invalid OTP code"]], 400);
         }
 
 
