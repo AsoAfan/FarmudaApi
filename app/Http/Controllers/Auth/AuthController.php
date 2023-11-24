@@ -73,7 +73,7 @@ class AuthController extends Controller
             'otp_expires_at' => now()->addMinutes(config('myApp.otp_expiry_minutes', 5)),
         ]);
 
-        return ['success' => "Email sent", 'data' => ["otpHashedSlug" => $user->otp_secret_slug]];
+        return ['success' => "Email sent", 'data' => $user->otp_secret_slug];
     }
 
     public function login(Request $request)
