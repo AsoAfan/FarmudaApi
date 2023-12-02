@@ -60,7 +60,7 @@ class AuthController extends Controller
         if ($user->email_verified_at) return response(['errors' => $user->email . ' is verified with username: ' . $user->name], 400);
 
 //                                        TODO:can be better in feature
-        if ($user->otp_attempt_count > config('myApp.max_otp_attempts', 3)) return response(['errors' => 'a lot of requests received please try again tomorrow'], 400);
+//        if ($user->otp_attempt_count > config('myApp.max_otp_attempts', 3)) return response(['errors' => 'a lot of requests received please try again tomorrow'], 400);
 
         $otp = mt_rand(100000, 999999);
 //        \Illuminate\Support\Facades\Log::info("OTP Sent");
