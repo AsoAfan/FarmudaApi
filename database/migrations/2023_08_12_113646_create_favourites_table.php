@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('favourites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hadis_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('hadith_id')->references('id')->on("hadiths")->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->unique(['hadis_id', 'user_id']);
+            $table->unique(['hadith_id', 'user_id']);
             $table->timestamps();
         });
     }

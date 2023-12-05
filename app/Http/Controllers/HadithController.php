@@ -121,12 +121,12 @@ class HadithController extends Controller
          */
 
         $validator = Validator::make($request->all(), [ // TODO: Separate into a new Request class
-            'arabic' => ['required_without_all:kurdish,description,hadith_number,hadith_teller_id,category_ids, book_ids, chapter_ids', "unique:hadith,arabic,$hadith->id", new ArabicChars],
+            'arabic' => ['required_without_all:kurdish,description,hadith_number,hadith_teller_id,category_ids, book_ids, chapter_ids', "unique:hadiths,arabic,$hadith->id", new ArabicChars],
             'kurdish' => ['required_without_all:arabic,description,hadith_number,hadith_teller_id,category_ids, book_ids, chapter_ids', new KurdishChars],
             'badiny' => ['required_without_all:arabic,kurdish,description,hadith_number,hadith_teller_id,category_ids, book_ids, chapter_ids', new KurdishChars],
             'hawramy' => ['required_without_all:arabic,kurdish,badiny,description,hadith_number,hadith_teller_id,category_ids, book_ids, chapter_ids', new KurdishChars],
             'description' => ['required_without_all:arabic,kurdish,hadith_number,hadith_teller_id,category_ids, book_ids, chapter_ids', new KurdishChars],
-            'number' => ['required_without_all:arabic,kurdish,description,hadith_teller_id,category_ids, book_ids, chapter_ids', "unique:hadith,hadith_number,{$hadith->id}", 'numeric'],
+            'number' => ['required_without_all:arabic,kurdish,description,hadith_teller_id,category_ids, book_ids, chapter_ids', "unique:hadiths,hadith_number,{$hadith->id}", 'numeric'],
             'teller_id' => ['required_without_all:arabic,kurdish,description,hadith_number,category_ids,book_ids,chapter_ids', 'numeric', 'exists:tellers,id'],
 
             'category_ids' => ['array', 'exists:categories,id', 'required_without_all:arabic,kurdish,description,hadith_number,hadith_teller_id,book_ids,chapter_ids'],
@@ -182,12 +182,12 @@ class HadithController extends Controller
 
 
         $validator = Validator::make($request->all(), [
-            'arabic' => ['unique:hadith,arabic', 'required', new ArabicChars],
+            'arabic' => ['unique:hadiths,arabic', 'required', new ArabicChars],
             'kurdish' => ['required', new ArabicChars],
             'badiny' => ['nullable', new ArabicChars],
             'hawramy' => ['nullable', new ArabicChars],
             'description' => ['nullable', new ArabicChars],
-            'number' => ['required', 'unique:hadith,hadith_number', 'numeric'],
+            'number' => ['required', 'numeric', 'unique:hadiths,hadith_number'],
             'teller_id' => ['required', 'numeric', 'exists:tellers,id'],
 
             'category_ids' => ['array', 'exists:categories,id'],

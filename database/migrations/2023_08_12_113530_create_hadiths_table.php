@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('hadith', function (Blueprint $table) {
+        Schema::create('hadiths', function (Blueprint $table) {
             $table->id();
             $table->longText('arabic');
             $table->longText('kurdish');
