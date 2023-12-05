@@ -10,7 +10,6 @@ class Chapter extends Model
     use HasFactory;
 
 
-
     protected $fillable = ['name', 'book_id'];
 
     protected $hidden = ['pivot'];
@@ -28,6 +27,6 @@ class Chapter extends Model
 
     public function hadises()
     {
-        return $this->belongsToMany(Hadis::class);
+        return $this->belongsToMany(Hadith::class);
     }
 }

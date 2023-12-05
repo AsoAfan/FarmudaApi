@@ -10,16 +10,24 @@ class SocialController extends Controller
 {
     public function google()
     {
-        return Socialite::driver('google')->redirect()->getTargetUrl();
+        return Socialite::driver('google')
+            ->stateless()
+            ->redirect()
+            ->getTargetUrl();
     }
+
+
 
     public function callback()
     {
-        $socialUser = Socialite::with('google')->stateless()->user();
+        $socialUser = Socialite::driver('google')->stateless()->user();
         $user = $this->findOrCreate($socialUser);
 
 
-        return ['google' => $socialUser, 'user' => $user, 'token' => $user->createToken('API_TOKEN')->plainTextToken];
+        return [
+            'success' => 'login succeed',
+            'data' => ['user' => $user, 'token' => $user->createToken('API_TOKEN')->plainTextToken]
+        ];
     }
 
 

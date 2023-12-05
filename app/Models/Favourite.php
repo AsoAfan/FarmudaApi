@@ -13,16 +13,15 @@ class Favourite extends Model
     protected $hidden = ['id', 'created_at', 'updated_at', 'user_id', 'hadis_id'];
 
 
-
     protected $fillable = ['hadis_id', "user_id"];
 
     public function hadis()
     {
-        return $this->belongsTo(Hadis::class);
+        return $this->belongsTo(Hadith::class);
     }
 
     public function user()
     {
-       return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }

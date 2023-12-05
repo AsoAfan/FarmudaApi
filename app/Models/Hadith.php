@@ -5,21 +5,23 @@ namespace App\Models;
 use App\Traits\HasFilters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 //use Patchwork\Utf8\Normalizer;
 
-class Hadis extends Model
+class Hadith extends Model
 {
-    use HasFactory, HasFilters;
+    use HasFactory, HasFilters, SoftDeletes;
 
     protected $guarded = [];
+
 
     protected $with = ['teller', 'categories', 'chapters.books']; // TODO: return books of chapters(chapters.books)
 
     protected $hidden = ['arabic_search', 'pivot', 'teller_id', 'categories_count'];
 
-
+    
     public function activity()
     {
         return $this->morphMany(Activity::class, 'model');

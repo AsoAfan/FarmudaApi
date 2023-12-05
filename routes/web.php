@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Auth\SocialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,17 +13,17 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/sanctum/csrf-cookie', function (){
-    return ['csrf' => csrf_token()];
+Route::get('/sanctum/csrf-cookie', function () {
+    return ['message' => "csrf header set successfully"];
 });
 
-Route::get('/', function (){
+Route::get('/', function () {
     return redirect("https://farmudaa.com");
 });
+Route::post('/auth/google', [SocialController::class, 'google']);
 
-Route::get('/auth/google', [\App\Http\Controllers\Auth\SocialController::class, 'google']);
+Route::get('/auth/google/callback', [SocialController::class, 'callback']);
 
-Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\SocialController::class, 'callback']);
 //Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
 
 

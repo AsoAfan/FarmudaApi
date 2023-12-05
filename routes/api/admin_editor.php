@@ -3,27 +3,27 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChapterController;
-use App\Http\Controllers\HadisController;
+use App\Http\Controllers\HadithController;
 use App\Http\Controllers\TellerController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:admin,editor'])->group(function () {
-    Route::get('/ae/test', fn() => auth()->user());
+//    Route::get('/ae/test', fn() => auth()->user());
 
-// Hadis
-    Route::post('/hadis/store', [HadisController::class, 'store']); // create(Add new hadis) TODO: ADMINS, EDITOR
+// hadith
+    Route::post('/hadith/store', [HadithController::class, 'store']); // create(Add new hadith) TODO: ADMINS, EDITOR
 
-    Route::get('/hadis/toggle-feature/{hadis}', [HadisController::class, 'toggleFeature'])
-        ->missing(fn() => response()->json(["errors" => ["Hadis not found"]], 400)); // update toggle statues toFALSE if True and to TRUE if False
+    Route::get('/hadith/toggle-feature/{hadith}', [HadithController::class, 'toggleFeature'])
+        ->missing(fn() => response()->json(["errors" => ["hadith not found"]], 400)); // update toggle statues toFALSE if True and to TRUE if False
 
 
-    Route::put('/hadis/featured/update', [HadisController::class, "updateFeaturedLength"]);
+    Route::put('/hadith/featured/update', [HadithController::class, "updateFeaturedLength"]);
 
-    Route::put('hadis/update/{hadis}', [HadisController::class, "update"])
-        ->missing(fn() => response()->json(['errors' => ["Hadis not found"]], 400)); // update TODO:  Admins, EDITOR
+    Route::put('hadith/update/{hadith}', [HadithController::class, "update"])
+        ->missing(fn() => response()->json(['errors' => ["hadith not found"]], 400)); // update TODO:  Admins, EDITOR
 
-    Route::delete('/hadis/destroy/{hadis}', [HadisController::class, 'destroy'])
-        ->missing(fn() => response()->json(['errors' => ["Hadis not found"]], 400)); // Delete  TODO: Admins
+    Route::delete('/hadith/delete/{hadith}', [HadithController::class, 'destroy'])
+        ->missing(fn() => response()->json(['errors' => ["hadith not found"]], 400)); // Delete  TODO: Admins
 
 
 // Teller

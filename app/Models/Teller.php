@@ -16,12 +16,12 @@ class Teller extends Model
     public function activities()
     {
 
-        return $this->morphMany(Activity::class,'model');
+        return $this->morphMany(Activity::class, 'model');
 
     }
 
     public function hadises()
     {
-        return $this->hasMany(Hadis::class);
+        return $this->hasMany(Hadith::class);
     }
 }

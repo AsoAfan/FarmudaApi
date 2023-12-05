@@ -20,6 +20,6 @@ class Category extends Model
 
     public function hadises()
     {
-        return $this->belongsToMany(Hadis::class);
+        return $this->belongsToMany(Hadith::class);
     }
 }

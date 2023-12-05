@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('hadis', function (Blueprint $table) {
+        Schema::create('hadith', function (Blueprint $table) {
             $table->id();
             $table->longText('arabic');
             $table->longText('kurdish');
@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->longText('description')->nullable();
             // s => sahih, h => hasan, z => za`if, m => mawzu`
             $table->enum('hukim', ['s', 'h', 'z', 'm']);
-            $table->unsignedInteger('hadis_number');
+            $table->unsignedInteger('hadith_number');
             $table->foreignId('teller_id')->references('id')->on('tellers')->cascadeOnDelete();
             $table->boolean('is_featured')->default(false);
 
@@ -30,11 +30,15 @@ return new class extends Migration {
 //            $table->foreignId('muslim_chapter_id')->nullable()->references('id')->on('muslim_chapters')->cascadeOnDelete();
 //
 //
-//            $table->foreignId('hadis_favourite')->constrained()->cascadeOnDelete();
+//            $table->foreignId('hadith_favourite')->constrained()->cascadeOnDelete();
 
 //            $table->foreignId('category_id')->references('id')->on('categories')->cascadeOnDelete();
 
             $table->timestamps();
+
+            $table->index('created_at');
+
+            $table->softDeletes();
         });
     }
 
@@ -43,6 +47,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('hadis');
+        Schema::dropIfExists('hadith');
     }
 };

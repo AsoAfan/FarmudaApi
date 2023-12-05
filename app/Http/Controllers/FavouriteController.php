@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favourite;
-use App\Models\Hadis;
+use App\Models\Hadith;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 
@@ -14,7 +14,7 @@ class FavouriteController extends Controller
     {
 
 
-        return Favourite::with('hadis')->join('hadis', 'favourites.hadis_id', '=', 'hadis.id')
+        return Favourite::with('hadis')
             ->filter(
                 array_filter(
                     request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
@@ -25,16 +25,15 @@ class FavouriteController extends Controller
 
     }
 
-    public function store(Hadis $hadis)
+    public function store(Hadith $hadis)
     {
         try {
             auth()->user()->favourites()->create(['hadis_id' => $hadis->id]);
 
-            $shortHadis = Str::take($hadis->arabic, 10);
 
-            return response()->json(['success' => "{$shortHadis} Added to " . auth()->user()->name . "'s favourite list"]);
+            return response()->json(['success' => Str::take($hadis->arabic, 10) . " Added to " . auth()->user()->name . "'s favourite list"]);
         } catch (QueryException $exception) {
-            return response(["errors" => "Duplicated entry"], 400);
+            return response(["errors" => $exception->getMessage()], 400);
         }
 
 

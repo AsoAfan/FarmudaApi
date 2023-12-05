@@ -2,14 +2,14 @@
 
 namespace App\Observers;
 
-use App\Models\Hadis;
+use App\Models\Hadith;
 
-class HadisObserver
+class HadithObserver
 {
     /**
      * Handle the Hadis "created" event.
      */
-    public function created(Hadis $hadis): void
+    public function created(Hadith $hadis): void
     {
 
         $hadis->activity()->create([
@@ -22,7 +22,7 @@ class HadisObserver
     /**
      * Handle the Hadis "updated" event.
      */
-    public function updated(Hadis $hadis): void
+    public function updated(Hadith $hadis): void
     {
         $hadis->activity()->create([
             'action' => 'Hadis Updated',
@@ -34,7 +34,7 @@ class HadisObserver
     /**
      * Handle the Hadis "deleted" event.
      */
-    public function deleted(Hadis $hadis): void
+    public function deleted(Hadith $hadis): void
     {
         $hadis->activity()->create([
             'action' => 'Hadis deleted',

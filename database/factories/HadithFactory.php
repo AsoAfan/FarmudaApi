@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\Hadith;
 use App\Models\Teller;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Hadis>
+ * @extends Factory<Hadith>
  */
-class HadisFactory extends Factory
+class HadithFactory extends Factory
 {
     /**
      * Define the model's default state.

@@ -2,13 +2,13 @@
 
 namespace App\Policies;
 
-use App\Models\Hadis;
+use App\Models\Hadith;
 use App\Models\User;
 
-class HadisPolicy
+class HadithPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Determine whether thge user can view any models.
      */
     public function viewAny(User $user): bool
     {
@@ -18,7 +18,7 @@ class HadisPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Hadis $hadis): bool
+    public function view(User $user, Hadith $hadis): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class HadisPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Hadis $hadis): bool
+    public function update(User $user, Hadith $hadis): bool
     {
         return $user->role == 'admin' || $user->role == 'editor';
     }
@@ -43,7 +43,7 @@ class HadisPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Hadis $hadis): bool
+    public function delete(User $user, Hadith $hadis): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class HadisPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Hadis $hadis): bool
+    public function restore(User $user, Hadith $hadis): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class HadisPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Hadis $hadis): bool
+    public function forceDelete(User $user, Hadith $hadis): bool
     {
         //
     }

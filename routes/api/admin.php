@@ -5,7 +5,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\HadisController;
+use App\Http\Controllers\HadithController;
 use App\Http\Controllers\TellerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,11 +23,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/user/role/{user}', [UserController::class, 'updateRole']);
 
 
-// Hadises
+// hadithes
 
 
-    Route::delete('/hadis/destroy-related/{hadis}', [HadisController::class, 'destroyRelated'])
-        ->missing(fn() => response(['errors' => "Hadis not found"], 400)); // Delete
+    Route::delete('/hadith/destroy-related/{hadith}', [HadithController::class, 'destroyRelated'])
+        ->missing(fn() => response(['errors' => "hadith not found"], 400)); // Delete
 
 
     Route::delete('/teller/destroy/{teller}', [TellerController::class, 'destroy'])
