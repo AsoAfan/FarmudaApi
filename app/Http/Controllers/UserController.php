@@ -17,8 +17,13 @@ class UserController extends Controller
      */
     public function index()
     {
+
+        $page = request('page');
+        $take = 20;
+
 //        dd("User Controller");
-        return User::all(['id', 'name', 'email', 'gender', 'role', 'created_at']);
+        return User::query()->skip($page * $take)
+            ->take($take)->get();
     }
 
 
