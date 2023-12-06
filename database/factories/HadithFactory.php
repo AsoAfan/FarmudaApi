@@ -23,7 +23,7 @@ class HadithFactory extends Factory
             'kurdish' => $this->faker->paragraph,
             'description' => $this->faker->paragraph,
             'arabic_search' => $this->faker->paragraph,
-            'hadis_number' => $this->faker->numerify,
+            'hadith_number' => $this->faker->numerify,
             'teller_id' => Teller::factory()->create()
         ];
     }
