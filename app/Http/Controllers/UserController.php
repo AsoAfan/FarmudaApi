@@ -85,7 +85,8 @@ class UserController extends Controller
      */
     public function update(Request $request) // Password not implemented
     {
-        $is_allowed = Gate::check('update', auth()->user());
+        $user = auth()->user();
+        $is_allowed = Gate::check('update', $user);
         if (!$is_allowed) return response(['errors' => ['unauthorized']], 400);
 
 
