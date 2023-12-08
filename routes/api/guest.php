@@ -30,7 +30,6 @@ Route::middleware(['guest:sanctum'])->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 
 
-
     // Resend otp code
     Route::post('resend', [AuthController::class, 'sendOtp']);
 
@@ -43,7 +42,7 @@ Route::middleware(['guest:sanctum'])->group(function () {
         return response()->json(["errors" => 'You are not authorized'], 401);
     })->name('login');
 
-    Route::get('/hadis/count', function () {
+    Route::get('/hadith/count', function () {
         return \App\Models\Hadith::count();
     });
 

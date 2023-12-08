@@ -10,12 +10,12 @@ class Favourite extends Model
 {
     use HasFactory, HasFilters;
 
-    protected $hidden = ['id', 'created_at', 'updated_at', 'user_id', 'hadis_id'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'user_id', 'hadith_id'];
 
 
-    protected $fillable = ['hadis_id', "user_id"];
+    protected $fillable = ['hadith_id', "user_id"];
 
-    public function hadis()
+    public function hadith()
     {
         return $this->belongsTo(Hadith::class);
     }

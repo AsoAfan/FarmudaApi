@@ -18,7 +18,7 @@ class Category extends Model
         return $this->morphMany(Activity::class, 'model');
     }
 
-    public function hadises()
+    public function hadiths()
     {
         return $this->belongsToMany(Hadith::class);
     }
