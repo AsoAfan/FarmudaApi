@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         Teller::factory(5)->create();
 
 
-        Hadith::factory(250000)->create();
+        Hadith::factory(50)->create();
 
 
         // \App\Models\User::factory()->create([
