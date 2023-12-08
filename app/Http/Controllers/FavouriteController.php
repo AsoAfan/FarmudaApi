@@ -31,7 +31,10 @@ class FavouriteController extends Controller
             auth()->user()->favourites()->create(['hadith_id' => $hadith->id]);
 
 
-            return response()->json(['success' => Str::take($hadith->arabic, 10) . " Added to " . auth()->user()->name . "'s favourite list"]);
+            return response()->json([
+                'success' => Str::take($hadith->arabic, 10) . " Added to " . auth()->user()->name . "'s favourite list",
+                'data' => $hadith
+            ]);
         } catch (QueryException $exception) {
             return response(["errors" => $exception->getMessage()], 400);
         }
