@@ -29,7 +29,7 @@ class FavouriteController extends Controller
     public function store(Hadith $hadith)
     {
         try {
-            auth()->user()->favourites()->attach(['hadith_id' => $hadith->id]);
+            auth()->user()->favourites()->create(['hadith_id' => $hadith->id]);
 
 
             return response()->json([
