@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('password')->nullable();
             $table->enum('gender', ['male', 'female'])->default('male');
             $table->enum('role', ['admin', 'editor', 'guider', 'user'])->default('user');
-            // TODO: Num. of hadises added by an admin/editor and its relationship
+            // TODO: Num. of hadiths added by an admin/editor and its relationship
             $table->rememberToken();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('otp_secret')->nullable();

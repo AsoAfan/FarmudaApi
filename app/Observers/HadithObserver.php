@@ -9,10 +9,10 @@ class HadithObserver
     /**
      * Handle the Hadis "created" event.
      */
-    public function created(Hadith $hadis): void
+    public function created(Hadith $hadith): void
     {
 
-        $hadis->activity()->create([
+        $hadith->activity()->create([
             'action' => 'Hadis Created',
             'user_id' => auth()->id()
         ]);
@@ -22,11 +22,11 @@ class HadithObserver
     /**
      * Handle the Hadis "updated" event.
      */
-    public function updated(Hadith $hadis): void
+    public function updated(Hadith $hadith): void
     {
-        $hadis->activity()->create([
+        $hadith->activity()->create([
             'action' => 'Hadis Updated',
-            'data' => json_encode($hadis->getOriginal()),
+            'data' => json_encode($hadith->getOriginal()),
             'user_id' => auth()->id()
         ]);
     }
@@ -34,18 +34,18 @@ class HadithObserver
     /**
      * Handle the Hadis "deleted" event.
      */
-    public function deleted(Hadith $hadis): void
+    public function deleted(Hadith $hadith): void
     {
-        $hadis->activity()->create([
+        $hadith->activity()->create([
             'action' => 'Hadis deleted',
-            'data' => json_encode($hadis->getOriginal()),
+            'data' => json_encode($hadith->getOriginal()),
             'user_id' => auth()->id()
         ]);
     }
 
     /**
      * Handle the Hadis "restored" event.
-     * public function restored(Hadis $hadis): void
+     * public function restored(Hadis $hadith): void
      * {
      * //
      * }
@@ -53,7 +53,7 @@ class HadithObserver
     /**
      * Handle the Hadis "force deleted" event.
      *
-     * public function forceDeleted(Hadis $hadis): void
+     * public function forceDeleted(Hadis $hadith): void
      * {
      * //
      * }

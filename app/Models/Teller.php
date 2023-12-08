@@ -20,7 +20,7 @@ class Teller extends Model
 
     }
 
-    public function hadises()
+    public function hadiths()
     {
         return $this->hasMany(Hadith::class);
     }

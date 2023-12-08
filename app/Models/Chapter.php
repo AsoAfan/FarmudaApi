@@ -25,7 +25,7 @@ class Chapter extends Model
         return $this->belongsToMany(Book::class);
     }
 
-    public function hadises()
+    public function hadiths()
     {
         return $this->belongsToMany(Hadith::class);
     }

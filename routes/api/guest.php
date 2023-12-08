@@ -43,7 +43,7 @@ Route::middleware(['guest:sanctum'])->group(function () {
         return response()->json(["errors" => 'You are not authorized'], 401);
     })->name('login');
 
-    Route::get('/hadis/count', function () {
+    Route::get('/hadith/count', function () {
         return \App\Models\Hadith::count();
     });
 

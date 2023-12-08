@@ -10,9 +10,9 @@ trait HasFilters
 
         /**
          *
-         *  Must-have filters for hadises
+         *  Must-have filters for hadiths
          * 1. Language
-         * 2. Search (arabic, hawramy, kurdish, badiny OR badiny and hadis_number => PartialMatch)
+         * 2. Search (arabic, hawramy, kurdish, badiny OR badiny and hadith_number => PartialMatch)
          * 3. Hukim (option [s, h, z, m] => MustExists)
          * 4. Teller (name => ExactMatch)
          * 5. Categories (name => ExactMatch)
@@ -39,7 +39,7 @@ trait HasFilters
         // 2. Search
         $query->when($filters['search'] ?? false, function ($query, $search) use ($language, $filters) {
 
-            if (is_numeric($filters['search'])) $query->Where('hadis_number', 'like', "{$search}%");
+            if (is_numeric($filters['search'])) $query->Where('hadith_number', 'like', "{$search}%");
             else
                 $query->where(function ($query) use ($language, $search, $filters) {
                     $query
