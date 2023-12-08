@@ -83,9 +83,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user) // Password not implemented
+    public function update(Request $request) // Password not implemented
     {
-        $is_allowed = Gate::check('update', $user);
+        $is_allowed = Gate::check('update', auth()->user());
         if (!$is_allowed) return response(['errors' => ['unauthorized']], 400);
 
 
@@ -109,7 +109,7 @@ class UserController extends Controller
         ]);
 
 
-        return ['success' => "user updated successfully", 'data' => $user];
+        return ['success' => "user updated successfully", 'data' => $user->fresh()];
 
     }
 
