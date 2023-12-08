@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\FavouriteController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserController;
@@ -37,9 +38,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 // hadith
 
 
-    Route::get('/favourite', [FavouriteController::class, 'index']);
+    Route::get('/favourites', [FavouriteController::class, 'index']);
 
     Route::post('/favourite/{hadith}', [FavouriteController::class, 'store'])
+        ->missing(fn() => response()->json(["errors" => "Page not found", "status" => 404], 404));
+
+    Route::post('/favourite/destroy/{hadith}', [FavouriteController::class, 'destroy'])
         ->missing(fn() => response()->json(["errors" => "Page not found", "status" => 404], 404));
 
 

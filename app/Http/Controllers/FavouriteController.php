@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Favourite;
 use App\Models\Hadith;
+use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 
@@ -37,6 +38,24 @@ class FavouriteController extends Controller
             ]);
         } catch (QueryException $exception) {
             return response(["errors" => $exception->getMessage()], 400);
+        }
+
+
+    }
+
+    public function destroy(Hadith $hadith)
+    {
+        try {
+
+            auth()->user()->favourites()->detach($hadith);
+
+            return response()->json([
+                'success' => Str::take($hadith->arabic, 10) . " removed from " . auth()->user()->name . "'s favourite list",
+                'data' => $hadith->id
+            ]);
+
+        } catch (Exception $exception) {
+            return response(['errors' => $exception->getMessage()], 400)
         }
 
 
