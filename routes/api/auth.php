@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/favourite', [FavouriteController::class, 'index']);
 
-    Route::get('/favourite/{hadith}', [FavouriteController::class, 'store'])
+    Route::post('/favourite/{hadith}', [FavouriteController::class, 'store'])
         ->missing(fn() => response()->json(["errors" => "Page not found", "status" => 404], 404));
 
 
