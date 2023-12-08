@@ -20,7 +20,7 @@ Route::get('/sanctum/csrf-cookie', function () {
 Route::get('/', function () {
     return redirect("https://farmudaa.com");
 });
-Route::post('/auth/google', [SocialController::class, 'google']);
+Route::get('/auth/google', [SocialController::class, 'google']);
 
 Route::get('/auth/google/callback', [SocialController::class, 'callback']);
 
