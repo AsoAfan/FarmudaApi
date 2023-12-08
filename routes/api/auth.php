@@ -34,12 +34,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->missing(fn() => response()->json(["errors" => "Question not found"], 404)); // TODO: Auth
 
 
-// Hadis
+// hadith
 
 
     Route::get('/favourite', [FavouriteController::class, 'index']);
 
-    Route::get('/favourite/{hadis}', [FavouriteController::class, 'store'])
+    Route::get('/favourite/{hadith}', [FavouriteController::class, 'store'])
         ->missing(fn() => response()->json(["errors" => "Page not found", "status" => 404], 404));
 
 

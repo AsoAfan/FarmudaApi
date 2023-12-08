@@ -19,7 +19,7 @@ class HadithFactory extends Factory
     public function definition(): array
     {
         return [
-            'arabic' => $this->faker->paragraph(mt_rand(15, 255)),
+            'arabic' => $this->faker->paragraph,
             'kurdish' => $this->faker->paragraph,
             'description' => $this->faker->paragraph,
             'arabic_search' => $this->faker->paragraph,

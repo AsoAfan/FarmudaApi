@@ -19,6 +19,7 @@ class HadithController extends Controller
     public function index()
     {
         $validator = Validator::make(request()->all(), [
+            'page' => 'numeric',
             "teller" => "numeric",
             'category' => 'array',
             'book' => 'array',
