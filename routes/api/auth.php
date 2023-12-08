@@ -16,7 +16,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // User
     Route::get('/user', [UserController::class, 'current']);
-    Route::post('/user/image/{user}', [UserController::class, 'update']);
+    Route::put('/user/update', [UserController::class, 'update']);
 
     // Notifications
     Route::get('/user/notifications', [NotificationController::class, 'index']);
