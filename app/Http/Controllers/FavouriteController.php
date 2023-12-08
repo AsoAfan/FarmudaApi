@@ -14,24 +14,24 @@ class FavouriteController extends Controller
     {
 
 
-        return Favourite::with('hadis')
+        return Favourite::with('hadith')
             ->filter(
                 array_filter(
                     request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
                     fn($value) => $value !== [null])
             )
-            ->get()->map(fn($user) => $user->hadis);
+            ->get()->map(fn($user) => $user->hadith);
 
 
     }
 
-    public function store(Hadith $hadis)
+    public function store(Hadith $hadith)
     {
         try {
-            auth()->user()->favourites()->create(['hadis_id' => $hadis->id]);
+            auth()->user()->favourites()->create(['hadith_id' => $hadith->id]);
 
 
-            return response()->json(['success' => Str::take($hadis->arabic, 10) . " Added to " . auth()->user()->name . "'s favourite list"]);
+            return response()->json(['success' => Str::take($hadith->arabic, 10) . " Added to " . auth()->user()->name . "'s favourite list"]);
         } catch (QueryException $exception) {
             return response(["errors" => $exception->getMessage()], 400);
         }

@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('chapter_hadis', function (Blueprint $table) {
+        Schema::create('chapter_hadith', function (Blueprint $table) {
             $table->foreignId('chapter_id')->constrained()->cascadeOnDelete();
             $table->foreignId('hadith_id')->references('id')->on('hadiths')->cascadeOnDelete();
 
@@ -23,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('chapter_hadis');
+        Schema::dropIfExists('chapter_hadith');
     }
 };

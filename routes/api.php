@@ -28,9 +28,9 @@ Route::middleware('json')->group(function () {
 // Reference
 Route::get('test-poly', function () {
 //    $ac = new \App\Models\Activity();
-//    $hadis = \App\Models\Hadis::find(1);
+//    $hadith = \App\Models\Hadis::find(1);
 //    $ac->user_id = 1;
-//   $ac->model()->associate($hadis);
+//   $ac->model()->associate($hadith);
 //   $ac->save();
     return ['data' => \App\Models\Activity::with([
             'model' => fn($query) => $query->select('id', 'arabic'),
