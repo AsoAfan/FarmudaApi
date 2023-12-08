@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/question/show', [QuestionController::class, 'index'])->middleware('json'); // TODO: All Users
 
 Route::get('/hadis/count', [HadithController::class, 'count']);
-Route::post('/hadis/show', [HadithController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO: ALL_USERS
+Route::get('/hadis/show', [HadithController::class, 'index']); // read | ?page=num_of_page => 3 per page for now TODO:
+// ALL_USERS
 Route::get('/hadis/show/{hadis}', [HadithController::class, 'show']); // read | UPDATE: Returns Single hadith with specified id | EDITED: NOT with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
 Route::get('/hadis/featured', [HadithController::class, 'showFeatures']); // read |  featured Hadises with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
 Route::get('/hadis/latest', [HadithController::class, 'latest']);
