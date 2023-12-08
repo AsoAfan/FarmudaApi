@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -27,7 +28,7 @@ class UserController extends Controller
     }
 
 
-    public function current()
+    public function current(): ?Authenticatable
     {
         return auth()->user();
     }

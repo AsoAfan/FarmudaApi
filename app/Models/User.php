@@ -16,7 +16,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, canResetPassword;
 
 
-//    protected $with = ['questions'];
+    protected $with = ['favourites'];
 
     /**
      * The attributes that are mass assignable.
