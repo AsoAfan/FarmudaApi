@@ -56,13 +56,17 @@ class HadithController extends Controller
     public function latest()
     {
 
-        return Hadith::query()->latest()->take(2)->get();
+        return Hadith::query()
+            ->latest()
+            ->take(2)
+            ->with(['teller', 'categories', 'chapters'])
+            ->get();
     } // DONE
 
-    public function show(Hadith $hadith): Hadith
+    public function show(Hadith $hadith)
     {
 
-        return $hadith;
+        return $hadith->with(["teller", "categories", "chapters"])->get();
 
     } // DONE
 
@@ -76,7 +80,9 @@ class HadithController extends Controller
 
 //        return hadith::whereRaw("char_length(arabic) < " . request('chars'))->get()->take($num);
 
-        return Hadith::where('is_featured', 1)->get();
+        return Hadith::where('is_featured', 1)
+            ->with(['teller', 'categories', 'chapters'])
+            ->get();
 //        ->whereRaw('char_length(arabic) <= ' . 50)
 
     } // DONE
