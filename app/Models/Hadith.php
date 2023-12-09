@@ -17,19 +17,19 @@ class Hadith extends Model
     protected $guarded = [];
 
 
-    protected $with = ['teller', 'categories', 'chapters.books']; // TODO: return books of chapters(chapters.books)
+//    protected $with = ['teller', 'categories', 'chapters.books']; // TODO: return books of chapters(chapters.books)
 
     protected $hidden = ['arabic_search', 'pivot', 'teller_id', 'categories_count'];
 
-    
+
     public function activity()
     {
         return $this->morphMany(Activity::class, 'model');
     }
 
-    public function favourites()
+    public function user()
     {
-        $this->hasMany(Favourite::class);
+        $this->belongsToMany(User::class, 'favourites');
     }
 
     public function categories()

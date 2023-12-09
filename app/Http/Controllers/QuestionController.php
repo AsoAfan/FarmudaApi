@@ -15,8 +15,14 @@ class QuestionController extends Controller
      */
     public function index()
     {
+        $page = request('page');
+        $take = 20;
 
-        return Question::with(['user', 'answer'])->get();
+        return Question::query()
+            ->skip($page * $take)
+            ->take($take)
+            ->with(['user', 'answer'])
+            ->get();
 
     }
 
@@ -50,7 +56,7 @@ class QuestionController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return ['success' => "{$newQuestion->user->name}'s question added successfully", 'data' => $newQuestion];
+        return ['success' => "{$newQuestion->user->name}'s question added successfully", 'data' => null];
     }
 
     /**
@@ -67,11 +73,12 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         $auth = Gate::check('update', $question);
-        if (!$auth->allowed()) return response(['errors' => "Unauthorized user"], 400);
+
+        if (!$auth || $question->is_approved) return response(['errors' => "Unauthorized user"], 400);
 
 
         $validator = Validator::make($request->all(), [
-            'body' => ['min:10', new KurdishOrArabicChars]
+            'body' => ['required', 'min:10', new KurdishOrArabicChars]
         ]);
 
         if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
@@ -80,7 +87,7 @@ class QuestionController extends Controller
             $request->only('body')
         );
 
-        return ['success' => "Question updated successfully", 'data' => $question];
+        return ['success' => "Question updated successfully", 'data' => null];
     }
 
     /**

@@ -16,7 +16,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, canResetPassword;
 
 
-    protected $with = ['favourites'];
+//    protected $with = ['favourites.hadith'];
 
     /**
      * The attributes that are mass assignable.
@@ -73,9 +73,9 @@ class User extends Authenticatable
         return $this->hasMany(Question::class)->where('is_Anonymous', '==', 0);
     }
 
-    public function favourites()
+    public function hadiths()
     {
-        return $this->hasMany(Favourite::class);
+        return $this->belongsToMany(Hadith::class, 'favourites');
     }
 
     public function feedbacks()

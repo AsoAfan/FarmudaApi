@@ -29,17 +29,18 @@ class FavouriteController extends Controller
     public function store(Hadith $hadith)
     {
         try {
-            auth()->user()->favourites()->create(['hadith_id' => $hadith->id]);
+            auth()->user()->hadiths()->syncWithoutDetaching($hadith);
 
 
             return response()->json([
                 'success' => Str::take($hadith->arabic, 10) . " Added to " . auth()->user()->name . "'s favourite list",
-                'data' => $hadith
+                'data' => $hadith->id
             ]);
         } catch (QueryException $exception) {
-            return response(["errors" => $exception->getMessage()], 400);
-        }
 
+            return response(['errors' => "Bad request", 'status' => 400], 400);
+
+        }
 
     }
 
@@ -47,7 +48,7 @@ class FavouriteController extends Controller
     {
         try {
 
-            auth()->user()->favourites()->detach($hadith);
+            auth()->user()->hadiths()->detach($hadith);
 
             return response()->json([
                 'success' => Str::take($hadith->arabic, 10) . " removed from " . auth()->user()->name . "'s favourite list",
@@ -55,7 +56,7 @@ class FavouriteController extends Controller
             ]);
 
         } catch (Exception $exception) {
-            return response(['errors' => $exception->getMessage()], 400);
+            return response(['errors' => "Bad request", 'status' => 400], 400);
         }
 
 
