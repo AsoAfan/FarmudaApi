@@ -41,6 +41,7 @@ class HadithController extends Controller
                     request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
                     fn($value) => $value !== [null])
             )
+            ->with(['teller', 'categories', 'chapters'])
             ->skip($page * $take)
             ->take($take)->get();
         // TODO: Double check for skipping algorithm => DONE
