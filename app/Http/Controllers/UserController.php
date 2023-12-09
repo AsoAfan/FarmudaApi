@@ -29,9 +29,7 @@ class UserController extends Controller
 
     public function current()
     {
-        return auth()->user()->with(['hadiths' => function ($query) {
-            $query->select("hadiths.id as hadith_id");
-        }])->get();
+        return Auth::user();
     }
 
     /**
