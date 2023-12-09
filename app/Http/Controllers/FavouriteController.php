@@ -15,13 +15,14 @@ class FavouriteController extends Controller
     {
 
 
-        return Favourite::with('hadith')
+        return auth()->user()->hadiths()
             ->filter(
                 array_filter(
                     request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
                     fn($value) => $value !== [null])
             )
-            ->get()->map(fn($user) => $user->hadith);
+            ->with(['teller', 'categories', 'chapters'])
+            ->get();
 
 
     }
