@@ -21,7 +21,7 @@ class QuestionController extends Controller
         return Question::query()
             ->skip($page * $take)
             ->take($take)
-            ->with(['user', 'answer'])
+            ->with(['answer', 'user'])
             ->get();
 
     }

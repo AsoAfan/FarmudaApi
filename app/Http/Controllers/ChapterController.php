@@ -37,7 +37,7 @@ class ChapterController extends Controller
             ]
         );
 
-        $newChapter->books()->attach($request->get('book_id'));
+        $newChapter->books()->attach($request->get('book_ids'));
 
         return ["success" => "Chapter added successfully", "data" => $newChapter];
     }
@@ -50,14 +50,14 @@ class ChapterController extends Controller
         //
 
         $validator = Validator::make($request->all(), [
-            'name' => ['required_without:book_id', "unique:chapters,name,{$chapter->id}", new KurdishChars],
-            'book_ids' => ['required' ,'array', 'exists:books,id', 'required_without:name']
+            'name' => ['required_without:book_id', "unique:chapters,name,$chapter->id", new KurdishChars],
+            'book_id' => ['required', 'array', 'exists:books,id', 'required_without:name']
         ]);
 
         if ($validator->fails()) return response(["errors" => $validator->errors()->all()], 400);
 
 
-        $chapter->books()->sync($request->get('book_ids') ?? []);
+        $chapter->books()->sync($request->get('book_id') ?? []);
         $chapter->update($request->only('name'));
 
         return ["success" => "chapter updated successfully", 'data' => $chapter];

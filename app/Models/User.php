@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function questions()
     {
-        return $this->hasMany(Question::class)->where('is_Anonymous', '==', 0);
+        return $this->hasMany(Question::class);
     }
 
     public function hadiths()

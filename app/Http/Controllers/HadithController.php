@@ -73,10 +73,10 @@ class HadithController extends Controller
             ->get();
     } // DONE
 
-    public function show(Hadith $hadith)
+    public function show(string $id)
     {
 
-        return $hadith->with(["teller", "categories", "chapters"])->get();
+        return Hadith::where("id", $id)->with(["teller", "chapters", "categories"])->first();
 
     } // DONE
 
