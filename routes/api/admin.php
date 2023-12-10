@@ -15,6 +15,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     // User
     Route::get('/users', [UserController::class, 'index']); // returns all users
     Route::get('/admins', [AdminController::class, 'index']);
+    Route::get('/users/count', [UserController::class, 'count']);
 
     Route::get('/warn/{user}', [UserController::class, 'warn']); // send warning notification to user => {user} -> id
 

@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 // hadith
 
 
+    Route::get('/favourites/search', [FavouriteController::class, 'search']);
     Route::get('/favourites', [FavouriteController::class, 'index']);
 
     Route::post('/favourite/{hadith}', [FavouriteController::class, 'store'])

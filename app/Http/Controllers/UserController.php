@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
+use App\Services\PaginationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -12,18 +13,16 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    use Has
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PaginationService $paginator)
     {
 
-        $page = request('page');
-        $take = 20;
 
 //        dd("User Controller");
-        return User::query()->skip($page * $take)
-            ->take($take)->get();
+        return $paginator->paginate(User::query());
     }
 
 
@@ -49,6 +48,16 @@ class UserController extends Controller
     public function show(User $user)
     {
         return ['data' => $user];
+    }
+
+    public function count()
+    {
+        $genderCounts = User::groupBy('gender')
+            ->selectRaw('gender, COUNT(*) as count')
+            ->pluck('count', 'gender');
+
+        return ['males' => $genderCounts['male'], 'females' => $genderCounts['female']];
+
     }
 
     public function warn(User $user, Request $request)

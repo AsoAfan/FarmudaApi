@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hadith;
 use App\Rules\ArabicChars;
 use App\Rules\KurdishChars;
+use App\Services\PaginationService;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -16,7 +17,18 @@ class HadithController extends Controller
 {
 
 
-    public function index()
+    public function index(PaginationService $paginator)
+    {
+
+
+        return $paginator->paginate(
+            Hadith::query()
+                ->with(['teller', 'categories', 'chapters'])
+        );
+    }
+
+
+    public function search()
     {
         $validator = Validator::make(request()->all(), [
             'page' => 'numeric',
@@ -32,18 +44,10 @@ class HadithController extends Controller
 //        dd(array_filter(request(["search", 'teller', 'category', 'book', 'chapter',]),
 //            fn($value) => $value !== [null]));
 
-        $page = request('page');
-        $take = 20;
 
-        return Hadith::query()
-            ->filter(
-                array_filter(
-                    request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
-                    fn($value) => $value !== [null])
-            )
-            ->with(['teller', 'categories', 'chapters'])
-            ->skip($page * $take)
-            ->take($take)->get();
+
+        return
+
         // TODO: Double check for skipping algorithm => DONE
 
 //        $validator = Validator::make(request()->all(), [

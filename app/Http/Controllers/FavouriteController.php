@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Favourite;
 use App\Models\Hadith;
 use Exception;
 use Illuminate\Database\QueryException;
@@ -11,9 +10,25 @@ use Illuminate\Support\Str;
 class FavouriteController extends Controller
 {
 
+
     public function index()
     {
 
+        $page = request()->query('page');
+        $take = request()->query('limit') ?? 20;
+
+        return auth()->user()->hadiths()
+            ->with(['teller', 'categories', 'chapters'])
+            ->skip($page * $take)
+            ->take($take)->get();
+
+    }
+
+    public function search()
+    {
+
+        $page = request()->query('page');
+        $take = request()->query('limit') ?? 20;
 
         return auth()->user()->hadiths()
             ->filter(
@@ -22,7 +37,8 @@ class FavouriteController extends Controller
                     fn($value) => $value !== [null])
             )
             ->with(['teller', 'categories', 'chapters'])
-            ->get();
+            ->skip($page * $take)
+            ->take($take)->get();
 
 
     }
