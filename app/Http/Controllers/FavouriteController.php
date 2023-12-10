@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hadith;
+use App\Services\PaginationService;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
@@ -11,35 +12,29 @@ class FavouriteController extends Controller
 {
 
 
-    public function index()
+    public function index(PaginationService $paginator)
     {
 
-        $page = request()->query('page');
-        $take = request()->query('limit') ?? 20;
 
-        return auth()->user()->hadiths()
-            ->with(['teller', 'categories', 'chapters'])
-            ->skip($page * $take)
-            ->take($take)->get();
+        return $paginator->paginate(
+            auth()->user()->hadiths()
+                ->with(['teller', 'categories', 'chapters'])
+        );
 
     }
 
-    public function search()
+    public function search(PaginationService $paginator)
     {
 
-        $page = request()->query('page');
-        $take = request()->query('limit') ?? 20;
 
-        return auth()->user()->hadiths()
+        return $paginator->paginate(auth()->user()->hadiths()
             ->filter(
                 array_filter(
                     request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
                     fn($value) => $value !== [null])
             )
             ->with(['teller', 'categories', 'chapters'])
-            ->skip($page * $take)
-            ->take($take)->get();
-
+        );
 
     }
 

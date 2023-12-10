@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FeedbackStoreRequest;
 use App\Models\Feedback;
+use App\Services\PaginationService;
 use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
 
-    public function index()
+    public function index(PaginationService $paginator)
     {
 
-        $page = request('page');
-        $take = 20;
 
-        return Feedback::with('user')->skip($page * $take)
-            ->take($take)->get();
+        return $paginator->paginate(
+            Feedback::with('user')
+        );
 
     }
 

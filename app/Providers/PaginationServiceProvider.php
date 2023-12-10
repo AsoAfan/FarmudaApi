@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\PaginationService;
 use Illuminate\Support\ServiceProvider;
 
 class PaginationServiceProvider extends ServiceProvider
@@ -11,7 +12,7 @@ class PaginationServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(PaginationService::class);
     }
 
     /**

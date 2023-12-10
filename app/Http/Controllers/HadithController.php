@@ -28,7 +28,7 @@ class HadithController extends Controller
     }
 
 
-    public function search()
+    public function search(PaginationService $paginator)
     {
         $validator = Validator::make(request()->all(), [
             'page' => 'numeric',
@@ -45,9 +45,15 @@ class HadithController extends Controller
 //            fn($value) => $value !== [null]));
 
 
-
-        return
-
+        return $paginator->paginate(
+            Hadith::query()
+                ->filter(
+                    array_filter(
+                        request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
+                        fn($value) => $value !== [null])
+                )
+                ->with(['teller', 'categories', 'chapters'])
+        );
         // TODO: Double check for skipping algorithm => DONE
 
 //        $validator = Validator::make(request()->all(), [
@@ -108,22 +114,7 @@ class HadithController extends Controller
         return ['success' => $hadith->arabic . (!$is_featured ? " added to featured list" : " removed from featured list")];
     } // DONE
 
-    /*
 
-        public function updateFeaturedLength(Request $request)
-        {
-    //        dd("test");
-            $validator = Validator::make($request->all(), [
-                'maxLength' => "required|numeric|min:1"
-            ]);
-
-            if ($validator->fails()) return response()->json(['errors' => $validator->errors()->all()], 406);
-            $limit_old = config('myApp.featured_max_length');
-    //        dd($request->get('maxLength'));
-            config(['myApp.featured_max_length' => $request->get('maxLength')]);
-            return response(['success' => "max limit for featured hadithes updated from $limit_old to " . config('myApp.featured_max_length')]);
-        }
-    */
     public function update(Hadith $hadith, Request $request)
     {
         /**

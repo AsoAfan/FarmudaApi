@@ -15,8 +15,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $page = request('page');
-        $take = 20;
+        $page = request()->query('page');
+        $take = request()->query('limit') ?? 20;
 
         return Question::query()
             ->skip($page * $take)
