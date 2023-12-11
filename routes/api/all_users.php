@@ -20,7 +20,7 @@ Route::get('/hadith/show/{hadith}', [HadithController::class, 'show']); // read 
 Route::get('/hadith/featured', [HadithController::class, 'showFeatures']); // read |  featured hadithes with limited number of characters ?chars=max_num_of_chars TODO: ALL_USERS
 Route::get('/hadith/latest', [HadithController::class, 'latest']);
 
-Route::get('/teller/show', [TellerController::class, 'show']); // Read
+Route::get('teller/show', [TellerController::class, 'show']); // Read
 
 Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
 
