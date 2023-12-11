@@ -194,7 +194,7 @@ class HadithController extends Controller
 
             'category_ids' => ['array', 'exists:categories,id'],
 //            'book_ids' => ['array', 'exists:books,id'], // TODO: Check this remove if possible, get books of the hadith from associated chapter
-            'chapter_ids' => ['array', 'exists:chapters,id']
+            'chapter_ids' => ['required', 'array', 'exists:chapters,id']
 
         ]);
 

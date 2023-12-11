@@ -28,5 +28,5 @@ Route::get('/category/show', [CategoryController::class, 'index']); // read (ret
 Route::get('/book/show', [BookController::class, 'index']); // read
 
 
-Route::get('/chapter/show', [ChapterController::class, 'index']); // read
+//Route::get('/chapter/show', [ChapterController::class, 'index']); // read
 
