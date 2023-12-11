@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('json')->group(function () {
-    require __DIR__ . '/api/admin.php';
-    require __DIR__ . '/api/admin_editor.php';
-    require __DIR__ . '/api/admin_guider.php';
-    require __DIR__ . '/api/guider.php';
-    require __DIR__ . '/api/auth.php';
-    require __DIR__ . '/api/guest.php';
-    require __DIR__ . '/api/all_users.php';
+//    require __DIR__ . '/api/admin.php';
+//    require __DIR__ . '/api/admin_editor.php';
+//    require __DIR__ . '/api/admin_guider.php';
+//    require __DIR__ . '/api/guider.php';
+//    require __DIR__ . '/api/auth.php';
+//    require __DIR__ . '/api/guest.php';
+//    require __DIR__ . '/api/all_users.php';
     Route::get('/chapter/show', [ChapterController::class, 'index']); // read
 
 });
