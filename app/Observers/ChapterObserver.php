@@ -13,6 +13,7 @@ class ChapterObserver
     {
         $chapter->activities()->create([
             'action' => 'Chapter created',
+            "data" => json_encode($chapter),
             'user_id' => auth()->id()
         ]);
     }

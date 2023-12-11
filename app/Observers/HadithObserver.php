@@ -14,6 +14,7 @@ class HadithObserver
 
         $hadith->activity()->create([
             'action' => 'Hadis Created',
+            'data' => $hadith,
             'user_id' => auth()->id()
         ]);
 

@@ -13,6 +13,7 @@ class CategoryObserver
     {
         $category->activities()->create([
             'action' => 'Category created',
+            "data" => json_encode($category),
             'user_id' => auth()->id()
         ]);
     }

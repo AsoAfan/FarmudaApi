@@ -13,6 +13,7 @@ class TellerObserver
     {
         $teller->activities()->create([
             'action' => 'Teller created',
+            'data' => json_encode($teller),
             'user_id' => auth()->id()
         ]);
 
