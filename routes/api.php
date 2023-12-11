@@ -28,7 +28,7 @@ Route::middleware('json')->group(function () {
 
 
 // Reference
-Route::get('test-poly', function () {
+/*Route::get('test-poly', function () {
 //    $ac = new \App\Models\Activity();
 //    $hadith = \App\Models\Hadis::find(1);
 //    $ac->user_id = 1;
@@ -39,4 +39,4 @@ Route::get('test-poly', function () {
             'user' => fn($query) => $query->select('id', 'name')
         ]
     )->get()];
-});
+});*/
