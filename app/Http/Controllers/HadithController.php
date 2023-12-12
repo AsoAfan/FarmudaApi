@@ -20,7 +20,6 @@ class HadithController extends Controller
     public function index(PaginationService $paginator)
     {
 
-
         return $paginator->paginate(
             Hadith::query()
                 ->with(['teller', 'categories', 'chapters'])

@@ -8,7 +8,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TellerController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/question/show', [QuestionController::class, 'index'])->middleware('json'); // TODO: All Users
+Route::get('/question/show', [QuestionController::class, 'index']); // TODO: All Users
 
 Route::get('/hadith/count', [HadithController::class, 'count']);
 

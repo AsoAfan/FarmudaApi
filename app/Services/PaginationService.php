@@ -8,6 +8,7 @@ class PaginationService
 {
     public function paginate($queryBuilder)
     {
+
         $page = request()->query('page') ?? 0;
         $take = request()->query('limit') ?? 20;
 

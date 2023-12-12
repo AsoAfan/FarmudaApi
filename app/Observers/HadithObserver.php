@@ -14,7 +14,7 @@ class HadithObserver
 
         $hadith->activity()->create([
             'action' => 'Hadis Created',
-            'data' => $hadith,
+            'data' => json_encode($hadith),
             'user_id' => auth()->id()
         ]);
 
@@ -46,7 +46,7 @@ class HadithObserver
 
     /**
      * Handle the Hadis "restored" event.
-     * public function restored(Hadis $hadith): void
+     * Public function restored(Hadis $hadith): void
      * {
      * //
      * }
@@ -54,7 +54,7 @@ class HadithObserver
     /**
      * Handle the Hadis "force deleted" event.
      *
-     * public function forceDeleted(Hadis $hadith): void
+     * Public function forceDeleted(Hadis $hadith): void
      * {
      * //
      * }
