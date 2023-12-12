@@ -25,6 +25,9 @@ Route::middleware(['auth:sanctum', 'role:admin,editor'])->group(function () {
     Route::delete('/hadith/delete/{hadith}', [HadithController::class, 'destroy'])
         ->missing(fn() => response()->json(['errors' => ["hadith not found"]], 400)); // Delete  TODO: Admins
 
+    Route::delete('/hadith/destroy/{hadith}', [HadithController::class, 'forceDestroy'])
+        ->missing(fn() => response()->json(['errors' => ["hadith not found"]], 400)); // Delete  TODO: Admins
+
 
 // Teller
     Route::post('teller/store', [TellerController::class, 'store']); // Create(Add new teller) TODO: Admins, EDITOR

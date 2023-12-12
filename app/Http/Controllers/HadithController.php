@@ -43,6 +43,11 @@ class HadithController extends Controller
 //        dd(array_filter(request(["search", 'teller', 'category', 'book', 'chapter',]),
 //            fn($value) => $value !== [null]));
 
+        $search_items = array_filter(
+            request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
+            fn($value) => $value !== [null]);
+
+        if (!$search_items) return [];
 
         return $paginator->paginate(
             Hadith::query()
