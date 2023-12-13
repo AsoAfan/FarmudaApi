@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
@@ -29,23 +28,7 @@ class UserController extends Controller
     public function current()
     {
 //        dd(new UserResource(Auth::user()));
-        $userId = auth()->id();
-
-        $userData = User::select(
-            'id',
-            'image_name',
-            'profile_image',
-            'name',
-            'email',
-            'gender',
-            'role',
-            'created_at',
-            'updated_at',
-            'deleted_at'
-        )
-            ->with(['hadiths:id']) // Eager load only the 'id' column of hadiths
-            ->find($userId);
-        return new UserResource($userData);
+        return Auth::user()->with('hadiths:id')->find(auth()->id());
     }
 
 
@@ -59,11 +42,12 @@ class UserController extends Controller
 
     public function count()
     {
+
         $genderCounts = User::groupBy('gender')
             ->selectRaw('gender, COUNT(*) as count')
             ->pluck('count', 'gender');
 
-        return ['males' => $genderCounts['male'], 'females' => $genderCounts['female']];
+        return ['males' => $genderCounts['male'], 'females' => $genderCounts['female'] ?? 0];
 
     }
 
