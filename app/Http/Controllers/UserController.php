@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\RoleChangedNotification;
 use App\Notifications\WarningNotification;
@@ -27,7 +28,8 @@ class UserController extends Controller
 
     public function current()
     {
-        return Auth::user();
+//        dd(new UserResource(Auth::user()));
+        return [new UserResource(Auth::user())];
     }
 
 
@@ -36,7 +38,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return ['data' => $user];
+        return $user;
     }
 
     public function count()
