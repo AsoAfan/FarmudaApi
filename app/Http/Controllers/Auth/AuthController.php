@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Mail\EmailOtp;
 use App\Mail\OTP;
 use App\Models\User;
@@ -98,7 +99,8 @@ class AuthController extends Controller
 
         if (!Auth::attempt($request->only(['email', 'password']))) return response(['errors' => ["ئیمەڵ/وشەی نهێنی هەڵەیە"]], 400);
 
-        return ['success' => "Token generated successfully", 'data' => ['token' => $user->createToken("API_TOKEN")->plainTextToken, "user" => $user]];
+        return ['success' => "Token generated successfully", 'data' => ['token' => $user->createToken("API_TOKEN")
+            ->plainTextToken, "user" => new UserResource($user)]];
     }
 
     public function logout()

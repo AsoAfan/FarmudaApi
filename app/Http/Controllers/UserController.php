@@ -29,7 +29,23 @@ class UserController extends Controller
     public function current()
     {
 //        dd(new UserResource(Auth::user()));
-        return [new UserResource(Auth::user())];
+        $userId = auth()->id();
+
+        $userData = User::select(
+            'id',
+            'image_name',
+            'profile_image',
+            'name',
+            'email',
+            'gender',
+            'role',
+            'created_at',
+            'updated_at',
+            'deleted_at'
+        )
+            ->with(['hadiths:id']) // Eager load only the 'id' column of hadiths
+            ->find($userId);
+        return new UserResource($userData);
     }
 
 
