@@ -27,10 +27,9 @@ class HadithController extends Controller
     }
 
 
-    public function search(PaginationService $paginator)
+    public function search()
     {
         $validator = Validator::make(request()->all(), [
-            'page' => 'numeric',
             "teller" => "numeric",
             'category' => 'array',
             'book' => 'array',
@@ -49,15 +48,14 @@ class HadithController extends Controller
 
         if (!$search_items) return [];
 
-        return $paginator->paginate(
-            Hadith::query()
-                ->filter(
-                    array_filter(
-                        request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
-                        fn($value) => $value !== [null])
-                )
-                ->with(['teller', 'categories', 'chapters'])
-        );
+        return Hadith::query()
+            ->filter(
+                array_filter(
+                    request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
+                    fn($value) => $value !== [null])
+            )
+            ->take(25)
+            ->with(['teller', 'categories', 'chapters'])->get();
         // TODO: Double check for skipping algorithm => DONE
 
 //        $validator = Validator::make(request()->all(), [

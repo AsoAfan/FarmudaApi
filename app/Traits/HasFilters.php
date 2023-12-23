@@ -52,7 +52,7 @@ trait HasFilters
 
 //                    ->orWhereHas('chapters', function ($query) use ($search){
 //                        $query->where('name', 'like', "%$search%"); }); Search in Chapters also
-                });
+                })->orderByRaw("CASE WHEN arabic_search LIKE ? THEN 1 ELSE 2 END", ["%$search%"]);
 
 
         });

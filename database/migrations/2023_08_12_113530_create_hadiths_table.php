@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->longText('kurdish');
             $table->longText('badiny')->nullable();
             $table->longText('hawramy')->nullable();
-            $table->longText("arabic_search");
+            $table->string("arabic_search", 400)->index("arabic_search");
             $table->longText('description')->nullable();
             // s => sahih, h => hasan, z => za`if, m => mawzu`
             $table->enum('hukim', ['s', 'h', 'z', 'm']);
