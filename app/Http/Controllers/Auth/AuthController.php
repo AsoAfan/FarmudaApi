@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Jobs\SendEmailVerification;
 use App\Mail\EmailOtp;
-use App\Mail\OTP;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
@@ -65,7 +64,10 @@ class AuthController extends Controller
 
         $otp = mt_rand(100000, 999999);
 //        \Illuminate\Support\Facades\Log::info("OTP Sent");
-        Mail::to($user->email)->send(new OTP($user->username, $otp));
+//        Mail::to($user->email)->send(new OTP($user->username, $otp));
+
+        SendEmailVerification::dispatch($user, $otp);
+
         $otp = Hash::make($otp);
 //       dd($hashedOtp);
         $user->update([

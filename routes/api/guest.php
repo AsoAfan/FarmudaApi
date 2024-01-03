@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,24 +27,16 @@ Route::middleware(['guest:sanctum'])->group(function () {
 //            return view('auth.reset-password', ['token' => $token]);
 //        })->middleware('guest')->name('password.reset');
 
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
+    Route::post("/google", [SocialController::class, 'google']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
 
 
     // Resend otp code
-    Route::post('resend', [AuthController::class, 'sendOtp']);
+    Route::post('/resend', [AuthController::class, 'sendOtp']);
 
     // Verify email
-    Route::post('verify-email/{user:otp_secret_slug}', [EmailVerificationController::class, 'checkOtp'])
-        ->missing(fn() => response()->json(["errors" => "Link Expired", 'status' => 410], 404));
-
-
-    Route::get('not-auth', function () {
-        return response()->json(["errors" => 'You are not authorized'], 401);
-    })->name('login');
-
-    Route::get('/hadith/count', function () {
-        return \App\Models\Hadith::count();
-    });
+    Route::post('/verify-email/{user:otp_secret_slug}', [EmailVerificationController::class, 'checkOtp'])
+        ->missing(fn() => response()->json(["errors" => "Link Expired", 'status' => 410], 410));
 
 });

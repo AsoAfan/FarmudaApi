@@ -22,4 +22,10 @@ class Category extends Model
     {
         return $this->belongsToMany(Hadith::class);
     }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
 }

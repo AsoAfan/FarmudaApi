@@ -9,7 +9,7 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['body', 'user_id'];
+    protected $fillable = ['body', 'user_id', 'category_id'];
 
 //    protected $with = ['user'];
 
@@ -17,6 +17,11 @@ class Question extends Model
     {
         return $this->hasOne(Answer::class);
 
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
 

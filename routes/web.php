@@ -20,9 +20,10 @@ Route::get('/sanctum/csrf-cookie', function () {
 Route::get('/', function () {
     return redirect("https://farmudaa.com");
 });
-Route::get('/auth/google', [SocialController::class, 'google']);
+//Route::get('/auth/google', [SocialController::class, 'google']);
 
-Route::get('/auth/google/callback', [SocialController::class, 'callback']);
+//Route::get('/auth/google/callback', [SocialController::class, 'callback']);
+
 
 //Route::get('/category/show', [CategoryController::class, 'index']); // read (returns all categories) TODO: ALL_USERS
 

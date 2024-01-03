@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('subject');
             $table->text('body');
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->double('rating', 2, 1);
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

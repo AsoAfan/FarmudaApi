@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ChapterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,8 +23,14 @@ Route::middleware('json')->group(function () {
     require __DIR__ . '/api/guest.php';
     require __DIR__ . '/api/all_users.php';
 
+
 });
 
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/data', [\App\Http\Controllers\BackupController::class, 'hadith']);
+});
+
+//Route::get("/download", [\App\Http\Controllers\FavouriteController::class, "temp"]);
 
 // Reference
 /*Route::get('test-poly', function () {
