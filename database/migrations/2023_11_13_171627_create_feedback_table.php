@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->double('rating', 2, 1);
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

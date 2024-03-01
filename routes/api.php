@@ -26,9 +26,9 @@ Route::middleware('json')->group(function () {
 
 });
 
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::get('/data', [\App\Http\Controllers\BackupController::class, 'hadith']);
-});
+
+Route::get('/data', [\App\Http\Controllers\BackupController::class, 'hadith']);
+
 
 //Route::get("/download", [\App\Http\Controllers\FavouriteController::class, "temp"]);
 

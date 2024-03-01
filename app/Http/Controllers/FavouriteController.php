@@ -35,8 +35,8 @@ class FavouriteController extends Controller
 
 
         return $paginator->paginate(
-            auth()->user()->hadiths()
-                ->with(['teller', 'categories', 'chapters'])
+            auth()->user()->hadiths(),
+            with(['teller', 'categories', 'chapters'])
         );
 
     }

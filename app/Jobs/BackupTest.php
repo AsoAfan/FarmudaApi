@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Hadith;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -17,7 +16,11 @@ class BackupTest implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+
+    public function __construct(
+        protected string $filename
+
+    )
     {
         //
     }
@@ -27,6 +30,13 @@ class BackupTest implements ShouldQueue
      */
     public function handle(): void
     {
-        Hadith::all();
+
+        $hadiths = Hadith::all();
+        $jsonData = json_encode($hadiths, JSON_PRETTY_PRINT);
+
+
+        // Save JSON data to a file
+        file_put_contents(storage_path('app/' . $this->filename), $jsonData);
+
     }
 }

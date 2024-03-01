@@ -37,9 +37,9 @@ trait HasFilters
 
 
         // 2. Search
-        $query->when($filters['search'] ?? false, function ($query, $search) use ($language, $filters) {
+        $query->when($filters['s'] ?? false, function ($query, $search) use ($language, $filters) {
 
-            if (is_numeric($filters['search'])) $query->Where('hadith_number', 'like', "{$search}%");
+            if (is_numeric($filters['s'])) $query->Where('hadith_number', 'like', "{$search}%");
             else
                 $query->where(function ($query) use ($language, $search, $filters) {
                     $query

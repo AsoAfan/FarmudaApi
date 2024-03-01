@@ -21,8 +21,8 @@ class HadithController extends Controller
     {
 
         return $paginator->paginate(
-            Hadith::query()
-                ->with(['teller', 'categories', 'chapters'])
+            Hadith::query(),
+            ['teller', 'categories', 'chapters']
         );
     }
 
@@ -37,7 +37,7 @@ class HadithController extends Controller
             'hukim' => 'string'
         ]);
 
-        if ($validator->fails()) return response(['errors' => $validator->errors()->all()], 400);
+        if ($validator->fails()) return response(['errors' => $validator->errors()->all(), "code" => 422], 422);
 
 //        dd(array_filter(request(["search", 'teller', 'category', 'book', 'chapter',]),
 //            fn($value) => $value !== [null]));
@@ -48,14 +48,15 @@ class HadithController extends Controller
 
         if (!$search_items) return [];
 
-        return Hadith::query()
+        return HadFith::query()
             ->filter(
                 array_filter(
-                    request(['lang', 'search', 'hukim', 'teller', 'category', 'book', 'chapter']),
+                    request(['lang', 's', 'hukim', 'teller', 'category', 'book', 'chapter']),
                     fn($value) => $value !== [null])
             )
             ->take(25)
-            ->with(['teller', 'categories', 'chapters'])->get();
+            ->with(['teller', 'categories', 'chapters.books'])
+            ->get();
         // TODO: Double check for skipping algorithm => DONE
 
 //        $validator = Validator::make(request()->all(), [
@@ -78,7 +79,7 @@ class HadithController extends Controller
     public function show(string $id)
     {
 
-        return Hadith::where("id", $id)->with(["teller", "chapters", "categories"])->first();
+        return Hadith::where("id", $id)->with(["teller", "chapters.books", "categories"])->first();
 
     } // DONE
 
@@ -93,14 +94,18 @@ class HadithController extends Controller
 //        return hadith::whereRaw("char_length(arabic) < " . request('chars'))->get()->take($num);
 
         return Hadith::where('is_featured', 1)
-            ->with(['teller', 'categories', 'chapters'])
-            ->get();
+            ->get(["arabic", "kurdish"]);
 //        ->whereRaw('char_length(arabic) <= ' . 50)
 
     } // DONE
 
     public function toggleFeature(Hadith $hadith)
     {
+        if ($this->showFeatures()->count() > 15)
+            return response([
+                'message' => "maximum featured hadiths exceed",
+                'code' => 400
+            ], 400);
         $is_featured = $hadith->is_featured;
         // CHeck again why I did that: using additional variable for $hadith->is_featured in line 84
 
@@ -212,7 +217,7 @@ class HadithController extends Controller
             return response()->json(["errors" => $validator->errors()->all()], 422);
         }
 
-        $newhadith = Hadith::create([
+        $newHadith = Hadith::create([
             'arabic' => $request->get('arabic'),
             'kurdish' => $request->get('kurdish'),
             "badiny" => $request->get('badiny'),
@@ -224,12 +229,12 @@ class HadithController extends Controller
             "arabic_search" => preg_replace('/\p{M}/u', '', $request->get('arabic'))
         ]);
 
-        $newhadith->books()->attach($request->get('hadith_book_ids'));
-        $newhadith->chapters()->attach($request->get('hadith_chapter_ids'));
-        $newhadith->categories()->attach($request->get('hadith_category_ids'));
+        $newHadith->books()->attach($request->get('hadith_book_ids'));
+        $newHadith->chapters()->attach($request->get('hadith_chapter_ids'));
+        $newHadith->categories()->attach($request->get('hadith_category_ids'));
 
 
-        return ['success' => "hadith added successfully", 'data' => $newhadith];
+        return ['success' => "hadith added successfully", 'data' => $newHadith];
 
     }
 

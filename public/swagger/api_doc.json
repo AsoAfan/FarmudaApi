@@ -1,0 +1,420 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Sayay Farmuda",
+        "description": "Sayay Farmuda",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api"
+        }
+    ],
+    "paths": {
+        "/hadith/show": {
+            "get": {
+                "summary": "Get hadiths",
+                "description": "Returns all hadiths in a paginated way, 20 per page by default",
+                "tags": [
+                    "Hadiths"
+                ],
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Indicates the number of returned hadiths",
+                        "example": 20
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "this is page number",
+                        "example": 0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ppurewq f",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Hadiths"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hadith/search": {
+            "get": {
+                "summary": "Get search results",
+                "description": "Search for hadiths based on (search[query, number], translated, teller, book, chapter, hukim and category)",
+                "tags": [
+                    "Hadiths"
+                ],
+                "requestBody": {
+                    "description": "necessary search filters",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "lang": {
+                                        "type": "string",
+                                        "example": "hr | bd | NUL"
+                                    },
+                                    "teller": {
+                                        "type": "integer",
+                                        "example": "19"
+                                    },
+                                    "category": {
+                                        "type": "array",
+                                        "example": [
+                                            3,
+                                            5
+                                        ]
+                                    },
+                                    "book": {
+                                        "type": "array",
+                                        "example": [
+                                            1,
+                                            5
+                                        ]
+                                    },
+                                    "chapter": {
+                                        "type": "array",
+                                        "example": [
+                                            19,
+                                            7
+                                        ]
+                                    },
+                                    "hukim": {
+                                        "type": "string",
+                                        "example": "صحیح | حسن | ضعیف | موضوع"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "example": "الاسلام"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "search result returned: result can be empty",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Hadiths"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Data validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "example": [
+                                                "The category field must be an array.",
+                                                "The book field must be an array."
+                                            ]
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hadith/{id}": {
+            "get": {
+                "summary": "get single hadith",
+                "description": "Get data of one single hadith with specified id",
+                "tags": [
+                    "Hadiths"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "example": 1,
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Hadiths"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Hadith not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Hadith not found"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hadith/latest": {
+            "get": {
+                "summary": "2 latest",
+                "description": "get 2 last added hadiths",
+                "tags": [
+                    "Hadiths"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Hadiths"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hadith/featured": {
+            "get": {
+                "summary": "returns featured hadiths",
+                "description": "get all hadiths that checked as featured hadiths",
+                "tags": [
+                    "Hadiths"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Hadiths": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "arabic": {
+                        "type": "string",
+                        "example": "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى دُنْيَا يُصِيبُهَا، أَوْ إِلَى امْرَأَةٍ يَنْكِحُهَا، فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ"
+                    },
+                    "kurdish": {
+                        "type": "string",
+                        "example": "بەڕاستی پاداشتی کردەوەکان بە گوێرەی نیەتەکەیەتی، بۆیە هەموو کەس بە گوێرەی نیەتی ناو دڵی پاداشت وەردەگرێت، هەرکەسێک کۆچ کردنەکەی لەبەر خوا و پێغەمبەرەکەیەتی ﷺ ئەوا کۆچکردنەکەی لەبەر خوا و پێغەمبەرەکەیەتی ﷺ، وە هەرکەسێک کۆچکردنەکەی بۆ بەدەستهێنانی ماڵی دنیا کە بەدەستی بهێنێت یاخود ئافرەتێک کە مارەی بکات ئەوە کۆچکردنەکەی بۆ ئەوەیە کە کۆچی بۆ کردووە."
+                    },
+                    "badiny": {
+                        "type": "string",
+                        "example": "NUL | ئەز بادینی نزانم"
+                    },
+                    "hawramy": {
+                        "type": "string",
+                        "example": "NUL | هەرچیێ بۆ بە هەورامی"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "نییەتی دڵ زۆر لە ئەنجامدانی کارەکان گرنگترە چونکە پاداشتی هەر کردەوەیەک بەپێی نیەتەکەیەتی | NUL"
+                    },
+                    "hukim": {
+                        "type": "string",
+                        "example": "صحیح | حسن | ضعیف | موضوع"
+                    },
+                    "hadith_number": {
+                        "type": "integer",
+                        "example": "١"
+                    },
+                    "is_featured": {
+                        "type": "integer",
+                        "example": "0 | 1"
+                    },
+                    "teller": {
+                        "$ref": "#/components/schemas/Tellers"
+                    },
+                    "chapters": {
+                        "$ref": "#/components/schemas/Chapters"
+                    },
+                    "categories": {
+                        "$ref": "#/components/schemas/Categories"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    }
+                }
+            },
+            "FeaturedHadiths": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "arabic": {
+                        "type": "string",
+                        "example": "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى دُنْيَا يُصِيبُهَا، أَوْ إِلَى امْرَأَةٍ يَنْكِحُهَا، فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ"
+                    },
+                    "kurdish": {
+                        "type": "string",
+                        "example": "بەڕاستی پاداشتی کردەوەکان بە گوێرەی نیەتەکەیەتی، بۆیە هەموو کەس بە گوێرەی نیەتی ناو دڵی پاداشت وەردەگرێت، هەرکەسێک کۆچ کردنەکەی لەبەر خوا و پێغەمبەرەکەیەتی ﷺ ئەوا کۆچکردنەکەی لەبەر خوا و پێغەمبەرەکەیەتی ﷺ، وە هەرکەسێک کۆچکردنەکەی بۆ بەدەستهێنانی ماڵی دنیا کە بەدەستی بهێنێت یاخود ئافرەتێک کە مارەی بکات ئەوە کۆچکردنەکەی بۆ ئەوەیە کە کۆچی بۆ کردووە."
+                    }
+                }
+            },
+            "Tellers": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 19
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "عمر بن خطاب"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    }
+                }
+            },
+            "Books": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "صحیح البخاري"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    }
+                }
+            },
+            "Chapters": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 7
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "الاخلاق"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    },
+                    "books": {
+                        "$ref": "#/components/schemas/Books"
+                    }
+                }
+            },
+            "Categories": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 27
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "ڕێز"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "timestamp",
+                        "example": "2023-12-12T17:34:18.000000Z"
+                    }
+                }
+            }
+        }
+    }
+}

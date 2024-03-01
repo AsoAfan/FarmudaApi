@@ -19,6 +19,7 @@ class ApiResponse
 
         $response->setContent(json_encode($response->getOriginalContent()));
         $response->header('Content-Type', 'application/json');
+        $response->header('Accept', 'application/json');
 
 
         return $response;
